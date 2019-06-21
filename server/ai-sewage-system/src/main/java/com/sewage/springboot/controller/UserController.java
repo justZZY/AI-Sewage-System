@@ -15,4 +15,17 @@ public class UserController {
     String getUserByGet(@RequestParam(value = "userName") String userName){
         return "Hello " + userName;
     }
+
+    //通过RequestMethod.POST表示请求需要时POST方式
+    @RequestMapping(value = "/getUserByPost", method = RequestMethod.POST)
+    String getUserByPost(@RequestParam(value = "userName") String userName){
+        return "Hello " + userName;
+    }
+
+    //在入参设置@RequestBody注解表示接收整个报文体，这里主要用在接收整个POST请求中的json报文体，
+    //目前主流的请求报文也都是JSON格式了，使用该注解就能够获取整个JSON报文体作为入参，使用JSON解析工具解析后获取具体参数
+    @RequestMapping(value = "/getUserByJson",method = RequestMethod.POST)
+    String getUserByJson(@RequestBody String data){
+        return "Json is " + data;
+    }
 }
