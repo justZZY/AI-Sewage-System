@@ -26,6 +26,8 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'mysql:mysql-connector-java'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	//web 应用程序
-	compile('org.springframework.boot:spring-boot-starter-web')
+	// web 应用程序
+	compile 'org.springframework.boot:spring-boot-starter-web'
+	// okhttp
+	compile 'com.squareup.okhttp3:okhttp:3.5.0'
 }

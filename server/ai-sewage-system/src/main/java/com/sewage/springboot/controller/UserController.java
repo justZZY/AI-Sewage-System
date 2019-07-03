@@ -1,9 +1,15 @@
 package com.sewage.springboot.controller;
 
 
+import okhttp3.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import java.io.IOException;
+
+//允许外部访问
+@CrossOrigin
 //@RestController注解能够使项目支持Rest
 @RestController
 @SpringBootApplication
@@ -11,15 +17,45 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/test")
 public class UserController {
     //这里使用@RequestMapping注解表示该方法对应的二级上下文路径
-    @RequestMapping(value = "/getUserByGet", method = RequestMethod.GET)
-    String getUserByGet(@RequestParam(value = "userName") String userName){
-        return "Hello " + userName;
+    @RequestMapping(value = "/testLogin", method = RequestMethod.POST)
+    //测试登录信息
+    String testLogin() throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        FormBody formBody = new FormBody.Builder()
+                .add("username", "kmzmhj")
+                .add("password", "zmhj123456")
+                .add("scope", "openid offline_access fbox email profile")
+                .add("client_id", "kmbq")
+                .add("client_secret", "a89f97dc2ed2457aa0c6e58eb40142b2")
+                .add("grant_type", "password")
+                .build();
+        Request request = new Request.Builder()
+                .url("https://account.flexem.com/core/connect/token")
+                .post(formBody)
+                .build();
+        Response response = client.newCall(request).execute();
+        if (response.isSuccessful()) {
+            return response.body().string();
+        } else {
+            throw new IOException("Unexpected code " + response);
+        }
     }
 
-    //通过RequestMethod.POST表示请求需要时POST方式
-    @RequestMapping(value = "/getUserByPost", method = RequestMethod.POST)
-    String getUserByPost(@RequestParam(value = "userName") String userName){
-        return "Hello " + userName;
+    @RequestMapping(value = "/testEquipments", method = RequestMethod.GET)
+    //如果需要参数 @RequestParam(value = "test") String test
+    String testEquipments(@RequestParam(value = "Authorization") String authorization,
+                          @RequestParam(value = "XFBoxClientId") String xfboxclientid) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url("http://fbox360.com/api/client/box/grouped")
+                .addHeader("Authorization", authorization)
+                .addHeader("X-FBox-ClientId", xfboxclientid)
+                .build();
+        Response response = client.newCall(request).execute();
+        if (response.isSuccessful()){
+            return response.body().string();
+        }else{
+            throw new IOException("Unexpected code " + response);
+        }
     }
 
     //在入参设置@RequestBody注解表示接收整个报文体，这里主要用在接收整个POST请求中的json报文体，
