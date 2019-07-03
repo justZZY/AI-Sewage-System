@@ -4,7 +4,7 @@
       <vHead></vHead>
     </el-header>
     <el-container>
-      <el-aside width="255px">
+      <el-aside width="300px">
         <vAside></vAside>
       </el-aside>
       <el-main>
@@ -30,6 +30,9 @@
     padding: 0px;
     margin: 0px;
     height: 100%;
+  }
+  body {
+    min-width: 1200px;
   }
   .el-header {
     background-color: #545c64;

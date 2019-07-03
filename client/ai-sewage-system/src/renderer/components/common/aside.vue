@@ -50,5 +50,7 @@
 </script>
 
 <style>
-
+  .aside {
+    padding-left: 12px;
+  }
 </style>

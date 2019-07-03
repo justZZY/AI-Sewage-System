@@ -11,11 +11,6 @@ export default new Router({
       component: require('@/components/page/login').default
     },
     {
-      path: '/404',
-      name: 'page404',
-      component: require('@/components/page/404').default
-    },
-    {
       path: '/main',
       name: 'vMain',
       redirect: '/map',
@@ -30,6 +25,11 @@ export default new Router({
           path: '/test',
           name: 'vTest',
           component: require('@/components/page/test').default
+        },
+        {
+          path: '/404',
+          name: 'page404',
+          component: require('@/components/page/404').default
         }
       ]
     },

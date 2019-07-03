@@ -1,5 +1,6 @@
 <template>
-    <baidu-map class="map" :center="center" :zoom="zoom" :scroll-wheel-zoom="true" @click="getPoint" @ready="handler">
+    <baidu-map class="map" :center="center" :zoom="zoom" :scroll-wheel-zoom="true"
+               @click="getPoint" @ready="handler" mapType="BMAP_HYBRID_MAP">
       <div v-for="pos in equipposarray">
         <bm-marker :position="{lng: pos.pos.longitude, lat: pos.pos.latitude}" @click="infoWindowCheck(pos)">
           <bm-info-window :show="pos.showflag" @close="infoWindowClose(pos)" @open="infoWindowOpen(pos)" style="font-size: 14px">
