@@ -27,7 +27,16 @@ dependencies {
 	runtimeOnly 'mysql:mysql-connector-java'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	// web 应用程序
-	compile 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	// okhttp
-	compile 'com.squareup.okhttp3:okhttp:3.5.0'
+	implementation 'com.squareup.okhttp3:okhttp:3.5.0'
+	// shiro
+	implementation 'org.apache.shiro:shiro-core:latest.release'
+	implementation 'org.apache.shiro:shiro-ehcache:latest.release'
+	implementation 'org.apache.shiro:shiro-web:latest.release'
+	implementation 'org.crazycake:shiro-redis:3.2.1'
+	implementation 'org.apache.shiro:shiro-spring:1.4.0'
+	// google验证码框架
+	implementation 'com.google.code.kaptcha:kaptcha:2.3'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
