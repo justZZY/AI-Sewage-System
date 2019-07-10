@@ -74,7 +74,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/renderer/components/common/main.vue">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="236">
@@ -83,13 +83,6 @@
                 <element signature="n#style#0;n#el-container#0;n#template#0;n#!!top" expanded="true" />
               </folding>
             </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/package.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-758" />
           </provider>
         </entry>
       </file>
@@ -318,12 +311,12 @@
       <workItem from="1561438852720" duration="58000" />
       <workItem from="1561438920495" duration="66000" />
       <workItem from="1561438997955" duration="4209000" />
-      <workItem from="1561445846450" duration="78401000" />
+      <workItem from="1561445846450" duration="78628000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="100234000" />
+    <option name="totallyTimeSpent" value="100461000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="17" y="55" width="1264" height="765" extended-state="0" />
@@ -525,6 +518,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="66" column="4" lean-forward="true" selection-start-line="66" selection-start-column="4" selection-end-line="66" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/renderer/components/common/main.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="236">
@@ -533,11 +533,6 @@
             <element signature="n#style#0;n#el-container#0;n#template#0;n#!!top" expanded="true" />
           </folding>
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-758" />
       </provider>
     </entry>
   </component>
