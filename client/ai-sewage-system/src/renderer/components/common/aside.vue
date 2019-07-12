@@ -13,10 +13,9 @@
   export default {
     name: 'vAside',
     data () {
-      // 处理地图树形数据,分割出省市信息-迁移到地图初始化后返回对象初始化
-      let treedata = this.$store.state.treedata
       return {
-        equiptreedata: treedata,
+        // 处理地图树形数据,分割出省市信息-迁移到地图初始化后返回对象初始化
+        equiptreedata: this.$store.state.Treedata.treedata,
         defaultProps: {
           children: 'children',
           label: 'label'
@@ -43,7 +42,6 @@
             }
           }
         }
-        console.log(data)
       }
     }
   }

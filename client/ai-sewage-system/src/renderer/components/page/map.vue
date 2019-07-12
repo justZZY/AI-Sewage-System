@@ -34,7 +34,7 @@
       async handler ({BMap, map}) {
         console.log(BMap, map)
         let treedata = await getTreeData(this.equipposarray, BMap)
-        this.$store.dispatch('setTreedata', treedata)
+        await this.$store.dispatch('setTreedata', treedata)
         window.BMap = BMap
         window.map = map
       },
@@ -55,7 +55,7 @@
   }
   // 解析全局设备信息中的位置数据
   function getEquipmentPosArray () {
-    const equipmentobjarray = window.equipmentobj[0]['boxRegs']
+    const equipmentobjarray = window.equipmentobj[0]['boxRegs'].concat(window.equipmentobj[1]['boxRegs'])
     let equipmentposarray = []
     for (let i = 0; i < equipmentobjarray.length; i++) {
       let name = equipmentobjarray[i]['alias']
@@ -94,7 +94,7 @@
   }
 
   /*
-  正常情况 matchaddr经过正则解析后应该长度为2代表省/市
+  正常情况 matchaddr经过解析后应该长度为2代表省/市
   其他情况下可以视为错误地址
   */
   function insertMatchAddr (treedataarray, matchaddr, name, net) {

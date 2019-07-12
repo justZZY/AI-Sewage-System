@@ -1,17 +1,18 @@
 const state = {
-  treedata: [{label: '暂无数据', children: [{label: '暂无数据', netclass: 'el-icon-loading'}]}]
+  treedata: [{label: '暂无数据', children: [{label: '暂无数据', netclass: 'null'}]}]
 }
 
 const mutations = {
   SET_TREE_DATA (state, newdata) {
+    state.treedata = null
     state.treedata = newdata
   }
 }
 
 const actions = {
-  setTreedata (context, newdata) {
+  setTreedata ({ commit }, newdata) {
     // do something async
-    context.commit('SET_TREE_DATA', newdata)
+    commit('SET_TREE_DATA', newdata)
   }
 }
 
