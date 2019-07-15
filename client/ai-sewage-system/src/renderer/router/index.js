@@ -30,6 +30,16 @@ export default new Router({
           path: '/404',
           name: 'page404',
           component: require('@/components/page/404').default
+        },
+        {
+          path: '/remote_control',
+          name: 'remote_control',
+          component: require('@/components/page/remote_control').default
+        },
+        {
+          path: '/time_control',
+          name: 'time_control',
+          component: require('@/components/page/time_control').default
         }
       ]
     },

@@ -23,8 +23,8 @@
         </el-submenu>
         <el-submenu index="3">
           <template slot="title">站点控制</template>
-          <el-menu-item index="3-1">远程控制</el-menu-item>
-          <el-menu-item index="3-2">定时控制</el-menu-item>
+          <el-menu-item index="/remote_control">远程控制</el-menu-item>
+          <el-menu-item index="/time_control">定时控制</el-menu-item>
         </el-submenu>
         <el-menu-item index="4">运营维护</el-menu-item>
         <el-menu-item index="/test">系统管理</el-menu-item>
@@ -38,7 +38,6 @@
     name: 'vHeader',
     data () {
       return {
-        // activeIndex: '/map'
         imgurl: require('@/assets/logo.png')
       }
     },
