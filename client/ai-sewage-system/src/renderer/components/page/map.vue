@@ -37,6 +37,19 @@
         await this.$store.dispatch('setTreedata', treedata)
         window.BMap = BMap
         window.map = map
+        // 在切换界面时返回记录坐标数据
+        let posarray = window.equipmentposarray
+        let index = this.$store.state.ChooseData.chooseData
+        let longitude = posarray[index]['pos']['longitude']
+        let latitude = posarray[index]['pos']['latitude']
+        let point = new window.BMap.Point(longitude, latitude)
+        // 重新定位地图位置
+        window.map.centerAndZoom(point, 12)
+        // 关闭以前打开的地图窗口并开启新的地图窗口
+        for (let j = 0; j < posarray.length; j++) {
+          posarray[j]['showflag'] = false
+        }
+        posarray[index]['showflag'] = true
       },
       // 点击地图获取一些信息
       getPoint (e) {

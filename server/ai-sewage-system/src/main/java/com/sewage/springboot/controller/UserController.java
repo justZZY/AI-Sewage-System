@@ -70,7 +70,7 @@ public class UserController {
     String getEquipMonitor (@RequestParam(value = "apiBaseUrl") String apiBaseUrl,
                             @RequestParam(value = "boxNo") String boxNo,
                             @RequestParam(value = "Authorization") String authorization) throws IOException {
-        String url = "[" + apiBaseUrl + "]v2/box/dmon/get?boxNo={" + boxNo + "}";
+        String url = apiBaseUrl + "v2/box/dmon/get?boxNo=" + boxNo;
         OkHttpClient client = new OkHttpClient();
         FormBody formBody = new FormBody.Builder().build();
         Request request = new Request.Builder().url(url)
