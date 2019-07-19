@@ -64,4 +64,24 @@ public class UserController {
     String getUserByJson(@RequestBody String data){
         return "Json is " + data;
     }
+
+    // 获取监控设备信息
+    @RequestMapping(value = "/getEquipMonitor", method = RequestMethod.POST)
+    String getEquipMonitor (@RequestParam(value = "apiBaseUrl") String apiBaseUrl,
+                            @RequestParam(value = "boxNo") String boxNo,
+                            @RequestParam(value = "Authorization") String authorization) throws IOException {
+        String url = "[" + apiBaseUrl + "]v2/box/dmon/get?boxNo={" + boxNo + "}";
+        OkHttpClient client = new OkHttpClient();
+        FormBody formBody = new FormBody.Builder().build();
+        Request request = new Request.Builder().url(url)
+                .addHeader("Authorization", authorization)
+                .post(formBody)
+                .build();
+        Response response = client.newCall(request).execute();
+        if (response.isSuccessful()) {
+            return response.body().string();
+        } else {
+            throw new IOException("Unexpected code " + response);
+        }
+    }
 }
