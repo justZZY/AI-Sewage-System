@@ -29,7 +29,7 @@
             <span>设备控制</span>
           </div>
           <div>
-            <el-table :data="devicedata" border style="width: 100%" height="300">
+            <el-table :data="devicedata" style="width: 100%" height="300" :row-class-name="tableRowClassName">
               <el-table-column prop="name" label="设备名称" align="center"></el-table-column>
               <el-table-column prop="run_feedback" label="运行反馈" align="center"></el-table-column>
               <el-table-column prop="error_feedback" label="故障反馈" align="center"></el-table-column>
@@ -60,14 +60,57 @@
           error_feedback: '测试故障反馈2',
           state: '自动测试2',
           operate: '测试测试测试测试测试2'
+        }, {
+          name: '测试2',
+          run_feedback: '测试反馈2',
+          error_feedback: '测试故障反馈2',
+          state: '自动测试2',
+          operate: '测试测试测试测试测试2'
+        }, {
+          name: '测试2',
+          run_feedback: '测试反馈2',
+          error_feedback: '测试故障反馈2',
+          state: '自动测试2',
+          operate: '测试测试测试测试测试2'
+        }, {
+          name: '测试2',
+          run_feedback: '测试反馈2',
+          error_feedback: '测试故障反馈2',
+          state: '自动测试2',
+          operate: '测试测试测试测试测试2'
         }]
+      }
+    },
+    methods: {
+      tableRowClassName ({row, rowIndex}) {
+        if (rowIndex === 1) {
+          return 'warning-row'
+        }
+        return ''
       }
     }
   }
+  // 获取监控的数据 会通过计算进行变动
+  // function getEquipMonitor (apiBaseUrl, boxNo) {
+  //   let authorization = 'Bearer ' + window.jsonobj['access_token']
+  //   this.$http.post('http://localhost:8081/test/getEquipMonitor', {
+  //     params: {
+  //       Authorization: authorization,
+  //       apiBaseUrl: apiBaseUrl,
+  //       boxNo: boxNo
+  //     }
+  //   }).then(res => {
+  //     console.log('res=>')
+  //     console.log(res)
+  //   })
+  // }
 </script>
 
 <style scoped>
   .el-row {
     margin-bottom: 20px;
+  }
+  .el-table .warning-row {
+    background: #9d0006;
   }
 </style>

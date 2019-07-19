@@ -15,7 +15,7 @@
     data () {
       return {
         // 处理地图树形数据,分割出省市信息-迁移到地图初始化后返回对象初始化
-        equiptreedata: this.$store.state.Treedata.treedata,
+        // equiptreedata: ,
         defaultProps: {
           children: 'children',
           label: 'label'
@@ -25,10 +25,13 @@
     methods: {
       // 树形节点点击事件
       handleNodeClick (data) {
+        console.log(data)
         if (data['children'] === undefined) {
           let posarray = window.equipmentposarray
           for (let i = 0; i < posarray.length; i++) {
             if (posarray[i].name === data['label']) {
+              this.$store.dispatch('setChooseData', i)
+              // console.log('data: ' + this.$store.state.ChooseData.chooseData)
               let longitude = posarray[i]['pos']['longitude']
               let latitude = posarray[i]['pos']['latitude']
               let point = new window.BMap.Point(longitude, latitude)
@@ -42,6 +45,12 @@
             }
           }
         }
+      }
+    },
+    computed: {
+      // 处理地图树形数据,分割出省市信息-迁移到地图初始化后返回对象初始化
+      equiptreedata () {
+        return this.$store.state.Treedata.treedata
       }
     }
   }

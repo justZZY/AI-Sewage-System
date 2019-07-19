@@ -55,7 +55,7 @@
   }
   // 解析全局设备信息中的位置数据
   function getEquipmentPosArray () {
-    const equipmentobjarray = window.equipmentobj[0]['boxRegs'].concat(window.equipmentobj[1]['boxRegs'])
+    const equipmentobjarray = window.equipmentobjarray
     let equipmentposarray = []
     for (let i = 0; i < equipmentobjarray.length; i++) {
       let name = equipmentobjarray[i]['alias']
