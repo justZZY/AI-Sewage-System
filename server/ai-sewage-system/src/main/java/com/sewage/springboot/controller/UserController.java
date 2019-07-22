@@ -1,6 +1,7 @@
 package com.sewage.springboot.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
 import okhttp3.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
@@ -67,12 +68,17 @@ public class UserController {
 
     // 获取监控设备信息
     @RequestMapping(value = "/getEquipMonitor", method = RequestMethod.POST)
-    String getEquipMonitor (@RequestParam(value = "apiBaseUrl") String apiBaseUrl,
-                            @RequestParam(value = "boxNo") String boxNo,
-                            @RequestParam(value = "Authorization") String authorization) throws IOException {
+    String getEquipMonitor (@RequestBody JSONObject jsonObject) throws IOException {
+        // 通过fastJson获取相关的post参数
+        String authorization = jsonObject.getString("Authorization");
+        String apiBaseUrl = jsonObject.getString("apiBaseUrl");
+        String boxNo = jsonObject.getString("boxNo");
+        String uid = jsonObject.getString("uid");
         String url = apiBaseUrl + "v2/box/dmon/get?boxNo=" + boxNo;
         OkHttpClient client = new OkHttpClient();
-        FormBody formBody = new FormBody.Builder().build();
+        FormBody formBody = new FormBody.Builder()
+                .add("Uid", uid)
+                .build();
         Request request = new Request.Builder().url(url)
                 .addHeader("Authorization", authorization)
                 .post(formBody)

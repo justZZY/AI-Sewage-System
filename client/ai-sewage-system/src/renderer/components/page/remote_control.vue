@@ -47,6 +47,8 @@
   export default {
     name: 'remote_control',
     data () {
+      let test = this.getEquipMonitor()
+      console.log(test)
       return {
         devicedata: [{
           name: '测试1',
@@ -87,23 +89,35 @@
           return 'warning-row'
         }
         return ''
+      },
+      // 获取监控的数据 会通过计算进行变动
+      // args: apiBaseUrl boxNo
+      // 参数根据equipmentobjarray和vuex中存储的下标进行计算
+      getEquipMonitor () {
+        let index = this.$store.state.ChooseData.chooseData
+        console.log(index)
+        let authorization = 'Bearer ' + window.jsonobj['access_token']
+        let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
+        let boxNo = window.equipmentobjarray[index]['box']['boxNo']
+        let uid = window.equipmentobjarray[index]['box']['id']
+        console.log('===========')
+        console.log(apiBaseUrl)
+        console.log(boxNo)
+        this.$http.post('http://localhost:8081/test/getEquipMonitor', {
+          Authorization: authorization,
+          apiBaseUrl: apiBaseUrl,
+          boxNo: boxNo,
+          uid: uid
+        }).then(res => {
+          console.log('res=>')
+          console.log(res)
+        })
       }
+    },
+    computed: {
+
     }
   }
-  // 获取监控的数据 会通过计算进行变动
-  // function getEquipMonitor (apiBaseUrl, boxNo) {
-  //   let authorization = 'Bearer ' + window.jsonobj['access_token']
-  //   this.$http.post('http://localhost:8081/test/getEquipMonitor', {
-  //     params: {
-  //       Authorization: authorization,
-  //       apiBaseUrl: apiBaseUrl,
-  //       boxNo: boxNo
-  //     }
-  //   }).then(res => {
-  //     console.log('res=>')
-  //     console.log(res)
-  //   })
-  // }
 </script>
 
 <style scoped>
