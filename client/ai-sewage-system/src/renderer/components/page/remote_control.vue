@@ -99,15 +99,10 @@
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-        let uid = window.equipmentobjarray[index]['box']['id']
-        console.log('===========')
-        console.log(apiBaseUrl)
-        console.log(boxNo)
         this.$http.post('http://localhost:8081/test/getEquipMonitor', {
           Authorization: authorization,
           apiBaseUrl: apiBaseUrl,
-          boxNo: boxNo,
-          uid: uid
+          boxNo: boxNo
         }).then(res => {
           console.log('res=>')
           console.log(res)

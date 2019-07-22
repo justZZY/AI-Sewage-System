@@ -73,15 +73,15 @@ public class UserController {
         String authorization = jsonObject.getString("Authorization");
         String apiBaseUrl = jsonObject.getString("apiBaseUrl");
         String boxNo = jsonObject.getString("boxNo");
-        String uid = jsonObject.getString("uid");
-        String url = apiBaseUrl + "v2/box/dmon/get?boxNo=" + boxNo;
+//        String uid = jsonObject.getString("uid");
+        String url = apiBaseUrl + "v2/box/dmon/grouped?boxNo=" + boxNo;
         OkHttpClient client = new OkHttpClient();
-        FormBody formBody = new FormBody.Builder()
-                .add("Uid", uid)
-                .build();
+//        FormBody formBody = new FormBody.Builder()
+//                .add("Uid", uid)
+//                .build();
         Request request = new Request.Builder().url(url)
                 .addHeader("Authorization", authorization)
-                .post(formBody)
+//                .post(formBody)
                 .build();
         Response response = client.newCall(request).execute();
         if (response.isSuccessful()) {
