@@ -100,11 +100,34 @@
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
         this.$http.post('http://localhost:8081/test/getEquipMonitor', {
-          Authorization: authorization,
+          authorization: authorization,
           apiBaseUrl: apiBaseUrl,
           boxNo: boxNo
         }).then(res => {
-          console.log('res=>')
+          let data = res['data']
+          console.log(data)
+          let dataArray = findEquipName(data)
+          // 组装表数据
+          console.log(dataArray)
+          let ans = this.getEquipValue(dataArray)
+          console.log(ans)
+          return dataArray
+        })
+      },
+      // 获取监控寄存器的值
+      getEquipValue (dataArray) {
+        let index = this.$store.state.ChooseData.chooseData
+        let authorization = 'Bearer ' + window.jsonobj['access_token']
+        let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
+        let boxNo = window.equipmentobjarray[index]['box']['boxNo']
+        let names = getMonitorNames(dataArray)
+        console.log(names)
+        this.$http.post('http://localhost:8081/test/getEquipValue', {
+          authorization: authorization,
+          apiBaseUrl: apiBaseUrl,
+          boxNo: boxNo,
+          names: names
+        }).then(res => {
           console.log(res)
         })
       }
@@ -113,6 +136,55 @@
 
     }
   }
+  /*
+   * 判定设备数据是否需要组合
+   * arg: data:服务器上获取的json数据
+   * return: 处理后的控制json数组
+   *
+   * --undo 优化 根据所需要的label数据生成相应的array数据
+   */
+  function findEquipName (data) {
+    let indexState = -1
+    let indexRemote = -1
+    let indexEquip = -1
+    for (let i = 0; i < data.length; i++) {
+      if (data[i]['name'] === '状态') {
+        indexState = i
+      } else if (data[i]['name'] === '远程') {
+        indexRemote = i
+      } else if (name === '设备控制') {
+        indexEquip = i
+      }
+    }
+    let newData = []
+    if (indexState !== -1 && indexRemote !== -1) {
+      // 组合数组
+      newData = data[indexState]['items'].concat(data[indexRemote]['items'])
+    } else if (indexEquip !== -1) {
+      // 单数组
+      newData = data[indexEquip]['items']
+    }
+    return newData
+  }
+  /*
+   * 获取寄存器设备名称作为json参数传出
+   * return: names
+   */
+  function getMonitorNames (dataArray) {
+    let names = []
+    for (let i = 0; i < dataArray.length; i++) {
+      names.push(dataArray[i]['name'])
+    }
+    return names
+  }
+  /*
+   * 根据正则组合设备控制数据
+   * arg: data:原始json拼凑的设备数据
+   * return: 设备控制表数据
+   */
+  // function getDeviceData (data) {
+  //
+  // }
 </script>
 
 <style scoped>

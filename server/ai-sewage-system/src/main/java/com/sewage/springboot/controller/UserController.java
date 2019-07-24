@@ -1,6 +1,7 @@
 package com.sewage.springboot.controller;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import okhttp3.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -59,8 +60,8 @@ public class UserController {
         }
     }
 
-    //在入参设置@RequestBody注解表示接收整个报文体，这里主要用在接收整个POST请求中的json报文体，
-    //目前主流的请求报文也都是JSON格式了，使用该注解就能够获取整个JSON报文体作为入参，使用JSON解析工具解析后获取具体参数
+    // 在入参设置@RequestBody注解表示接收整个报文体，这里主要用在接收整个POST请求中的json报文体，
+    // 目前主流的请求报文也都是JSON格式了，使用该注解就能够获取整个JSON报文体作为入参，使用JSON解析工具解析后获取具体参数
     @RequestMapping(value = "/getUserByJson",method = RequestMethod.POST)
     String getUserByJson(@RequestBody String data){
         return "Json is " + data;
@@ -70,18 +71,13 @@ public class UserController {
     @RequestMapping(value = "/getEquipMonitor", method = RequestMethod.POST)
     String getEquipMonitor (@RequestBody JSONObject jsonObject) throws IOException {
         // 通过fastJson获取相关的post参数
-        String authorization = jsonObject.getString("Authorization");
+        String authorization = jsonObject.getString("authorization");
         String apiBaseUrl = jsonObject.getString("apiBaseUrl");
         String boxNo = jsonObject.getString("boxNo");
-//        String uid = jsonObject.getString("uid");
         String url = apiBaseUrl + "v2/box/dmon/grouped?boxNo=" + boxNo;
         OkHttpClient client = new OkHttpClient();
-//        FormBody formBody = new FormBody.Builder()
-//                .add("Uid", uid)
-//                .build();
         Request request = new Request.Builder().url(url)
                 .addHeader("Authorization", authorization)
-//                .post(formBody)
                 .build();
         Response response = client.newCall(request).execute();
         if (response.isSuccessful()) {
@@ -89,5 +85,19 @@ public class UserController {
         } else {
             throw new IOException("Unexpected code " + response);
         }
+    }
+    /*
+     * 获取设备值
+     * args: jsonObject组装的json数据 通过fastJson解析
+     * jsonObject: {authorization, apiBaseUrl, boxNo, names}
+     */
+    @RequestMapping(value = "/getEquipValue", method = RequestMethod.POST)
+    String getEquipValue (@RequestBody JSONObject jsonObject) throws IOException {
+        String authorization = jsonObject.getString("authorization");
+        String apiBaseUrl = jsonObject.getString("apiBaseUrl");
+        String boxNo = jsonObject.getString("boxNo");
+        JSONArray names = jsonObject.getJSONArray("names");
+        OkHttpClient client = new OkHttpClient();
+        FormBody formBody = new
     }
 }
