@@ -40,4 +40,6 @@ dependencies {
 	implementation 'com.google.code.kaptcha:kaptcha:2.3'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'com.alibaba:fastjson:1.2.58'
+	// gson
+	implementation 'com.google.code.gson:gson:2.8.5'
 }

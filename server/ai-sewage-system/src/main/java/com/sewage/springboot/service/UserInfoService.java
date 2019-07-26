@@ -1,6 +1,6 @@
 package com.sewage.springboot.service;
 
-import com.sewage.springboot.dao.UserInfo;
+import com.sewage.springboot.entity.UserInfo;
 import org.springframework.stereotype.Service;
 
 @Service

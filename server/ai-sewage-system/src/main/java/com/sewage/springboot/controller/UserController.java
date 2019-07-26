@@ -3,7 +3,10 @@ package com.sewage.springboot.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
+import com.sewage.springboot.entity.EquipJson;
 import okhttp3.*;
+import okio.BufferedSink;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -93,11 +96,38 @@ public class UserController {
      */
     @RequestMapping(value = "/getEquipValue", method = RequestMethod.POST)
     String getEquipValue (@RequestBody JSONObject jsonObject) throws IOException {
+        // 解析传递的json
         String authorization = jsonObject.getString("authorization");
         String apiBaseUrl = jsonObject.getString("apiBaseUrl");
         String boxNo = jsonObject.getString("boxNo");
+        String url = apiBaseUrl + "v2/dmon/value/get?boxNo=" + boxNo;
         JSONArray names = jsonObject.getJSONArray("names");
         OkHttpClient client = new OkHttpClient();
-        FormBody formBody = new
+        // 配置gson解析对象
+        EquipJson equipJson = new EquipJson();
+        String[] str = new String[names.size()];
+        for (int i = 0; i < names.size(); i++) {
+            str[i] = names.getString(i);
+        }
+        equipJson.setNames(str);
+        equipJson.setTimeOut(5000);
+        equipJson.setUseCache(false);
+        // 解析对象为json
+        Gson gson = new Gson();
+        String json = gson.toJson(equipJson);
+        // 请求
+        okhttp3.RequestBody requestBody = FormBody.create(MEDIA_TYPE, json);
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", authorization)
+                .post(requestBody)
+                .build();
+        Response response = client.newCall(request).execute();
+        if (response.isSuccessful()) {
+            return response.body().string();
+        } else {
+            throw new IOException("Unexpected code " + response);
+        }
     }
+    public static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
 }

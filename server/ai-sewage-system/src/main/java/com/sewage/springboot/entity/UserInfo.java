@@ -1,4 +1,4 @@
-package com.sewage.springboot.dao;
+package com.sewage.springboot.entity;
 
 public class UserInfo {
     private String Password;

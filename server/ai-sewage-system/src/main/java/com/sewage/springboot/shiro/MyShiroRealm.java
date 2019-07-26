@@ -1,6 +1,6 @@
 package com.sewage.springboot.shiro;
 
-import com.sewage.springboot.dao.UserInfo;
+import com.sewage.springboot.entity.UserInfo;
 import com.sewage.springboot.service.UserInfoService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;

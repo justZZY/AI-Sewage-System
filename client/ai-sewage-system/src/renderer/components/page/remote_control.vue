@@ -152,7 +152,7 @@
         indexState = i
       } else if (data[i]['name'] === '远程') {
         indexRemote = i
-      } else if (name === '设备控制') {
+      } else if (data[i]['name'] === '设备控制') {
         indexEquip = i
       }
     }
