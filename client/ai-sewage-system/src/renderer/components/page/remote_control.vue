@@ -31,10 +31,10 @@
           <div>
             <el-table :data="devicedata" style="width: 100%" height="300" :row-class-name="tableRowClassName">
               <el-table-column prop="name" label="设备名称" align="center"></el-table-column>
-              <el-table-column prop="run_feedback" label="运行反馈" align="center"></el-table-column>
-              <el-table-column prop="error_feedback" label="故障反馈" align="center"></el-table-column>
-              <el-table-column prop="state" label="手动/自动" align="center"></el-table-column>
-              <el-table-column prop="operate" label="操作" align="center"></el-table-column>
+              <el-table-column prop="运行反馈" label="运行反馈" align="center"></el-table-column>
+              <el-table-column prop="故障反馈" label="故障反馈" align="center"></el-table-column>
+              <el-table-column prop="手自动开关" label="手动/自动" align="center"></el-table-column>
+              <el-table-column prop="启停开关" label="启动/停止" align="center"></el-table-column>
             </el-table>
           </div>
         </el-card>
@@ -50,37 +50,7 @@
       let test = this.getEquipMonitor()
       console.log(test)
       return {
-        devicedata: [{
-          name: '测试1',
-          run_feedback: '测试反馈1',
-          error_feedback: '测试故障反馈1',
-          state: '自动测试1',
-          operate: '测试测试测试测试测试1'
-        }, {
-          name: '测试2',
-          run_feedback: '测试反馈2',
-          error_feedback: '测试故障反馈2',
-          state: '自动测试2',
-          operate: '测试测试测试测试测试2'
-        }, {
-          name: '测试2',
-          run_feedback: '测试反馈2',
-          error_feedback: '测试故障反馈2',
-          state: '自动测试2',
-          operate: '测试测试测试测试测试2'
-        }, {
-          name: '测试2',
-          run_feedback: '测试反馈2',
-          error_feedback: '测试故障反馈2',
-          state: '自动测试2',
-          operate: '测试测试测试测试测试2'
-        }, {
-          name: '测试2',
-          run_feedback: '测试反馈2',
-          error_feedback: '测试故障反馈2',
-          state: '自动测试2',
-          operate: '测试测试测试测试测试2'
-        }]
+        devicedata: []
       }
     },
     methods: {
@@ -129,11 +99,12 @@
           names: names
         }).then(res => {
           console.log(res)
+          let values = res['data']
+          let deviceData = formatDeviceData(values, dataArray)
+          console.log(deviceData)
+          this.devicedata = deviceData
         })
       }
-    },
-    computed: {
-
     }
   }
   /*
@@ -182,9 +153,50 @@
    * arg: data:原始json拼凑的设备数据
    * return: 设备控制表数据
    */
-  // function getDeviceData (data) {
-  //
-  // }
+  function formatDeviceData (datas, labelArray) {
+    console.log(datas)
+    let deviceArray = []
+    for (let i = 0; i < datas.length; i++) {
+      let originName = datas[i]['name']
+      // 分割字符串名
+      let names = originName.split('_')
+      let deviceName = names[1]
+      let labelName = names[2]
+      console.log(names)
+      let dataType = datas[i]['dataType']
+      let value = datas[i]['value']
+      // 位类型获取标记label
+      let label = ''
+      if (dataType === 0) {
+        if (value === 0) {
+          label = labelArray[i]['label']['ftext']
+        } else {
+          label = labelArray[i]['label']['ttext']
+        }
+      } else {
+      }
+      // 组装数据
+      let index = getDeviceIndex(deviceArray, deviceName)
+      if (index === -1) {
+        deviceArray.push({'name': deviceName, [labelName]: label})
+      } else {
+        deviceArray[index][labelName] = label
+      }
+    }
+    return deviceArray
+  }
+  /*
+   * 获取相同设备名的index
+   */
+  function getDeviceIndex (deviceArray, name) {
+    for (let index = 0; index < deviceArray.length; index++) {
+      const element = deviceArray[index]
+      if (element['name'] === name) {
+        return index
+      }
+    }
+    return -1
+  }
 </script>
 
 <style scoped>
