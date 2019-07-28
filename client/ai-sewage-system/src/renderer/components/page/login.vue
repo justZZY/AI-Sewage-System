@@ -33,7 +33,7 @@
         }).then(function (response) {
           // 解析请求到的设备数据
           window.equipmentobj = JSON.parse(JSON.stringify(response))['data']
-          window.equipmentobjarray = window.equipmentobj[0]['boxRegs'].concat(window.equipmentobj[1]['boxRegs'])
+          window.equipmentobjarray = window.equipmentobj[0]['boxRegs']// .concat(window.equipmentobj[1]['boxRegs'])
           console.log(window.equipmentobj)
           console.log(window.equipmentobjarray)
           console.log('正式设备: ' + window.equipmentobj[0]['name'])
