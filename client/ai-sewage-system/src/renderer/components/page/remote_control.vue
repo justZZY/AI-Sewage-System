@@ -33,8 +33,24 @@
               <el-table-column prop="name" label="设备名称" align="center"></el-table-column>
               <el-table-column prop="运行反馈" label="运行反馈" align="center"></el-table-column>
               <el-table-column prop="故障反馈" label="故障反馈" align="center"></el-table-column>
-              <el-table-column prop="手自动开关" label="手动/自动" align="center"></el-table-column>
-              <el-table-column prop="启停开关" label="启动/停止" align="center"></el-table-column>
+              <el-table-column prop="手自动开关" label="手动/自动" align="center">
+                <template slot-scope="scope">
+                  <el-switch 
+                    v-model="scope.row.手自动开关"
+                    active-text="自动"
+                    inactive-text="手动">
+                  </el-switch>
+                </template>
+              </el-table-column>
+              <el-table-column prop="启停开关" label="启动/停止" align="center">
+                <template slot-scope="scope">
+                  <el-switch
+                    v-model="scope.row.启停开关"
+                    active-text="启动"
+                    inactive-text="停止">
+                  </el-switch>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
         </el-card>
@@ -162,19 +178,7 @@
       let names = originName.split('_')
       let deviceName = names[1]
       let labelName = names[2]
-      console.log(names)
-      let dataType = datas[i]['dataType']
-      let value = datas[i]['value']
-      // 位类型获取标记label
-      let label = ''
-      if (dataType === 0) {
-        if (value === 0) {
-          label = labelArray[i]['label']['ftext']
-        } else {
-          label = labelArray[i]['label']['ttext']
-        }
-      } else {
-      }
+      let label = getDeviceLabel(labelArray, datas, i, labelName)
       // 组装数据
       let index = getDeviceIndex(deviceArray, deviceName)
       if (index === -1) {
@@ -196,6 +200,34 @@
       }
     }
     return -1
+  }
+  /*
+   * 获取设备label名
+   * 判定太多单独提出来作为一个函数
+   */
+  function getDeviceLabel (labelArray, datas, i, labelName) {
+    let dataType = datas[i]['dataType']
+    let value = datas[i]['value']
+    // 位类型获取标记label
+    let label = ''
+    // 匹配正则 判定是否返回bool型数据
+    let reg = /.*反馈/
+    let boolFlag = reg.test(labelName)
+    if (dataType === 0 && boolFlag) {
+      if (value === 0) {
+        label = labelArray[i]['label']['ftext']
+      } else {
+        label = labelArray[i]['label']['ttext']
+      }
+    } else if (dataType === 0 && !boolFlag) {
+      if (value === 0) {
+        label = false
+      } else {
+        label = true
+      }
+    } else {
+    }
+    return label
   }
 </script>
 
