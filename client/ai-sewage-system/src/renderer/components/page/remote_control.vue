@@ -73,7 +73,8 @@
       let test = this.getEquipMonitor()
       console.log(test)
       return {
-        devicedata: []
+        devicedata: [],
+        monitordata: []
       }
     },
     methods: {

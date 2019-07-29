@@ -29,7 +29,7 @@ dependencies {
 	// web 应用程序
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	// okhttp
-	implementation 'com.squareup.okhttp3:okhttp:3.5.0'
+	implementation 'com.squareup.okhttp3:okhttp:3.11.0'
 	// shiro
 	implementation 'org.apache.shiro:shiro-core:latest.release'
 	implementation 'org.apache.shiro:shiro-ehcache:latest.release'
