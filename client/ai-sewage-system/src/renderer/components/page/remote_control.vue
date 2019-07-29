@@ -6,8 +6,11 @@
           <div class="clearfix" slot="header">
             <span>传感器监控</span>
           </div>
-          <div v-for="o in 4" :key="o">
-            {{'列表内容 ' + o}}
+          <div>
+            <el-table :data="monitordata" height="275" stripe>
+              <el-table-column prop="name" label="传感器名称" align="center"></el-table-column>
+              <el-table-column prop="value" label="数值" align="center"></el-table-column>
+            </el-table>
           </div>
         </el-card>
       </el-col>
@@ -22,32 +25,36 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row :gutter="20">
+    <el-row class="bottomRow" :gutter="20">
       <el-col>
         <el-card shadow="always" body-style="height: 100%">
           <div slot="header">
             <span>设备控制</span>
           </div>
           <div>
-            <el-table :data="devicedata" style="width: 100%" height="300" :row-class-name="tableRowClassName">
+            <el-table :data="devicedata" style="width: 100%" height="300" border stripe :row-class-name="tableRowClassName">
               <el-table-column prop="name" label="设备名称" align="center"></el-table-column>
               <el-table-column prop="运行反馈" label="运行反馈" align="center"></el-table-column>
               <el-table-column prop="故障反馈" label="故障反馈" align="center"></el-table-column>
               <el-table-column prop="手自动开关" label="手动/自动" align="center">
                 <template slot-scope="scope">
-                  <el-switch 
+                  <el-switch
+                    v-if="scope.row.手自动开关 !== undefined" 
                     v-model="scope.row.手自动开关"
                     active-text="自动"
-                    inactive-text="手动">
+                    inactive-text="手动"
+                    @change="autoChange(scope)">
                   </el-switch>
                 </template>
               </el-table-column>
               <el-table-column prop="启停开关" label="启动/停止" align="center">
                 <template slot-scope="scope">
                   <el-switch
+                    v-if="scope.row.启停开关 !== undefined"
                     v-model="scope.row.启停开关"
                     active-text="启动"
-                    inactive-text="停止">
+                    inactive-text="停止"
+                    @change="runChange(scope)">
                   </el-switch>
                 </template>
               </el-table-column>
@@ -119,6 +126,46 @@
           let deviceData = formatDeviceData(values, dataArray)
           console.log(deviceData)
           this.devicedata = deviceData
+        })
+      },
+      autoChange (scope) {
+        console.log(scope)
+        let name = scope['row']['name']
+        this.$confirm('此操作将修改设备' + name + '的值, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '修改成功'
+          })
+        }).catch(() => {
+          scope['row']['手自动开关'] = !scope['row']['手自动开关']
+          this.$message({
+            type: 'info',
+            message: '已取消修改'
+          })
+        })
+      },
+      runChange (scope) {
+        console.log(scope)
+        let name = scope['row']['name']
+        this.$confirm('此操作将修改设备' + name + '的值, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '修改成功'
+          })
+        }).catch(() => {
+          scope['row']['启停开关'] = !scope['row']['启停开关']
+          this.$message({
+            type: 'info',
+            message: '已取消修改'
+          })
         })
       }
     }
@@ -211,15 +258,17 @@
     // 位类型获取标记label
     let label = ''
     // 匹配正则 判定是否返回bool型数据
-    let reg = /.*反馈/
-    let boolFlag = reg.test(labelName)
-    if (dataType === 0 && boolFlag) {
+    let feedbackReg = /.*反馈/
+    let switchReg = /.*开关/
+    let feedbackFlag = feedbackReg.test(labelName)
+    let switchFlag = switchReg.test(labelName)
+    if (dataType === 0 && feedbackFlag) {
       if (value === 0) {
         label = labelArray[i]['label']['ftext']
       } else {
         label = labelArray[i]['label']['ttext']
       }
-    } else if (dataType === 0 && !boolFlag) {
+    } else if (dataType === 0 && switchFlag) {
       if (value === 0) {
         label = false
       } else {
@@ -237,5 +286,8 @@
   }
   .el-table .warning-row {
     background: #9d0006;
+  }
+  .bottomRow {
+    margin-bottom: 0px;
   }
 </style>
