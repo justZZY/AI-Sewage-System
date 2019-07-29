@@ -32,7 +32,7 @@
             <span>设备控制</span>
           </div>
           <div>
-            <el-table :data="devicedata" style="width: 100%" height="300" border stripe :row-class-name="tableRowClassName">
+            <el-table :data="devicedata" style="width: 100%" height="300" border stripe>
               <el-table-column prop="name" label="设备名称" align="center"></el-table-column>
               <el-table-column prop="运行反馈" label="运行反馈" align="center"></el-table-column>
               <el-table-column prop="故障反馈" label="故障反馈" align="center"></el-table-column>
@@ -77,12 +77,6 @@
       }
     },
     methods: {
-      tableRowClassName ({row, rowIndex}) {
-        if (rowIndex === 1) {
-          return 'warning-row'
-        }
-        return ''
-      },
       // 获取监控的数据 会通过计算进行变动
       // args: apiBaseUrl boxNo
       // 参数根据equipmentobjarray和vuex中存储的下标进行计算
