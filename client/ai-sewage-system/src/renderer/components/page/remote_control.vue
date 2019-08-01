@@ -19,7 +19,7 @@
           <div slot="header">
             <span>站点组态图信息</span>
           </div>
-          <div>
+          <div>``
             <span>组态图内容--undo</span>
           </div>
         </el-card>
@@ -39,22 +39,22 @@
               <el-table-column prop="手自动开关" label="手动/自动" align="center">
                 <template slot-scope="scope">
                   <el-switch
-                    v-if="scope.row.手自动开关 !== undefined" 
-                    v-model="scope.row.手自动开关"
-                    active-text="自动"
-                    inactive-text="手动"
-                    @change="autoChange(scope)">
+                      v-if="scope.row.手自动开关 !== undefined"
+                      v-model="scope.row.手自动开关"
+                      active-text="自动"
+                      inactive-text="手动"
+                      @change="autoChange(scope)">
                   </el-switch>
                 </template>
               </el-table-column>
               <el-table-column prop="启停开关" label="启动/停止" align="center">
                 <template slot-scope="scope">
                   <el-switch
-                    v-if="scope.row.启停开关 !== undefined"
-                    v-model="scope.row.启停开关"
-                    active-text="启动"
-                    inactive-text="停止"
-                    @change="runChange(scope)">
+                      v-if="scope.row.启停开关 !== undefined"
+                      v-model="scope.row.启停开关"
+                      active-text="启动"
+                      inactive-text="停止"
+                      @change="runChange(scope)">
                   </el-switch>
                 </template>
               </el-table-column>
@@ -67,9 +67,11 @@
 </template>
 
 <script>
+  window.$ = window.jQuery = require('jquery')
   export default {
     name: 'remote_control',
     data () {
+      this.createSignalRConnect()
       let test = this.getEquipMonitor()
       console.log(test)
       return {
@@ -78,6 +80,23 @@
       }
     },
     methods: {
+      /*
+       * 建立实时监控连接
+       */
+      createSignalRConnect () {
+        let index = this.$store.state.ChooseData.chooseData
+        let signalrUrl = window.equipmentobjarray[index]['box']['cs']['signalrUrl']
+        let token = window.jsonobj['access_token']
+        let queryString = 'at=' + token + '&cid=ynsk'
+        let hub = window.$.hubConnection(signalrUrl, {qs: queryString})
+        let proxy = hub.createHubProxy('clientHub')
+        proxy.on('dMonUpdateValue', function (message) {
+          console.log(message)
+        })
+        hub.start()
+          .done(function () { console.log('Now connected, connection ID=' + hub.id) })
+          .fail(function () { console.log('Could not connect') })
+      },
       // 获取监控的数据 会通过计算进行变动
       // args: apiBaseUrl boxNo
       // 参数根据equipmentobjarray和vuex中存储的下标进行计算
