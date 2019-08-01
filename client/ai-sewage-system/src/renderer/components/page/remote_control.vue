@@ -94,8 +94,12 @@
           console.log(message)
         })
         hub.start()
-          .done(function () { console.log('Now connected, connection ID=' + hub.id) })
-          .fail(function () { console.log('Could not connect') })
+          .done(function () {
+            console.log('Now connected, connection ID=' + hub.id)
+          })
+          .fail(function () {
+            console.log('Could not connect')
+          })
       },
       // 获取监控的数据 会通过计算进行变动
       // args: apiBaseUrl boxNo
@@ -184,6 +188,7 @@
       }
     }
   }
+
   /*
    * 判定设备数据是否需要组合
    * arg: data:服务器上获取的json数据
@@ -214,6 +219,7 @@
     }
     return newData
   }
+
   /*
    * 获取寄存器设备名称作为json参数传出
    * return: names
@@ -225,6 +231,7 @@
     }
     return names
   }
+
   /*
    * 根据正则组合设备控制数据
    * arg: data:原始json拼凑的设备数据
@@ -250,6 +257,7 @@
     }
     return deviceArray
   }
+
   /*
    * 获取相同设备名的index
    */
@@ -262,6 +270,7 @@
     }
     return -1
   }
+
   /*
    * 获取设备label名
    * 判定太多单独提出来作为一个函数
@@ -298,9 +307,11 @@
   .el-row {
     margin-bottom: 20px;
   }
+
   .el-table .warning-row {
     background: #9d0006;
   }
+
   .bottomRow {
     margin-bottom: 0px;
   }

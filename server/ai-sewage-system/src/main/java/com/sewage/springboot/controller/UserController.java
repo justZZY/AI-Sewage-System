@@ -27,14 +27,14 @@ public class UserController {
     String testLogin() throws IOException {
         OkHttpClient client = new OkHttpClient();
         FormBody formBody = new FormBody.Builder()
-                .add("username", "kmzmhj")
-                .add("password", "zmhj123456")
-                .add("client_id", "kmbq")
-                .add("client_secret", "a89f97dc2ed2457aa0c6e58eb40142b2")
-//                .add("username", "ligaofa")
-//                .add("password", "gf229192")
-//                .add("client_id", "ynsk")
-//                .add("client_secret", "af6a37beddb28136eed65bda1f16547f")
+//                .add("username", "kmzmhj")
+//                .add("password", "zmhj123456")
+//                .add("client_id", "kmbq")
+//                .add("client_secret", "a89f97dc2ed2457aa0c6e58eb40142b2")
+                .add("username", "ligaofa")
+                .add("password", "gf229192")
+                .add("client_id", "ynsk")
+                .add("client_secret", "af6a37beddb28136eed65bda1f16547f")
                 .add("scope", "openid offline_access fbox email profile")
                 .add("grant_type", "password")
                 .build();
