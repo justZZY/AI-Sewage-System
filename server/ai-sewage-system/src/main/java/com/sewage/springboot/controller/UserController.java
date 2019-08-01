@@ -5,8 +5,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.sewage.springboot.entity.EquipJson;
+import com.sewage.springboot.entity.EquipValueJson;
 import okhttp3.*;
-import okio.BufferedSink;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -133,5 +133,41 @@ public class UserController {
             throw new IOException("Unexpected code " + response);
         }
     }
+    /*
+     * 设置设备寄存器的值
+     */
+    @RequestMapping(value = "setEquipValue", method = RequestMethod.POST)
+    String setEquipValue (@RequestBody JSONObject jsonObject) throws IOException {
+        String authorization = jsonObject.getString("authorization");
+        String apiUrl = jsonObject.getString("apiUrl");
+        String boxNo = jsonObject.getString("boxNo");
+        String name = jsonObject.getString("name");
+        int type = jsonObject.getIntValue("type");
+        String value = jsonObject.getString("value");
+        String url = apiUrl + "v2/dmon/value?boxNo=" + boxNo;
+        // 生成json类
+        EquipValueJson equipValueJson = new EquipValueJson();
+        equipValueJson.setName(name);
+        equipValueJson.setType(type);
+        equipValueJson.setValue(value);
+        Gson gson = new Gson();
+        String json = gson.toJson(equipValueJson);
+        // 建立json连接
+        okhttp3.RequestBody requestBody = FormBody.create(MEDIA_TYPE, json);
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", authorization)
+                .post(requestBody)
+                .build();
+        Response response = client.newCall(request).execute();
+        System.out.println(response.headers());
+        if (response.isSuccessful()) {
+            return response.body().string();
+        } else {
+            throw new IOException("Unexpected code " + response);
+        }
+    }
+
     public static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
 }

@@ -36,8 +36,6 @@ dependencies {
 	implementation 'org.apache.shiro:shiro-web:latest.release'
 	implementation 'org.crazycake:shiro-redis:3.2.1'
 	implementation 'org.apache.shiro:shiro-spring:1.4.0'
-	// google验证码框架
-	implementation 'com.google.code.kaptcha:kaptcha:2.3'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'com.alibaba:fastjson:1.2.58'
 	// gson

@@ -20,8 +20,8 @@
       window.equipmentposarray = getEquipmentPosArray()
       return {
         activeIndex: '1',
-        center: '昆明市',
-        zoom: 8,
+        center: '云南大学呈贡校区',
+        zoom: 12,
         equipposarray: window.equipmentposarray,
         defaultProps: {
           children: 'children',
@@ -72,9 +72,9 @@
     let equipmentposarray = []
     for (let i = 0; i < equipmentobjarray.length; i++) {
       let name = equipmentobjarray[i]['alias']
-      let address = equipmentobjarray[i]['box']['address']
-      let longitude = equipmentobjarray[i]['box']['longitude']
-      let latitude = equipmentobjarray[i]['box']['latitude']
+      let address = equipmentobjarray[i]['box']['useAddress']
+      let longitude = equipmentobjarray[i]['box']['useLongitude']
+      let latitude = equipmentobjarray[i]['box']['useLatitude']
       let net = equipmentobjarray[i]['box']['net']
       let posobj = {
         'name': name,

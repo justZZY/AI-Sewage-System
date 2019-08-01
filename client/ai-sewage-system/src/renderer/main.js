@@ -8,6 +8,7 @@ import BaiduMap from 'vue-baidu-map'
 import App from './App'
 import router from './router'
 import store from './store'
+import 'signalr'
 
 Vue.use(ElementUI)
 Vue.use(BaiduMap, {

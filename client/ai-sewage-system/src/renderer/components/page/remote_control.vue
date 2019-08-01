@@ -8,7 +8,7 @@
           </div>
           <div>
             <el-table :data="monitordata" height="275" stripe>
-              <el-table-column prop="name" label="传感器名称" align="center"></el-table-column>
+              <el-table-column prop="name" label="名称" align="center"></el-table-column>
               <el-table-column prop="value" label="数值" align="center"></el-table-column>
             </el-table>
           </div>
@@ -33,10 +33,11 @@
           </div>
           <div>
             <el-table :data="devicedata" style="width: 100%" height="300" border stripe>
-              <el-table-column prop="name" label="设备名称" align="center"></el-table-column>
-              <el-table-column prop="运行反馈" label="运行反馈" align="center"></el-table-column>
-              <el-table-column prop="故障反馈" label="故障反馈" align="center"></el-table-column>
-              <el-table-column prop="手自动开关" label="手动/自动" align="center">
+              <el-table-column prop="name" label="设备名称" align="center" width="160"></el-table-column>
+              <el-table-column prop="手自动反馈" label="手自动反馈" align="center" width="100"></el-table-column>
+              <el-table-column prop="运行反馈" label="运行反馈" align="center" width="100"></el-table-column>
+              <el-table-column prop="故障反馈" label="故障反馈" align="center" width="100"></el-table-column>
+              <el-table-column prop="手自动开关" label="手动/自动" align="center" width="160">
                 <template slot-scope="scope">
                   <el-switch
                       v-if="scope.row.手自动开关 !== undefined"
@@ -47,15 +48,12 @@
                   </el-switch>
                 </template>
               </el-table-column>
-              <el-table-column prop="启停开关" label="启动/停止" align="center">
+              <el-table-column prop="启停开关" label="启动/停止" align="center" min-width="190">
                 <template slot-scope="scope">
-                  <el-switch
-                      v-if="scope.row.启停开关 !== undefined"
-                      v-model="scope.row.启停开关"
-                      active-text="启动"
-                      inactive-text="停止"
-                      @change="runChange(scope)">
-                  </el-switch>
+                  <el-button v-if="scope.row.手自动开关 === false" type="primary" plain @click="startEquipBtn(scope)">启动</el-button>
+                  <el-button v-if="scope.row.手自动开关 === false" type="primary" plain @click="stopEquipBtn(scope)">停止</el-button>
+                  <el-button v-if="scope.row.手自动开关 === true" type="primary" disabled plain @click="startEquipBtn(scope)">启动</el-button>
+                  <el-button v-if="scope.row.手自动开关 === true" type="primary" disabled plain @click="stopEquipBtn(scope)">停止</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -71,36 +69,47 @@
   export default {
     name: 'remote_control',
     data () {
-      this.createSignalRConnect()
-      let test = this.getEquipMonitor()
-      console.log(test)
+      this.getEquipMonitor()
       return {
+        timer: null,
         devicedata: [],
         monitordata: []
       }
     },
     methods: {
       /*
+       * (完成实时数据监控后删除此方法)
+       * 设置数据监控定时器
+       */
+      setTimer () {
+        if (this.timer === null) {
+          this.timer = setInterval(this.getEquipMonitor, 5000)
+        }
+      },
+      /*
        * 建立实时监控连接
        */
-      createSignalRConnect () {
-        let index = this.$store.state.ChooseData.chooseData
-        let signalrUrl = window.equipmentobjarray[index]['box']['cs']['signalrUrl']
-        let token = window.jsonobj['access_token']
-        let queryString = 'at=' + token + '&cid=ynsk'
-        let hub = window.$.hubConnection(signalrUrl, {qs: queryString})
-        let proxy = hub.createHubProxy('clientHub')
-        proxy.on('dMonUpdateValue', function (message) {
-          console.log(message)
-        })
-        hub.start()
-          .done(function () {
-            console.log('Now connected, connection ID=' + hub.id)
-          })
-          .fail(function () {
-            console.log('Could not connect')
-          })
-      },
+      // createSignalRConnect () {
+      //   let index = this.$store.state.ChooseData.chooseData
+      //   let signalrUrl = window.equipmentobjarray[index]['box']['cs']['signalrUrl']
+      //   let token = window.jsonobj['access_token']
+      //   let queryString = 'at=' + token + '&cid=ynsk'
+      //   let hub = window.$.hubConnection(signalrUrl, {qs: queryString})
+      //   let proxy = hub.createHubProxy('clientHub')
+      //   proxy.on('dMonUpdateValue', function (message) {
+      //     console.log(message)
+      //   })
+      //   proxy.on('boxConnStateChanged', function (message) {
+      //     console.log(message)
+      //   })
+      //   hub.start()
+      //     .done(function () {
+      //       console.log('Now connected, connection ID=' + hub.id)
+      //     })
+      //     .fail(function () {
+      //       console.log('Could not connect')
+      //     })
+      // },
       // 获取监控的数据 会通过计算进行变动
       // args: apiBaseUrl boxNo
       // 参数根据equipmentobjarray和vuex中存储的下标进行计算
@@ -110,30 +119,35 @@
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-        this.$http.post('http://localhost:8081/test/getEquipMonitor', {
+        this.$http.post('http://114.55.146.36:8081/test/getEquipMonitor', {
           authorization: authorization,
           apiBaseUrl: apiBaseUrl,
           boxNo: boxNo
         }).then(res => {
           let data = res['data']
           console.log(data)
-          let dataArray = findEquipName(data)
-          // 组装表数据
-          console.log(dataArray)
-          let ans = this.getEquipValue(dataArray)
+          // 请求设备控制数据
+          let equipDataArray = findEquipName(data)
+          console.log(equipDataArray)
+          let ans = this.getEquipValue(equipDataArray, 'device')
           console.log(ans)
-          return dataArray
+          // 请求监控数据
+          let monitorDataArray = findMonitorName(data)
+          console.log(monitorDataArray)
+          ans = this.getEquipValue(monitorDataArray, 'monitor')
+          console.log(ans)
+          console.log('====refresh data')
         })
       },
       // 获取监控寄存器的值
-      getEquipValue (dataArray) {
+      getEquipValue (dataArray, type) {
         let index = this.$store.state.ChooseData.chooseData
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
         let names = getMonitorNames(dataArray)
         console.log(names)
-        this.$http.post('http://localhost:8081/test/getEquipValue', {
+        this.$http.post('http://114.55.146.36:8081/test/getEquipValue', {
           authorization: authorization,
           apiBaseUrl: apiBaseUrl,
           boxNo: boxNo,
@@ -141,23 +155,27 @@
         }).then(res => {
           console.log(res)
           let values = res['data']
-          let deviceData = formatDeviceData(values, dataArray)
-          console.log(deviceData)
-          this.devicedata = deviceData
+          if (type === 'device') {
+            this.devicedata = formatDeviceData(values, dataArray)
+          } else if (type === 'monitor') {
+            this.monitordata = formatMonitorData(values)
+          }
         })
       },
       autoChange (scope) {
         console.log(scope)
+        let key = '手自动开关'
         let name = scope['row']['name']
+        let value = 0
+        if (scope['row']['手自动开关'] === true) {
+          value = 1
+        }
         this.$confirm('此操作将修改设备' + name + '的值, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '修改成功'
-          })
+          this.setEquipValue(formatName(key, name), 0, value)
         }).catch(() => {
           scope['row']['手自动开关'] = !scope['row']['手自动开关']
           this.$message({
@@ -166,18 +184,19 @@
           })
         })
       },
-      runChange (scope) {
+      startEquipBtn (scope) {
         console.log(scope)
+        let key = '启动开关'
         let name = scope['row']['name']
-        this.$confirm('此操作将修改设备' + name + '的值, 是否继续?', '提示', {
+        let keyName = formatName(key, name)
+        let type = 0
+        let value = 1
+        this.$confirm('此操作将启动设备' + name + ', 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '修改成功'
-          })
+          this.setEquipValue(keyName, type, value)
         }).catch(() => {
           scope['row']['启停开关'] = !scope['row']['启停开关']
           this.$message({
@@ -185,7 +204,61 @@
             message: '已取消修改'
           })
         })
+      },
+      stopEquipBtn (scope) {
+        console.log(scope)
+        let key = '停止开关'
+        let name = scope['row']['name']
+        let keyName = formatName(key, name)
+        let type = 0
+        let value = 1
+        this.$confirm('此操作将关闭设备' + name + ', 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.setEquipValue(keyName, type, value)
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消修改'
+          })
+        })
+      },
+      /*
+       * 通用接口
+       * 向服务器传值,修改相关的寄存器值
+       */
+      setEquipValue (name, type, value) {
+        let index = this.$store.state.ChooseData.chooseData
+        let authorization = 'Bearer ' + window.jsonobj['access_token']
+        let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
+        let boxNo = window.equipmentobjarray[index]['box']['boxNo']
+        this.$http.post('http://114.55.146.36:8081/test/setEquipValue', {
+          authorization: authorization,
+          apiUrl: apiBaseUrl,
+          boxNo: boxNo,
+          name: name,
+          type: type,
+          value: value
+        }).then(res => {
+          console.log(res)
+          this.$message({
+            type: 'success',
+            message: '修改成功'
+          })
+        })
       }
+    },
+    created () {
+      clearInterval(this.timer)
+      this.timer = null
+      // 开始定时器
+      this.setTimer()
+    },
+    destroyed () {
+      clearInterval(this.timer)
+      this.timer = null
     }
   }
 
@@ -218,6 +291,18 @@
       newData = data[indexEquip]['items']
     }
     return newData
+  }
+  /*
+   * 查找传感监控数据的设备列表
+   */
+  function findMonitorName (data) {
+    let index = -1
+    for (let i = 0; i < data.length; i++) {
+      if (data[i]['name'] === '传感') {
+        index = i
+      }
+    }
+    return data[index]['items']
   }
 
   /*
@@ -257,7 +342,23 @@
     }
     return deviceArray
   }
-
+  /*
+   * 获取传感器监控数据
+   */
+  function formatMonitorData (datas) {
+    console.log(datas)
+    let monitorArray = []
+    for (let i = 0; i < datas.length; i++) {
+      let originName = datas[i]['name']
+      // 分割字符串名
+      let names = originName.split('_')
+      let monitorName = names[1]
+      let labelName = names[2]
+      monitorArray.push({'name': monitorName, 'value': datas[i]['value'] + labelName})
+    }
+    console.log(monitorArray)
+    return monitorArray
+  }
   /*
    * 获取相同设备名的index
    */
@@ -300,6 +401,19 @@
     } else {
     }
     return label
+  }
+
+  /*
+   * 组装寄存器name
+   * 规则: 反馈=>状态 开关=>远程 **=>传感
+   */
+  function formatName (key, name) {
+    let ans = ''
+    let reg = /.*开关/
+    if (reg.test(key)) {
+      ans = '远程'
+    }
+    return ans + '_' + name + '_' + key
   }
 </script>
 
