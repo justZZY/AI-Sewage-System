@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="52d5075d-afa5-4489-bf60-991555596b80" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/java/com/sewage/springboot/entity/EquipValueJson.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/renderer/components/page/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/page/login.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/components/page/map.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/page/map.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/components/page/remote_control.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/page/remote_control.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/java/com/sewage/springboot/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/java/com/sewage/springboot/controller/UserController.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/dist/" />
     <ignored path="$PROJECT_DIR$/node_modules/" />
@@ -24,11 +18,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/renderer/components/page/remote_control.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="520">
-              <caret line="394" column="44" lean-forward="true" selection-start-line="394" selection-start-column="44" selection-end-line="394" selection-end-column="44" />
+            <state relative-caret-position="99">
+              <caret line="221" column="10" selection-start-line="221" selection-start-column="10" selection-end-line="224" selection-end-column="12" />
               <folding>
                 <element signature="n#style#0;n#el-table#0;n#div#1;n#el-card#0;n#el-col#0;n#el-row#1;n#div#0;n#template#0;n#!!top" expanded="true" />
               </folding>
@@ -60,7 +54,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/renderer/components/page/map.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-61">
+            <state relative-caret-position="330">
               <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
               <folding>
                 <element signature="n#style#0;n#bm-info-window#0;n#bm-marker#0;n#div#0;n#baidu-map#0;n#template#0;n#!!top" expanded="true" />
@@ -92,11 +86,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/renderer/store/modules/ChooseData.js">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/renderer/components/page/login.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="20" column="12" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
+            <state relative-caret-position="508">
+              <caret line="51" column="35" selection-start-line="51" selection-start-column="35" selection-end-line="51" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -104,7 +98,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/renderer/components/common/aside.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="426">
+            <state relative-caret-position="480">
               <caret line="32" column="53" selection-start-line="32" selection-start-column="52" selection-end-line="32" selection-end-column="53" />
               <folding>
                 <element signature="n#style#0;n#span#0;n#span#0;n#el-tree#0;n#div#0;n#template#0;n#!!top" expanded="true" />
@@ -178,10 +172,10 @@
         <option value="$PROJECT_DIR$/.electron-vue/webpack.renderer.config.js" />
         <option value="$PROJECT_DIR$/src/renderer/store/modules/ChooseData.js" />
         <option value="$PROJECT_DIR$/src/renderer/components/common/aside.vue" />
-        <option value="$PROJECT_DIR$/src/renderer/components/page/login.vue" />
         <option value="$PROJECT_DIR$/src/renderer/main.js" />
         <option value="$PROJECT_DIR$/src/renderer/components/page/map.vue" />
         <option value="$PROJECT_DIR$/src/renderer/components/page/remote_control.vue" />
+        <option value="$PROJECT_DIR$/src/renderer/components/page/login.vue" />
       </list>
     </option>
   </component>
@@ -206,7 +200,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -267,6 +260,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -352,6 +346,7 @@
       <workItem from="1563947451313" duration="1330000" />
       <workItem from="1564106674626" duration="81000" />
       <workItem from="1564293163503" duration="9000" />
+      <workItem from="1564688497872" duration="1012000" />
     </task>
     <task id="LOCAL-00001" summary="在切换窗口时记录坐标数据">
       <created>1563524950645</created>
@@ -364,10 +359,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="173692000" />
+    <option name="totallyTimeSpent" value="174704000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="808" extended-state="0" />
+    <frame x="0" y="23" width="1440" height="812" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24242425" />
@@ -521,53 +516,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer/components/page/login.vue">
+    <entry file="file://$PROJECT_DIR$/src/renderer/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="31" column="11" selection-start-line="31" selection-start-column="11" selection-end-line="31" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer/components/common/aside.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="426">
-          <caret line="32" column="53" selection-start-line="32" selection-start-column="52" selection-end-line="32" selection-end-column="53" />
+        <state relative-caret-position="150">
+          <caret line="10" column="16" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
           <folding>
-            <element signature="n#style#0;n#span#0;n#span#0;n#el-tree#0;n#div#0;n#template#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer/store/modules/index.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer/store/modules/Treedata.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="13" selection-start-line="12" selection-start-column="2" selection-end-line="12" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer/store/modules/Counter.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="3" selection-start-line="17" selection-start-column="3" selection-end-line="17" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer/store/modules/ChooseData.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="12" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer/components/page/map.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-61">
-          <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
-          <folding>
-            <element signature="n#style#0;n#bm-info-window#0;n#bm-marker#0;n#div#0;n#baidu-map#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="e#0#21#0" expanded="true" />
+            <element signature="e#68#102#0" expanded="true" />
+            <element signature="e#164#200#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -589,25 +545,64 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer/main.js">
+    <entry file="file://$PROJECT_DIR$/src/renderer/components/page/map.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="16" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
+        <state relative-caret-position="330">
+          <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
           <folding>
-            <element signature="e#0#21#0" expanded="true" />
-            <element signature="e#68#102#0" expanded="true" />
-            <element signature="e#164#200#0" expanded="true" />
+            <element signature="n#style#0;n#bm-info-window#0;n#bm-marker#0;n#div#0;n#baidu-map#0;n#template#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/renderer/store/modules/index.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/renderer/store/modules/Treedata.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="13" selection-start-line="12" selection-start-column="2" selection-end-line="12" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/renderer/components/common/aside.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="32" column="53" selection-start-line="32" selection-start-column="52" selection-end-line="32" selection-end-column="53" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#span#0;n#el-tree#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/renderer/store/modules/ChooseData.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="12" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/renderer/store/modules/Counter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="3" selection-start-line="17" selection-start-column="3" selection-end-line="17" selection-end-column="3" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/renderer/components/page/remote_control.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="520">
-          <caret line="394" column="44" lean-forward="true" selection-start-line="394" selection-start-column="44" selection-end-line="394" selection-end-column="44" />
+        <state relative-caret-position="99">
+          <caret line="221" column="10" selection-start-line="221" selection-start-column="10" selection-end-line="224" selection-end-column="12" />
           <folding>
             <element signature="n#style#0;n#el-table#0;n#div#1;n#el-card#0;n#el-col#0;n#el-row#1;n#div#0;n#template#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/renderer/components/page/login.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="508">
+          <caret line="51" column="35" selection-start-line="51" selection-start-column="35" selection-end-line="51" selection-end-column="35" />
         </state>
       </provider>
     </entry>

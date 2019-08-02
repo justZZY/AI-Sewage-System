@@ -13,15 +13,20 @@
     name: 'login-page',
     methods: {
       runTestFun () {
-        this.$http.post('http://114.55.146.36:8081/test/testLogin').then(function (response) {
+        this.$http.post('http://114.55.146.36:8081/test/testLogin').then(response => {
           // 将获取到的登录消息数据设为全局,在后面的设备请求中会用到相关的token
           window.jsonobj = JSON.parse(JSON.stringify(response))['data']
           console.log('access_token: ' + window.jsonobj['access_token'])
           console.log('refresh_token: ' + window.jsonobj['refresh_token'])
           console.log(window.jsonobj['expires_in'])
           console.log(window.jsonobj['token_type'])
-        }).catch(function (error) {
+          this.$message({
+            type: 'success',
+            message: '获取登录数据成功'
+          })
+        }).catch(error => {
           console.log(error)
+          this.$message.error('获取登录数据失败')
         })
       },
       runTestEquipment () {
@@ -30,7 +35,7 @@
             Authorization: 'Bearer ' + window.jsonobj['access_token'],
             XFBoxClientId: 'zzy_test'
           }
-        }).then(function (response) {
+        }).then(response => {
           // 解析请求到的设备数据
           window.equipmentobj = JSON.parse(JSON.stringify(response))['data']
           window.equipmentobjarray = window.equipmentobj[0]['boxRegs']// .concat(window.equipmentobj[1]['boxRegs'])
@@ -38,8 +43,13 @@
           console.log(window.equipmentobjarray)
           console.log('正式设备: ' + window.equipmentobj[0]['name'])
           console.log('正式设备: ' + window.equipmentobj[0]['boxRegs'])
-        }).catch(function (error) {
+          this.$message({
+            type: 'success',
+            message: '获取设备数据成功'
+          })
+        }).catch(error => {
           console.log(error)
+          this.$message.error('获取设备数据失败')
         })
       },
       gotoIndex () {
