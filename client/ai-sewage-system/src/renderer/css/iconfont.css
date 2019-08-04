@@ -1,0 +1,38 @@
+@font-face {
+  font-family: "iconfont";
+  src: url('http://at.alicdn.com/t/font_1332658_ox8ev09o05.eot');
+  src: url('http://at.alicdn.com/t/font_1332658_ox8ev09o05.eot?#iefix') format('embedded-opentype'),
+  url('http://at.alicdn.com/t/font_1332658_ox8ev09o05.woff2') format('woff2'),
+  url('http://at.alicdn.com/t/font_1332658_ox8ev09o05.woff') format('woff'),
+  url('http://at.alicdn.com/t/font_1332658_ox8ev09o05.ttf') format('truetype'),
+  url('http://at.alicdn.com/t/font_1332658_ox8ev09o05.svg#iconfont') format('svg');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-internet:before {
+  content: "\e639";
+}
+
+.icon-Wifi-:before {
+  content: "\e6d5";
+}
+
+.icon-G-Network:before {
+  content: "\e6d6";
+}
+
+.icon-G-Network1:before {
+  content: "\e6d7";
+}
+
+.icon-Network-Error:before {
+  content: "\e86e";
+}
+

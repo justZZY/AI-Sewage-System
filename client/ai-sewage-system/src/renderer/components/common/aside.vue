@@ -1,9 +1,13 @@
 <template>
   <div class="aside">
     <el-tree :data="equiptreedata" :props="defaultProps" @node-click="handleNodeClick" :default-expand-all="true">
-          <span slot-scope="{node, data}">
-            <i :class="data.netclass"></i>
-            <span style="padding-left: 4px;">{{node.label}}</span>
+          <span class="custom-tree-node" slot-scope="{node, data}">
+<!--            <i :class="data.connectClass"></i>-->
+            <span>
+              <i :class="data.connectClass"></i>
+              {{node.label}}
+            </span>
+            <i :class="data.netClass"></i>
           </span>
     </el-tree>
   </div>
@@ -57,7 +61,15 @@
 </script>
 
 <style>
+  @import "../../css/iconfont.css";
   .aside {
     padding-left: 12px;
+  }
+  .custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 10px;
   }
 </style>

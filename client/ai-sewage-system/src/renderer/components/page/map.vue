@@ -76,11 +76,13 @@
       let longitude = equipmentobjarray[i]['box']['useLongitude']
       let latitude = equipmentobjarray[i]['box']['useLatitude']
       let net = equipmentobjarray[i]['box']['net']
+      let connectionState = equipmentobjarray[i]['box']['connectionState']
       let posobj = {
         'name': name,
         'address': address,
         'net': net,
         'showflag': false,
+        'connectionState': connectionState,
         'pos': {
           'longitude': longitude,
           'latitude': latitude
@@ -99,9 +101,10 @@
       let net = posarray[i]['net']
       let longitude = posarray[i]['pos']['longitude']
       let latitude = posarray[i]['pos']['latitude']
+      let connect = posarray[i]['connectionState']
       let matchaddr = await callbackAddrArray(longitude, latitude, BMap)
       console.log('province: ' + matchaddr[0] + 'city: ' + matchaddr[1])
-      treedataarray = insertMatchAddr(treedataarray, matchaddr, name, net)
+      treedataarray = insertMatchAddr(treedataarray, matchaddr, name, net, connect)
     }
     return treedataarray
   }
@@ -110,7 +113,7 @@
   正常情况 matchaddr经过解析后应该长度为2代表省/市
   其他情况下可以视为错误地址
   */
-  function insertMatchAddr (treedataarray, matchaddr, name, net) {
+  function insertMatchAddr (treedataarray, matchaddr, name, net, connect) {
     let province = matchaddr[0]
     let city = matchaddr[1]
     // 标记是否已经在循环时执行过插入
@@ -118,13 +121,14 @@
     let provinceindex = -1
     let cityflag = false
     let netclass = getNetIconClass(net)
+    let connectClass = getConnectClass(connect)
     // 遍历查找是否存在相同的省
     for (let i = 0; i < treedataarray.length; i++) {
       if (treedataarray[i]['label'] === province) {
         provinceflag = true // 存在同省
         for (let j = 0; j < treedataarray[i]['children'].length; j++) {
           if (treedataarray[i]['children'][j]['label'] === city) {
-            treedataarray[i]['children'][j]['children'].push({label: name, netclass: netclass})
+            treedataarray[i]['children'][j]['children'].push({label: name, netClass: netclass, connectClass: connectClass})
             cityflag = true // 存在同市
           }
         }
@@ -133,45 +137,36 @@
     }
     // 表示新的省市
     if (!provinceflag && !cityflag) {
-      treedataarray.push({label: province, children: [{label: city, children: [{label: name, netclass: netclass}]}]})
+      treedataarray.push({label: province, children: [{label: city, children: [{label: name, netClass: netclass, connectClass: connectClass}]}]})
     }
     // 表示已经存在省但不存在市
     if (provinceflag && !cityflag) {
-      treedataarray[provinceindex]['children'].push({label: city, children: [{label: name, netclass: netclass}]})
+      treedataarray[provinceindex]['children'].push({label: city, children: [{label: name, netClass: netclass, connectClass: connectClass}]})
     }
     return treedataarray
   }
 
-  /*
-  这个等找到图标之后再做 先用elementui图标代替
+  // 网络信号图标类
   function getNetIconClass (id) {
     let classname = ''
     switch (id) {
-      case 0: classname = 'unknown_icon'; break
-      case 1: classname = 'ethernet_icon'; break
-      case 2: classname = 'gprs_icon'; break
-      case 3: classname = 'wifi_icon'; break
-      case 4: classname = '4g_icon'; break
-      default: classname = 'unknown_icon'
+      case 0: classname = 'iconfont icon-Network-Error'; break
+      case 1: classname = 'iconfont icon-internet'; break
+      case 2: classname = 'iconfont icon-G-Network'; break
+      case 4: classname = 'iconfont icon-Wifi-'; break
+      case 5: classname = 'iconfont icon-G-Network1'; break
+      default: classname = 'iconfont icon-Network-Error'
     }
     return classname
   }
-   */
-  function getNetIconClass (id) {
+
+  // 连接图标类
+  function getConnectClass (connect) {
     let classname = ''
-    switch (id) {
-      case 0:
-        classname = 'el-icon-apple'; break
-      case 1:
-        classname = 'el-icon-pear'; break
-      case 2:
-        classname = 'el-icon-orange'; break
-      case 4:
-        classname = 'el-icon-grape'; break
-      case 5:
-        classname = 'el-icon-sugar'; break
-      default:
-        classname = 'el-icon-apple'
+    if (connect === 1) {
+      classname = 'el-icon-success'
+    } else {
+      classname = 'el-icon-warning-outline'
     }
     return classname
   }
@@ -208,5 +203,4 @@
     height: 100%;
     overflow: hidden;
   }
-
 </style>

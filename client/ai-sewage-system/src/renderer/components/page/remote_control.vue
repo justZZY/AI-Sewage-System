@@ -19,8 +19,8 @@
           <div slot="header">
             <span>站点组态图信息</span>
           </div>
-          <div>``
-            <span>组态图内容--undo</span>
+          <div>
+            <img src="@/assets/EquipState.png" class="equipImage">
           </div>
         </el-card>
       </el-col>
@@ -119,7 +119,7 @@
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-        this.$http.post('http://114.55.146.36:8081/test/getEquipMonitor', {
+        this.$http.post('http://localhost:8081/test/getEquipMonitor', {
           authorization: authorization,
           apiBaseUrl: apiBaseUrl,
           boxNo: boxNo
@@ -147,7 +147,7 @@
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
         let names = getMonitorNames(dataArray)
         console.log(names)
-        this.$http.post('http://114.55.146.36:8081/test/getEquipValue', {
+        this.$http.post('http://localhost:8081/test/getEquipValue', {
           authorization: authorization,
           apiBaseUrl: apiBaseUrl,
           boxNo: boxNo,
@@ -234,7 +234,7 @@
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-        this.$http.post('http://114.55.146.36:8081/test/setEquipValue', {
+        this.$http.post('http://localhost:8081/test/setEquipValue', {
           authorization: authorization,
           apiUrl: apiBaseUrl,
           boxNo: boxNo,
@@ -428,5 +428,9 @@
 
   .bottomRow {
     margin-bottom: 0px;
+  }
+  .equipImage {
+    width: 96%;
+    display: block;
   }
 </style>
