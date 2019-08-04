@@ -89,27 +89,20 @@
       /*
        * 建立实时监控连接
        */
-      // createSignalRConnect () {
-      //   let index = this.$store.state.ChooseData.chooseData
-      //   let signalrUrl = window.equipmentobjarray[index]['box']['cs']['signalrUrl']
-      //   let token = window.jsonobj['access_token']
-      //   let queryString = 'at=' + token + '&cid=ynsk'
-      //   let hub = window.$.hubConnection(signalrUrl, {qs: queryString})
-      //   let proxy = hub.createHubProxy('clientHub')
-      //   proxy.on('dMonUpdateValue', function (message) {
-      //     console.log(message)
-      //   })
-      //   proxy.on('boxConnStateChanged', function (message) {
-      //     console.log(message)
-      //   })
-      //   hub.start()
-      //     .done(function () {
-      //       console.log('Now connected, connection ID=' + hub.id)
-      //     })
-      //     .fail(function () {
-      //       console.log('Could not connect')
-      //     })
-      // },
+      createSignalRConnect () {
+        let index = this.$store.state.ChooseData.chooseData
+        let signalrUrl = window.equipmentobjarray[index]['box']['cs']['signalrUrl']
+        let token = window.jsonobj['access_token']
+        let queryString = 'at=' + token + '&cid=ynsk'
+        this.$http.post('http://localhost:8081/test/createSignalRConnect', {
+          url: signalrUrl,
+          qs: queryString
+        }).then(response => {
+          console.log(response)
+        }).catch(error => {
+          console.log(error)
+        })
+      },
       // 获取监控的数据 会通过计算进行变动
       // args: apiBaseUrl boxNo
       // 参数根据equipmentobjarray和vuex中存储的下标进行计算

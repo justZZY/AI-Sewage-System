@@ -40,4 +40,5 @@ dependencies {
 	implementation 'com.alibaba:fastjson:1.2.58'
 	// gson
 	implementation 'com.google.code.gson:gson:2.8.5'
+	implementation fileTree(dir: 'libs', includes: ['*.jar'])
 }

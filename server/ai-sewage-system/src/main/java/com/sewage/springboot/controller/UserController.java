@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.sewage.springboot.entity.EquipJson;
 import com.sewage.springboot.entity.EquipValueJson;
+import com.sewage.springboot.signalr.EquipStateSignalR;
 import okhttp3.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
@@ -168,6 +169,16 @@ public class UserController {
             throw new IOException("Unexpected code " + response);
         }
     }
-
+    /*
+     * 建立实时监控
+     */
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    String createSignalRConnect (@RequestBody JSONObject jsonObject) {
+        String signalrUrl = jsonObject.getString("signalrUrl");
+        String qs = jsonObject.getString("qs");
+        EquipStateSignalR equipStateSignalR = new EquipStateSignalR();
+        equipStateSignalR.createSignalRConnect(signalrUrl, qs);
+        return "success";
+    }
     public static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
 }
