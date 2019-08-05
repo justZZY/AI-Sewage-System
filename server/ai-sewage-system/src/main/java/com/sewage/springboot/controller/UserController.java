@@ -172,7 +172,7 @@ public class UserController {
     /*
      * 建立实时监控
      */
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(value = "/createSignalRConnect", method = RequestMethod.POST)
     String createSignalRConnect (@RequestBody JSONObject jsonObject) {
         String signalrUrl = jsonObject.getString("signalrUrl");
         String qs = jsonObject.getString("qs");

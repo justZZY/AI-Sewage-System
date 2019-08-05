@@ -70,6 +70,7 @@
     name: 'remote_control',
     data () {
       this.getEquipMonitor()
+      this.createSignalRConnect()
       return {
         timer: null,
         devicedata: [],
@@ -93,8 +94,8 @@
         let index = this.$store.state.ChooseData.chooseData
         let signalrUrl = window.equipmentobjarray[index]['box']['cs']['signalrUrl']
         let token = window.jsonobj['access_token']
-        let queryString = 'at=' + token + '&cid=ynsk'
-        this.$http.post('http://localhost:8081/test/createSignalRConnect', {
+        let queryString = 'at=' + token + '&cid=zzy_test'
+        this.$http.post('http://114.55.146.36:8081/test/createSignalRConnect', {
           url: signalrUrl,
           qs: queryString
         }).then(response => {
@@ -112,7 +113,7 @@
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-        this.$http.post('http://localhost:8081/test/getEquipMonitor', {
+        this.$http.post('http://114.55.146.36:8081/test/getEquipMonitor', {
           authorization: authorization,
           apiBaseUrl: apiBaseUrl,
           boxNo: boxNo
@@ -140,7 +141,7 @@
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
         let names = getMonitorNames(dataArray)
         console.log(names)
-        this.$http.post('http://localhost:8081/test/getEquipValue', {
+        this.$http.post('http://114.55.146.36:8081/test/getEquipValue', {
           authorization: authorization,
           apiBaseUrl: apiBaseUrl,
           boxNo: boxNo,
@@ -227,7 +228,7 @@
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-        this.$http.post('http://localhost:8081/test/setEquipValue', {
+        this.$http.post('http://114.55.146.36:8081/test/setEquipValue', {
           authorization: authorization,
           apiUrl: apiBaseUrl,
           boxNo: boxNo,
