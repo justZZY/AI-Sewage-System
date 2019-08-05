@@ -174,7 +174,7 @@ public class UserController {
      */
     @RequestMapping(value = "/createSignalRConnect", method = RequestMethod.POST)
     String createSignalRConnect (@RequestBody JSONObject jsonObject) {
-        String signalrUrl = jsonObject.getString("signalrUrl");
+        String signalrUrl = jsonObject.getString("url");
         String qs = jsonObject.getString("qs");
         EquipStateSignalR equipStateSignalR = new EquipStateSignalR();
         equipStateSignalR.createSignalRConnect(signalrUrl, qs);
