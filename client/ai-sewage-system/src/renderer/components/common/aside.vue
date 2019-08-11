@@ -1,6 +1,7 @@
 <template>
   <div class="aside">
-    <el-tree :data="equiptreedata" :props="defaultProps" @node-click="handleNodeClick" :default-expand-all="true">
+    <el-tree :data="equiptreedata" :props="defaultProps" @node-click="handleNodeClick"
+             :default-expand-all="true" :indent="0">
           <span class="custom-tree-node" slot-scope="{node, data}">
 <!--            <i :class="data.connectClass"></i>-->
             <span>

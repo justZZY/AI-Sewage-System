@@ -2,10 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="52d5075d-afa5-4489-bf60-991555596b80" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../../server/ai-sewage-system/libs/signalr4j-3.0.1.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/java/com/sewage/springboot/Global.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/java/com/sewage/springboot/Interface/Logger.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/java/com/sewage/springboot/Interface/LoggerFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/java/com/sewage/springboot/signalr/SignalRConnectionBase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/java/com/sewage/springboot/signalr/SignalRLoggerWrapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/components/common/aside.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/common/aside.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/renderer/components/page/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/page/login.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/components/page/map.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/page/map.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/renderer/components/page/remote_control.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/page/remote_control.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../server/ai-sewage-system/libs/signalr-client-sdk.jar" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/java/com/sewage/springboot/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/java/com/sewage/springboot/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/java/com/sewage/springboot/signalr/EquipStateSignalR.java" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/dist/" />
     <ignored path="$PROJECT_DIR$/node_modules/" />
@@ -23,8 +33,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/renderer/components/page/remote_control.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
-              <caret line="96" column="56" selection-start-line="96" selection-start-column="56" selection-end-line="96" selection-end-column="56" />
+            <state relative-caret-position="326">
+              <caret line="98" column="22" selection-start-line="98" selection-start-column="22" selection-end-line="98" selection-end-column="22" />
               <folding>
                 <element signature="n#style#0;n#el-table#0;n#div#1;n#el-card#0;n#el-col#0;n#el-row#1;n#div#0;n#template#0;n#!!top" expanded="true" />
               </folding>
@@ -44,8 +54,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/renderer/components/common/aside.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1080">
-              <caret line="72" column="23" selection-start-line="72" selection-start-column="23" selection-end-line="72" selection-end-column="23" />
+            <state relative-caret-position="45">
+              <caret line="3" column="40" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -53,8 +63,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/renderer/components/page/map.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="88" column="9" lean-forward="true" selection-start-line="88" selection-start-column="9" selection-end-line="88" selection-end-column="9" />
+            <state relative-caret-position="486">
+              <caret line="75" column="62" lean-forward="true" selection-start-line="75" selection-start-column="62" selection-end-line="75" selection-end-column="62" />
               <folding>
                 <element signature="n#style#0;n#bm-info-window#0;n#bm-marker#0;n#div#0;n#baidu-map#0;n#template#0;n#!!top" expanded="true" />
               </folding>
@@ -65,8 +75,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/renderer/components/page/login.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="305">
-              <caret line="35" column="36" selection-start-line="35" selection-start-column="28" selection-end-line="35" selection-end-column="36" />
+            <state relative-caret-position="496">
+              <caret line="61" column="14" selection-start-line="61" selection-start-column="14" selection-end-line="61" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -105,6 +115,8 @@
       <find>http://localhost:8081/test</find>
       <find>114.55.146.36</find>
       <find>localhost:8081</find>
+      <find>114.55.146.36:8081</find>
+      <find>ClientId</find>
     </findStrings>
     <replaceStrings>
       <replace>http://114.55.146.36:8081/test/</replace>
@@ -112,6 +124,8 @@
       <replace>http://114.55.146.36:8081/test</replace>
       <replace>localhost</replace>
       <replace>114.55.146.36:8081</replace>
+      <replace>local</replace>
+      <replace>localhost:8081</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -138,11 +152,11 @@
         <option value="$PROJECT_DIR$/.electron-vue/webpack.renderer.config.js" />
         <option value="$PROJECT_DIR$/src/renderer/store/modules/ChooseData.js" />
         <option value="$PROJECT_DIR$/src/renderer/main.js" />
-        <option value="$PROJECT_DIR$/src/renderer/components/page/login.vue" />
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/src/renderer/components/common/main.vue" />
         <option value="$PROJECT_DIR$/src/renderer/components/common/header.vue" />
         <option value="$PROJECT_DIR$/src/renderer/css/iconfont.css" />
+        <option value="$PROJECT_DIR$/src/renderer/components/page/login.vue" />
         <option value="$PROJECT_DIR$/src/renderer/components/page/map.vue" />
         <option value="$PROJECT_DIR$/src/renderer/components/common/aside.vue" />
         <option value="$PROJECT_DIR$/src/renderer/components/page/remote_control.vue" />
@@ -161,7 +175,7 @@
   <component name="ProjectFrameBounds">
     <option name="y" value="23" />
     <option name="width" value="1440" />
-    <option name="height" value="812" />
+    <option name="height" value="808" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -305,7 +319,7 @@
       <workItem from="1564106674626" duration="81000" />
       <workItem from="1564293163503" duration="9000" />
       <workItem from="1564688497872" duration="1012000" />
-      <workItem from="1564906771014" duration="6199000" />
+      <workItem from="1564906771014" duration="13357000" />
     </task>
     <task id="LOCAL-00001" summary="在切换窗口时记录坐标数据">
       <created>1563524950645</created>
@@ -318,10 +332,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="195273000" />
+    <option name="totallyTimeSpent" value="202431000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="812" extended-state="6" />
+    <frame x="0" y="23" width="1440" height="808" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24242425" />
@@ -549,34 +563,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer/components/common/aside.vue">
+    <entry file="file://$PROJECT_DIR$/src/renderer/components/page/login.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1080">
-          <caret line="72" column="23" selection-start-line="72" selection-start-column="23" selection-end-line="72" selection-end-column="23" />
+        <state relative-caret-position="496">
+          <caret line="61" column="14" selection-start-line="61" selection-start-column="14" selection-end-line="61" selection-end-column="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/renderer/components/page/map.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="88" column="9" lean-forward="true" selection-start-line="88" selection-start-column="9" selection-end-line="88" selection-end-column="9" />
+        <state relative-caret-position="486">
+          <caret line="75" column="62" lean-forward="true" selection-start-line="75" selection-start-column="62" selection-end-line="75" selection-end-column="62" />
           <folding>
             <element signature="n#style#0;n#bm-info-window#0;n#bm-marker#0;n#div#0;n#baidu-map#0;n#template#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer/components/page/login.vue">
+    <entry file="file://$PROJECT_DIR$/src/renderer/components/common/aside.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="35" column="36" selection-start-line="35" selection-start-column="28" selection-end-line="35" selection-end-column="36" />
+        <state relative-caret-position="45">
+          <caret line="3" column="40" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="40" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/renderer/components/page/remote_control.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="96" column="56" selection-start-line="96" selection-start-column="56" selection-end-line="96" selection-end-column="56" />
+        <state relative-caret-position="326">
+          <caret line="98" column="22" selection-start-line="98" selection-start-column="22" selection-end-line="98" selection-end-column="22" />
           <folding>
             <element signature="n#style#0;n#el-table#0;n#div#1;n#el-card#0;n#el-col#0;n#el-row#1;n#div#0;n#template#0;n#!!top" expanded="true" />
           </folding>

@@ -1,5 +1,7 @@
 package com.sewage.springboot;
 
+import com.sewage.springboot.logger.ConsoleLoggerFactory;
+import com.sewage.springboot.signalr.FBoxSignalRConnection;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

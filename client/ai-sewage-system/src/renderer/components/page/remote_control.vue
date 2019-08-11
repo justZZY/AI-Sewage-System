@@ -7,7 +7,7 @@
             <span>传感器监控</span>
           </div>
           <div>
-            <el-table :data="monitordata" height="275" stripe>
+            <el-table :data="monitordata" height="260" stripe>
               <el-table-column prop="name" label="名称" align="center"></el-table-column>
               <el-table-column prop="value" label="数值" align="center"></el-table-column>
             </el-table>
@@ -94,10 +94,9 @@
         let index = this.$store.state.ChooseData.chooseData
         let signalrUrl = window.equipmentobjarray[index]['box']['cs']['signalrUrl']
         let token = window.jsonobj['access_token']
-        let queryString = 'at=' + token + '&cid=zzy_test'
-        this.$http.post('http://114.55.146.36:8081/test/createSignalRConnect', {
+        this.$http.post('http://localhost:8081/test/createSignalRConnect', {
           url: signalrUrl,
-          qs: queryString
+          token: token
         }).then(response => {
           console.log(response)
         }).catch(error => {
@@ -113,7 +112,7 @@
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-        this.$http.post('http://114.55.146.36:8081/test/getEquipMonitor', {
+        this.$http.post('http://localhost:8081/test/getEquipMonitor', {
           authorization: authorization,
           apiBaseUrl: apiBaseUrl,
           boxNo: boxNo
@@ -141,7 +140,7 @@
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
         let names = getMonitorNames(dataArray)
         console.log(names)
-        this.$http.post('http://114.55.146.36:8081/test/getEquipValue', {
+        this.$http.post('http://localhost:8081/test/getEquipValue', {
           authorization: authorization,
           apiBaseUrl: apiBaseUrl,
           boxNo: boxNo,
@@ -228,7 +227,7 @@
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-        this.$http.post('http://114.55.146.36:8081/test/setEquipValue', {
+        this.$http.post('http://localhost:8081/test/setEquipValue', {
           authorization: authorization,
           apiUrl: apiBaseUrl,
           boxNo: boxNo,
@@ -424,7 +423,7 @@
     margin-bottom: 0px;
   }
   .equipImage {
-    width: 96%;
+    height: 260px;
     display: block;
   }
 </style>

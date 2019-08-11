@@ -13,7 +13,7 @@
     name: 'login-page',
     methods: {
       runTestFun () {
-        this.$http.post('http://114.55.146.36:8081/test/testLogin').then(response => {
+        this.$http.post('http://localhost:8081/test/testLogin').then(response => {
           // 将获取到的登录消息数据设为全局,在后面的设备请求中会用到相关的token
           window.jsonobj = JSON.parse(JSON.stringify(response))['data']
           console.log('access_token: ' + window.jsonobj['access_token'])
@@ -30,15 +30,14 @@
         })
       },
       runTestEquipment () {
-        this.$http.get('http://114.55.146.36:8081/test/testEquipments', {
+        this.$http.get('http://localhost:8081/test/testEquipments', {
           params: {
-            Authorization: 'Bearer ' + window.jsonobj['access_token'],
-            XFBoxClientId: 'zzy_test'
+            Authorization: 'Bearer ' + window.jsonobj['access_token']
           }
         }).then(response => {
           // 解析请求到的设备数据
           window.equipmentobj = JSON.parse(JSON.stringify(response))['data']
-          window.equipmentobjarray = window.equipmentobj[0]['boxRegs']// .concat(window.equipmentobj[1]['boxRegs'])
+          window.equipmentobjarray = getArray(window.equipmentobj)
           console.log(window.equipmentobj)
           console.log(window.equipmentobjarray)
           console.log('正式设备: ' + window.equipmentobj[0]['name'])
@@ -56,6 +55,13 @@
         this.$router.push('/main')
       }
     }
+  }
+  function getArray (arrayObj) {
+    let array = []
+    for (let i = 0; i < arrayObj.length; i++) {
+      array = array.concat(arrayObj[i]['boxRegs'])
+    }
+    return array
   }
 </script>
 

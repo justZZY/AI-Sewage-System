@@ -72,9 +72,9 @@
     let equipmentposarray = []
     for (let i = 0; i < equipmentobjarray.length; i++) {
       let name = equipmentobjarray[i]['alias']
-      let address = equipmentobjarray[i]['box']['useAddress']
-      let longitude = equipmentobjarray[i]['box']['useLongitude']
-      let latitude = equipmentobjarray[i]['box']['useLatitude']
+      let address = equipmentobjarray[i]['box']['address']
+      let longitude = equipmentobjarray[i]['box']['longitude']
+      let latitude = equipmentobjarray[i]['box']['latitude']
       let net = equipmentobjarray[i]['box']['net']
       let connectionState = equipmentobjarray[i]['box']['connectionState']
       let posobj = {

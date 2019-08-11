@@ -4,9 +4,11 @@ package com.sewage.springboot.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
+import com.sewage.springboot.Global;
 import com.sewage.springboot.entity.EquipJson;
 import com.sewage.springboot.entity.EquipValueJson;
-import com.sewage.springboot.signalr.EquipStateSignalR;
+import com.sewage.springboot.logger.ConsoleLoggerFactory;
+import com.sewage.springboot.signalr.FBoxSignalRConnection;
 import okhttp3.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
@@ -28,16 +30,12 @@ public class UserController {
     String testLogin() throws IOException {
         OkHttpClient client = new OkHttpClient();
         FormBody formBody = new FormBody.Builder()
-//                .add("username", "kmzmhj")
-//                .add("password", "zmhj123456")
-//                .add("client_id", "kmbq")
-//                .add("client_secret", "a89f97dc2ed2457aa0c6e58eb40142b2")
-                .add("username", "ligaofa")
-                .add("password", "gf229192")
-                .add("client_id", "ynsk")
-                .add("client_secret", "af6a37beddb28136eed65bda1f16547f")
-                .add("scope", "openid offline_access fbox email profile")
-                .add("grant_type", "password")
+                .add("username", Global.username)
+                .add("password", Global.password)
+                .add("client_id", Global.clientId)
+                .add("client_secret", Global.clientSecret)
+                .add("scope", Global.scope)
+                .add("grant_type", Global.grant_type)
                 .build();
         Request request = new Request.Builder()
                 .url("https://account.flexem.com/core/connect/token")
@@ -53,12 +51,11 @@ public class UserController {
 
     @RequestMapping(value = "/testEquipments", method = RequestMethod.GET)
     //如果需要参数 @RequestParam(value = "test") String test
-    String testEquipments(@RequestParam(value = "Authorization") String authorization,
-                          @RequestParam(value = "XFBoxClientId") String xfboxclientid) throws IOException {
+    String testEquipments(@RequestParam(value = "Authorization") String authorization) throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url("http://fbox360.com/api/client/box/grouped")
                 .addHeader("Authorization", authorization)
-                .addHeader("X-FBox-ClientId", xfboxclientid)
+                .addHeader("X-FBox-ClientId", Global.signalrClientId)
                 .build();
         Response response = client.newCall(request).execute();
         if (response.isSuccessful()){
@@ -175,9 +172,12 @@ public class UserController {
     @RequestMapping(value = "/createSignalRConnect", method = RequestMethod.POST)
     String createSignalRConnect (@RequestBody JSONObject jsonObject) {
         String signalrUrl = jsonObject.getString("url");
-        String qs = jsonObject.getString("qs");
-        EquipStateSignalR equipStateSignalR = new EquipStateSignalR();
-        equipStateSignalR.createSignalRConnect(signalrUrl, qs);
+        String token = jsonObject.getString("token");
+        // 启动signalr
+        ConsoleLoggerFactory loggerFactory = new ConsoleLoggerFactory();
+        FBoxSignalRConnection signalRConnection = new FBoxSignalRConnection(signalrUrl, token,
+                Global.signalrClientId, Global.proxy, loggerFactory);
+        signalRConnection.start();
         return "success";
     }
     public static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
