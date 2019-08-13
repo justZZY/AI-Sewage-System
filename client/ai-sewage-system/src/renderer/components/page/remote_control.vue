@@ -72,19 +72,28 @@
       this.getEquipMonitor()
       this.createSignalRConnect()
       return {
-        timer: null,
         devicedata: [],
         monitordata: []
       }
     },
     methods: {
       /*
-       * (完成实时数据监控后删除此方法)
-       * 设置数据监控定时器
+       * 启动websocket连接
        */
-      setTimer () {
-        if (this.timer === null) {
-          this.timer = setInterval(this.getEquipMonitor, 5000)
+      websocket () {
+        let ws = new WebSocket('ws://localhost:8081/websocket')
+        ws.onopen = () => {
+          console.log('打开websocket连接')
+        }
+        ws.onmessage = res => {
+          console.log(res)
+        }
+        ws.onclose = () => {
+          console.log('连接已关闭')
+        }
+        // 界面跳转websocket关闭函数
+        this.over = () => {
+          ws.close()
         }
       },
       /*
@@ -244,14 +253,10 @@
       }
     },
     created () {
-      clearInterval(this.timer)
-      this.timer = null
-      // 开始定时器
-      this.setTimer()
+      this.websocket()
     },
-    destroyed () {
-      clearInterval(this.timer)
-      this.timer = null
+    beforeDestroy () {
+      this.over()
     }
   }
 

@@ -9,6 +9,7 @@ import com.sewage.springboot.Global;
 import com.sewage.springboot.entity.BoxStateChanged;
 import com.sewage.springboot.logger.Logger;
 import com.sewage.springboot.logger.LoggerFactory;
+import com.sewage.springboot.websoket.WebSocket;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -91,18 +92,12 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
                         long time = item.get("t").getAsLong();
                         timestamp = String.valueOf(sdf.format(time));
                         this.logger.logInformation(String.format(" %s, %s, %d, %s\n",name,value,time,timestamp));
-                        //System.out.printf("%s:%s:%d:%s\n", name,value,time,timestamp);
-                        //监控点正常无status属性
-                        //long statu = item.get("status").getAsLong();
-                    };
+                        WebSocket.sendAll(name + "&" + value);
+                    }
                     //打印监控点的值集合，集合详细信息请看接口文档http://docs.flexem.net/fbox/zh-cn/tutorials/RealtimeDataPush.html
                     System.out.printf("%d",jsonElements[1].getAsLong());
                     //打印boxUid
                     System.out.printf("%d",jsonElements[2].getAsLong());
-//                }
-//                catch (Exception e) {
-//                    System.out.printf("%s", e);
-//                }
             });
         });
 
@@ -161,6 +156,7 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
     }
     /*
      * 启动设备订阅接口
+     * 盒子每次上线后，均需要开启FBox数据推送控制接口(订阅)
      */
     private void activeData (long id) throws IOException {
         String url = "http://fbcs101.fbox360.com/api/box/" + id + "/dmon/start";
@@ -173,7 +169,6 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
                 .build();
         Response response = client.newCall(request).execute();
         if (response.isSuccessful()){
-            // 盒子每次上线后，均需要开启FBox数据推送控制接口（订阅）
             // token有效期为两小时。若token过期，demo会自动刷新token。所以返回401后均需要重试接口
             this.logger.logInformation(String.format("Start dmon points on box ok %s\n", id));
         }else{
