@@ -58,6 +58,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "echarts": "^4.2.1",
     "element-ui": "^2.9.2",
     "jquery": "^3.4.1",
     "signalr": "^2.4.1",

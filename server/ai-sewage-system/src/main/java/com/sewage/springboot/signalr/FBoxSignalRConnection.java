@@ -1,6 +1,7 @@
 package com.sewage.springboot.signalr;
 
 import com.github.signalr4j.client.hubs.HubProxy;
+import com.github.signalr4j.client.transport.WebsocketTransport;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -71,33 +72,33 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
         hubProxy.removeSubscription("boxConnStateChanged");
     }
 
-    SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Override
     protected void onHubProxyCreated(HubProxy hubProxy) {
         //signalr实时数据推送事件，接收此事件数据前提条件，开启监控点数据推送控制接口（订阅）
         hubProxy.subscribe("dmonUpdateValue").addReceivedHandler(jsonElements -> {
             Global.threadPool.submit(() -> {
                 //try{
-                    this.dmonMsgCounter.increment();
-                    //System.out.println("Dmon data received: ");
-                    JsonArray items = jsonElements[1].getAsJsonArray();
-                    String timestamp = "";
-                    for (com.google.gson.JsonElement jsonElement : items) {
-                        JsonObject item = jsonElement.getAsJsonObject();
-                        this.dmonIds.computeIfAbsent(item.get("id").getAsLong(), aLong -> new LongAdder()).increment();
-                        this.dmonItemCounter.increment();
-                        //收到的推送数据
-                        String name = item.get("name").getAsString();
-                        String value = item.get("value").getAsString();
-                        long time = item.get("t").getAsLong();
-                        timestamp = String.valueOf(sdf.format(time));
-                        this.logger.logInformation(String.format(" %s, %s, %d, %s\n",name,value,time,timestamp));
-                        WebSocket.sendAll(name + "&" + value);
-                    }
-                    //打印监控点的值集合，集合详细信息请看接口文档http://docs.flexem.net/fbox/zh-cn/tutorials/RealtimeDataPush.html
-                    System.out.printf("%d",jsonElements[1].getAsLong());
-                    //打印boxUid
-                    System.out.printf("%d",jsonElements[2].getAsLong());
+                this.dmonMsgCounter.increment();
+                JsonArray items = jsonElements[1].getAsJsonArray();
+                String boxUid = jsonElements[2].getAsString();
+                String timestamp = "";
+                for (com.google.gson.JsonElement jsonElement : items) {
+                    JsonObject item = jsonElement.getAsJsonObject();
+                    this.dmonIds.computeIfAbsent(item.get("id").getAsLong(), aLong -> new LongAdder()).increment();
+                    this.dmonItemCounter.increment();
+                    //收到的推送数据
+                    String name = item.get("name").getAsString();
+                    String value = item.get("value").getAsString();
+                    long time = item.get("t").getAsLong();
+                    timestamp = sdf.format(time);
+                    this.logger.logInformation(String.format(" %s, %s, %d, %s\n", name, value, time, timestamp));
+                    WebSocket.sendAll(boxUid + '_' + name + '_' + value + '_' + timestamp);
+                }
+                //打印监控点的值集合，集合详细信息请看接口文档http://docs.flexem.net/fbox/zh-cn/tutorials/RealtimeDataPush.html
+                System.out.printf("%d", jsonElements[1].getAsLong());
+                //打印boxUid
+                System.out.printf("%d", jsonElements[2].getAsLong());
             });
         });
 
@@ -108,7 +109,8 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
                 for (com.google.gson.JsonElement jsonElement : jsonElements) {
                     //报警推送消息全部打印。具体参数解释请看接口文档http://docs.flexem.net/fbox/zh-cn/tutorials/AlarmTiggerPush.html
                     System.out.println("\t" + jsonElement);
-                };
+                    WebSocket.sendAll(jsonElement.toString());
+                }
                 //打印报警条目的值集合
                 System.out.printf("%d",jsonElements[1].getAsLong());
                 //打印boxUid
@@ -123,6 +125,7 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
                 for (com.google.gson.JsonElement jsonElement : jsonElements) {
                     //报警推送消息全部打印。具体参数解释请看接口文档http://docs.flexem.net/fbox/zh-cn/tutorials/AlarmReductionPush.html
                     System.out.println("\t" + jsonElement);
+                    WebSocket.sendAll(jsonElement.toString());
                 };
                 //打印报警条目的值集合
                 System.out.printf("%d",jsonElements[1].getAsLong());

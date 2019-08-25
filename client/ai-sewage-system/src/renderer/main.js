@@ -9,6 +9,8 @@ import App from './App'
 import router from './router'
 import store from './store'
 import 'signalr'
+// 导入图标组件
+import echarts from 'echarts'
 
 Vue.use(ElementUI)
 Vue.use(BaiduMap, {
@@ -17,6 +19,7 @@ Vue.use(BaiduMap, {
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
+Vue.prototype.$echarts = echarts
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

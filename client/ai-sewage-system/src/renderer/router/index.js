@@ -40,6 +40,16 @@ export default new Router({
           path: '/time_control',
           name: 'time_control',
           component: require('@/components/page/time_control').default
+        },
+        {
+          path: '/side_watch',
+          name: 'side_watch',
+          component: require('@/components/page/side_watch').default
+        },
+        {
+          path: '/system_manage',
+          name: 'system_manage',
+          component: require('@/components/page/system_manage').default
         }
       ]
     },

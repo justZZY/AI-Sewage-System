@@ -1,20 +1,22 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :span="8">
+      <el-col :span="10">
         <el-card shadow="always">
-          <div class="clearfix" slot="header">
-            <span>传感器监控</span>
+          <div slot="header">
+            <span>频率控制器</span>
           </div>
           <div>
-            <el-table :data="monitordata" height="260" stripe>
-              <el-table-column prop="name" label="名称" align="center"></el-table-column>
-              <el-table-column prop="value" label="数值" align="center"></el-table-column>
-            </el-table>
+            <div v-for="(sliderObj, index) in sliderData" class="slider">
+              <span style="text-align: center">{{sliderObj.name}}</span>
+              <el-slider v-model="sliderObj.value" vertical height="178px" show-input :show-input-controls="false"
+                         :max="30"  @change="sliderChange(sliderObj.value, index)" :format-tooltip="formatRateShow">
+              </el-slider>
+            </div>
           </div>
         </el-card>
       </el-col>
-      <el-col :span="16">
+      <el-col :span="14">
         <el-card shadow="always">
           <div slot="header">
             <span>站点组态图信息</span>
@@ -73,7 +75,7 @@
       this.createSignalRConnect()
       return {
         devicedata: [],
-        monitordata: []
+        sliderData: [] // 设置频率滑动条json数组
       }
     },
     methods: {
@@ -86,6 +88,10 @@
           console.log('打开websocket连接')
         }
         ws.onmessage = res => {
+          // let index = this.$store.state.ChooseData.chooseData
+          // let boxId = window.equipmentobjarray[index]['box']['id']
+          // 做数据解析
+          // solveSocketData(this.devicedata, boxId, res)
           console.log(res)
         }
         ws.onclose = () => {
@@ -131,14 +137,11 @@
           // 请求设备控制数据
           let equipDataArray = findEquipName(data)
           console.log(equipDataArray)
-          let ans = this.getEquipValue(equipDataArray, 'device')
-          console.log(ans)
-          // 请求监控数据
-          let monitorDataArray = findMonitorName(data)
-          console.log(monitorDataArray)
-          ans = this.getEquipValue(monitorDataArray, 'monitor')
-          console.log(ans)
-          console.log('====refresh data')
+          this.getEquipValue(equipDataArray, 'device')
+          // 请求频率设备控制数据
+          let rateControlNameArray = findRateName(data)
+          console.log(rateControlNameArray)
+          this.getEquipValue(rateControlNameArray, 'rate')
         })
       },
       // 获取监控寄存器的值
@@ -159,8 +162,8 @@
           let values = res['data']
           if (type === 'device') {
             this.devicedata = formatDeviceData(values, dataArray)
-          } else if (type === 'monitor') {
-            this.monitordata = formatMonitorData(values)
+          } else if (type === 'rate') {
+            this.sliderData = formatSliderData(values)
           }
         })
       },
@@ -250,13 +253,22 @@
             message: '修改成功'
           })
         })
+      },
+      sliderChange (value, index) {
+        console.log(value)
+        console.log(index)
+      },
+      formatRateShow (value) {
+        return value + ' Hz'
       }
     },
     created () {
-      this.websocket()
+      // this.websocket()
     },
     beforeDestroy () {
-      this.over()
+      // this.over()
+    },
+    mounted () {
     }
   }
 
@@ -270,37 +282,39 @@
   function findEquipName (data) {
     let indexState = -1
     let indexRemote = -1
-    let indexEquip = -1
     for (let i = 0; i < data.length; i++) {
       if (data[i]['name'] === '状态') {
         indexState = i
       } else if (data[i]['name'] === '远程') {
         indexRemote = i
-      } else if (data[i]['name'] === '设备控制') {
-        indexEquip = i
       }
     }
     let newData = []
     if (indexState !== -1 && indexRemote !== -1) {
       // 组合数组
       newData = data[indexState]['items'].concat(data[indexRemote]['items'])
-    } else if (indexEquip !== -1) {
-      // 单数组
-      newData = data[indexEquip]['items']
     }
     return newData
   }
+
   /*
-   * 查找传感监控数据的设备列表
+   * 做正则解析 只取评率控制数据
    */
-  function findMonitorName (data) {
+  function findRateName (data) {
+    let rateReg = /.*设定/
     let index = -1
+    let nameArray = []
     for (let i = 0; i < data.length; i++) {
-      if (data[i]['name'] === '传感') {
+      if (data[i]['name'] === '频率') {
         index = i
       }
     }
-    return data[index]['items']
+    for (let i = 0; i < data[index]['items'].length; i++) {
+      if (rateReg.test(data[index]['items'][i]['name'])) {
+        nameArray.push(data[index]['items'][i])
+      }
+    }
+    return nameArray
   }
 
   /*
@@ -341,22 +355,23 @@
     return deviceArray
   }
   /*
-   * 获取传感器监控数据
+   * 设置控制条组合json数据
    */
-  function formatMonitorData (datas) {
+  function formatSliderData (datas) {
     console.log(datas)
-    let monitorArray = []
+    let sliderData = []
     for (let i = 0; i < datas.length; i++) {
-      let originName = datas[i]['name']
-      // 分割字符串名
-      let names = originName.split('_')
-      let monitorName = names[1]
-      let labelName = names[2]
-      monitorArray.push({'name': monitorName, 'value': datas[i]['value'] + labelName})
+      let name = datas[i]['name'].split('_')[1]
+      let value = datas[i]['value']
+      let obj = {
+        name: name,
+        value: value
+      }
+      sliderData.push(obj)
     }
-    console.log(monitorArray)
-    return monitorArray
+    return sliderData
   }
+
   /*
    * 获取相同设备名的index
    */
@@ -427,8 +442,15 @@
   .bottomRow {
     margin-bottom: 0px;
   }
+  .slider {
+    margin-left: 20px;
+    float: left;
+  }
+  .el-slider {
+    margin-top: 10px;
+    margin-left: 35%;
+  }
   .equipImage {
     height: 260px;
-    display: block;
   }
 </style>
