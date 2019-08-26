@@ -9,7 +9,7 @@
           <div>
             <div v-for="(sliderObj, index) in sliderData" class="slider">
               <span style="text-align: center">{{sliderObj.name}}</span>
-              <el-slider v-model="sliderObj.value" vertical height="178px" show-input :show-input-controls="false"
+              <el-slider v-model="sliderObj.value" vertical height="194px" show-input :show-input-controls="false"
                          :max="30"  @change="sliderChange(sliderObj.value, index)" :format-tooltip="formatRateShow">
               </el-slider>
             </div>
@@ -79,29 +79,34 @@
       }
     },
     methods: {
+      setTimer () {
+        if (this.timer === null) {
+          this.timer = setInterval(this.getEquipMonitor, 5000)
+        }
+      },
       /*
        * 启动websocket连接
        */
-      websocket () {
-        let ws = new WebSocket('ws://localhost:8081/websocket')
-        ws.onopen = () => {
-          console.log('打开websocket连接')
-        }
-        ws.onmessage = res => {
-          // let index = this.$store.state.ChooseData.chooseData
-          // let boxId = window.equipmentobjarray[index]['box']['id']
-          // 做数据解析
-          // solveSocketData(this.devicedata, boxId, res)
-          console.log(res)
-        }
-        ws.onclose = () => {
-          console.log('连接已关闭')
-        }
-        // 界面跳转websocket关闭函数
-        this.over = () => {
-          ws.close()
-        }
-      },
+      // websocket () {
+      //   let ws = new WebSocket('ws://localhost:8081/websocket')
+      //   ws.onopen = () => {
+      //     console.log('打开websocket连接')
+      //   }
+      //   ws.onmessage = res => {
+      //     // let index = this.$store.state.ChooseData.chooseData
+      //     // let boxId = window.equipmentobjarray[index]['box']['id']
+      //     // 做数据解析
+      //     // solveSocketData(this.devicedata, boxId, res)
+      //     console.log(res)
+      //   }
+      //   ws.onclose = () => {
+      //     console.log('连接已关闭')
+      //   }
+      //   // 界面跳转websocket关闭函数
+      //   this.over = () => {
+      //     ws.close()
+      //   }
+      // },
       /*
        * 建立实时监控连接
        */
@@ -257,15 +262,35 @@
       sliderChange (value, index) {
         console.log(value)
         console.log(index)
+        this.$confirm('此操作将更改设备' + this.sliderData[index]['name'] + '频率上限为' + value + 'Hz, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.setEquipValue(this.sliderData[index]['originName'], 0, value)
+          this.sliderData[index]['preValue'] = value
+        }).catch(() => {
+          this.sliderData[index]['value'] = this.sliderData[index]['preValue']
+          this.$message({
+            type: 'info',
+            message: '已取消修改'
+          })
+        })
       },
       formatRateShow (value) {
         return value + ' Hz'
       }
     },
     created () {
+      clearInterval(this.timer)
+      this.timer = null
+      // 开始定时器
+      this.setTimer()
       // this.websocket()
     },
     beforeDestroy () {
+      clearInterval(this.timer)
+      this.timer = null
       // this.over()
     },
     mounted () {
@@ -364,6 +389,8 @@
       let name = datas[i]['name'].split('_')[1]
       let value = datas[i]['value']
       let obj = {
+        originName: datas[i]['name'],
+        preValue: value,
         name: name,
         value: value
       }
