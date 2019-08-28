@@ -1,21 +1,44 @@
 <template>
-  <el-table
-      :data="tableData"
-      border
-      empty-text="asfcvxdgadvsdfhg"
-      style="width: 100%">
-    <el-table-column
-        label="日期"
-        width="180">
-    </el-table-column>
-    <el-table-column
-        label="姓名"
-        width="180">
-    </el-table-column>
-    <el-table-column
-        label="地址">cnm
-    </el-table-column>
-  </el-table>
+  <div>
+    <el-card>
+      <div slot="header">
+        <span>定时控制器</span>
+      </div>
+      <div>
+        <el-table :data="timeDataArray" style="width: 100%" height="580" border stripe>
+          <el-table-column prop="name" label="设备名称" align="center"></el-table-column>
+          <el-table-column prop="openTime" label="开机时间" align="center">
+            <template slot-scope="scope">
+              <el-time-picker style="width: 120px" v-model="scope.row.openTime" :editable="false" :clearable="false"
+                  format="HH:mm" value-format="HH:mm" :picker-options="{format: 'HH:mm'}"
+                  placeholder="任意时间点" @change="timeChange">
+              </el-time-picker>
+            </template>
+          </el-table-column>
+          <el-table-column prop="closeTime" label="关机时间" align="center">
+            <template slot-scope="scope">
+              <el-time-picker style="width: 120px" v-model="scope.row.closeTime" :editable="false" :clearable="false"
+                              format="HH:mm" value-format="HH:mm" :picker-options="{format: 'HH:mm'}"
+                              placeholder="任意时间点" @change="timeChange(scope)">
+              </el-time-picker>
+            </template>
+          </el-table-column>
+          <el-table-column prop="runTime" label="运行时间" align="center" width="190">
+            <template slot-scope="scope">
+              <el-input placeholder="运行分钟" style="width: 80px" v-model="scope.row.runTime" prefix-icon="el-icon-timer"></el-input>
+              <el-button type="primary" plain>修改</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column prop="stopTime" label="停止时间" align="center" width="190">
+            <template slot-scope="scope">
+              <el-input placeholder="运行分钟" style="width: 80px" v-model="scope.row.runTime" prefix-icon="el-icon-timer"></el-input>
+              <el-button type="primary" plain @click="minChange(scope)">修改</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+    </el-card>
+  </div>
 </template>
 
 <script>
@@ -23,25 +46,129 @@
     name: 'time_control',
     data () {
       return {
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }]
+        timeDataArray: []
+      }
+    },
+    created () {
+      this.getEquipMonitor()
+    },
+    methods: {
+      // 获取监控的数据 会通过计算进行变动
+      // args: apiBaseUrl boxNo
+      // 参数根据equipmentobjarray和vuex中存储的下标进行计算
+      getEquipMonitor () {
+        let index = this.$store.state.ChooseData.chooseData
+        console.log(index)
+        let authorization = 'Bearer ' + window.jsonobj['access_token']
+        let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
+        let boxNo = window.equipmentobjarray[index]['box']['boxNo']
+        this.$http.post('http://localhost:8081/test/getEquipMonitor', {
+          authorization: authorization,
+          apiBaseUrl: apiBaseUrl,
+          boxNo: boxNo
+        }).then(res => {
+          let data = res['data']
+          console.log(data)
+          // 请求设备控制数据
+          let timeNameArray = findTimeName(data)
+          console.log(timeNameArray)
+          this.getTimeValue(timeNameArray)
+        })
+      },
+      getTimeValue (timeNameArray) {
+        let index = this.$store.state.ChooseData.chooseData
+        let authorization = 'Bearer ' + window.jsonobj['access_token']
+        let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
+        let boxNo = window.equipmentobjarray[index]['box']['boxNo']
+        console.log(timeNameArray)
+        this.$http.post('http://localhost:8081/test/getEquipValue', {
+          authorization: authorization,
+          apiBaseUrl: apiBaseUrl,
+          boxNo: boxNo,
+          names: timeNameArray
+        }).then(res => {
+          this.timeDataArray = formatTimeData(res)
+        })
+      },
+      timeChange (time) {
+        console.log(time)
+      },
+      minChange (scope) {
+        console.log(scope)
       }
     }
+  }
+  function findTimeName (data) {
+    console.log(data)
+    let index = -1
+    let nameArray = []
+    for (let i = 0; i < data.length; i++) {
+      if (data[i]['name'] === '定时') {
+        index = i
+      }
+    }
+    for (let i = 0; i < data[index]['items'].length; i++) {
+      nameArray.push(data[index]['items'][i]['name'])
+    }
+    return nameArray
+  }
+  /*
+   * 组合时间控制设备
+   */
+  function formatTimeData (res) {
+    let array = res['data']
+    let firstMergeArray = []
+    // 第一遍解析 将同名对象整合到一个json对象中
+    for (let i = 0; i < array.length; i++) {
+      let names = array[i]['name'].split('_')
+      let name = names[1]
+      let type = names[2]
+      let index = findNameInJsonArray(firstMergeArray, name)
+      if (index !== -1) {
+        console.log(firstMergeArray)
+        firstMergeArray[index][type] = array[i]['value']
+      } else {
+        let obj = {name: name, [type]: array[i]['value']}
+        firstMergeArray.push(obj)
+      }
+    }
+    console.log(firstMergeArray)
+    let secondMergeArray = []
+    for (let i = 0; i < firstMergeArray.length; i++) {
+      // 通过命名规则保证存在以下命名数据
+      let openHour = firstMergeArray[i]['开机小时']
+      let openMin = firstMergeArray[i]['开机分钟']
+      let closeHour = firstMergeArray[i]['关机小时']
+      let closeMin = firstMergeArray[i]['关机分钟']
+      let obj = {
+        name: firstMergeArray[i]['name'],
+        openTime: mergeTime(openHour, openMin),
+        closeTime: mergeTime(closeHour, closeMin),
+        runTime: firstMergeArray[i]['运行时间'],
+        stopTime: firstMergeArray[i]['停止时间']
+      }
+      secondMergeArray.push(obj)
+    }
+    console.log(secondMergeArray)
+    return secondMergeArray
+  }
+  /*
+   * 如果name存在于json数组中 返回true
+   * 不存在则返回-1
+   */
+  function findNameInJsonArray (jsonArray, name) {
+    for (let i = 0; i < jsonArray.length; i++) {
+      if (jsonArray[i]['name'] === name) {
+        return i
+      }
+    }
+    return -1
+  }
+  /*
+   * 合并时间小时:分钟
+   */
+  function mergeTime (hour, min) {
+    return hour + ':' + min
   }
 </script>
 

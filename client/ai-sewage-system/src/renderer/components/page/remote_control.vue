@@ -67,7 +67,8 @@
 </template>
 
 <script>
-  window.$ = window.jQuery = require('jquery')
+  // 取消jQuery操作
+  // window.$ = window.jQuery = require('jquery')
   export default {
     name: 'remote_control',
     data () {
