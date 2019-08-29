@@ -11,7 +11,7 @@
             <template slot-scope="scope">
               <el-time-picker style="width: 120px" v-model="scope.row.openTime" :editable="false" :clearable="false"
                   format="HH:mm" value-format="HH:mm" :picker-options="{format: 'HH:mm'}"
-                  placeholder="任意时间点" @change="timeChange">
+                  placeholder="任意时间点" @change="timeChange(scope)">
               </el-time-picker>
             </template>
           </el-table-column>
@@ -88,6 +88,7 @@
           names: timeNameArray
         }).then(res => {
           this.timeDataArray = formatTimeData(res)
+          console.log(this.timeDataArray)
         })
       },
       timeChange (time) {
@@ -125,7 +126,6 @@
       let type = names[2]
       let index = findNameInJsonArray(firstMergeArray, name)
       if (index !== -1) {
-        console.log(firstMergeArray)
         firstMergeArray[index][type] = array[i]['value']
       } else {
         let obj = {name: name, [type]: array[i]['value']}
@@ -168,6 +168,12 @@
    * 合并时间小时:分钟
    */
   function mergeTime (hour, min) {
+    if (hour < 10) {
+      hour = '0' + hour
+    }
+    if (min < 10) {
+      min = '0' + min
+    }
     return hour + ':' + min
   }
 </script>
