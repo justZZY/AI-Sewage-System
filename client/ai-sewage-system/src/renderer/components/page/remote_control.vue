@@ -73,7 +73,6 @@
     name: 'remote_control',
     data () {
       this.getEquipMonitor()
-      this.createSignalRConnect()
       return {
         devicedata: [],
         sliderData: [] // 设置频率滑动条json数组
@@ -108,22 +107,6 @@
       //     ws.close()
       //   }
       // },
-      /*
-       * 建立实时监控连接
-       */
-      createSignalRConnect () {
-        let index = this.$store.state.ChooseData.chooseData
-        let signalrUrl = window.equipmentobjarray[index]['box']['cs']['signalrUrl']
-        let token = window.jsonobj['access_token']
-        this.$http.post('http://localhost:8081/test/createSignalRConnect', {
-          url: signalrUrl,
-          token: token
-        }).then(response => {
-          console.log(response)
-        }).catch(error => {
-          console.log(error)
-        })
-      },
       // 获取监控的数据 会通过计算进行变动
       // args: apiBaseUrl boxNo
       // 参数根据equipmentobjarray和vuex中存储的下标进行计算

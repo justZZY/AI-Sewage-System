@@ -26,12 +26,12 @@
           <el-table-column prop="runTime" label="运行时间" align="center" width="190">
             <template slot-scope="scope">
               <el-input placeholder="运行分钟" style="width: 80px" v-model="scope.row.runTime" prefix-icon="el-icon-timer"></el-input>
-              <el-button type="primary" plain>修改</el-button>
+              <el-button type="primary" plain @click="minChange(scope)">修改</el-button>
             </template>
           </el-table-column>
           <el-table-column prop="stopTime" label="停止时间" align="center" width="190">
             <template slot-scope="scope">
-              <el-input placeholder="运行分钟" style="width: 80px" v-model="scope.row.runTime" prefix-icon="el-icon-timer"></el-input>
+              <el-input placeholder="停止分钟" style="width: 80px" v-model="scope.row.runTime" prefix-icon="el-icon-timer"></el-input>
               <el-button type="primary" plain @click="minChange(scope)">修改</el-button>
             </template>
           </el-table-column>
@@ -91,11 +91,87 @@
           console.log(this.timeDataArray)
         })
       },
-      timeChange (time) {
-        console.log(time)
+      // 启停时间控制
+      timeChange (scope) {
+        console.log(scope)
+        let title = scope['column']['property']
+        let label = scope['column']['label']
+        let name = scope['row']['name']
+        let newTime = scope['row'][title]
+        let timeArray = newTime.split(':')
+        let equipName = '定时_' + name + '_'
+        this.$confirm('此操作将修改设备' + name + '的' + label + '为' + newTime + ', 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let openReg = /开机.*/
+          let closeReg = /关机.*/
+          // 用于存储时间分割命名
+          let timeNameArray = []
+          if (openReg.test(label)) {
+            timeNameArray[0] = '开机小时'
+            timeNameArray[1] = '开机分钟'
+            for (let i = 0; i < timeArray.length; i++) {
+              this.setEquipValue(equipName + timeNameArray[i], 0, timeArray[i])
+            }
+          }
+          if (closeReg.test(label)) {
+            timeNameArray[0] = '关机小时'
+            timeNameArray[1] = '关机分钟'
+            for (let i = 0; i < timeArray.length; i++) {
+              this.setEquipValue(equipName + timeNameArray[i], 0, timeArray[i])
+            }
+          }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消修改'
+          })
+        })
       },
+      /* 关于运行时间的修改
+       * 先显示时间拖动条
+       * 再提示是否确认修改
+       */
       minChange (scope) {
         console.log(scope)
+        // 计算拖动条数据
+        this.$confirm('此操作将关闭设备' + name + ', 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消修改'
+          })
+        })
+      },
+      /*
+       * 通用接口
+       * 向服务器传值,修改相关的寄存器值
+       */
+      setEquipValue (name, type, value) {
+        let index = this.$store.state.ChooseData.chooseData
+        let authorization = 'Bearer ' + window.jsonobj['access_token']
+        let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
+        let boxNo = window.equipmentobjarray[index]['box']['boxNo']
+        this.$http.post('http://localhost:8081/test/setEquipValue', {
+          authorization: authorization,
+          apiUrl: apiBaseUrl,
+          boxNo: boxNo,
+          name: name,
+          type: type,
+          value: value
+        }).then(res => {
+          console.log(res)
+          this.$message({
+            type: 'success',
+            message: '修改成功'
+          })
+        })
       }
     }
   }

@@ -37,25 +37,26 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
         this.proxy = proxy;
         this.token = token;
         gson = new GsonBuilder().create();
-        new Thread(() -> {
-            //统计条目数线程
-            for (; ; ) {
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                long currentTime = System.nanoTime();
-                long currentMsgCount = this.dmonMsgCounter.longValue();
-                long currentItemCount = this.dmonItemCounter.longValue();
-                long msgRate = (currentMsgCount - this.lastDmonMsgCount) * 1000000000 / (currentTime - this.lastReportTime);
-                long itemRate = (currentItemCount - this.lastDmonItemCount) * 1000000000 / (currentTime - this.lastReportTime);
-                this.logger.logInformation(String.format("Dmon id count: %d, item rate: %d, message rate: %d", this.dmonIds.size(), itemRate, msgRate));
-                this.lastReportTime = currentTime;
-                this.lastDmonMsgCount = currentMsgCount;
-                this.lastDmonItemCount = currentItemCount;
-            }
-        }).start();
+//        // 暂时不需要统计实时条目
+//        new Thread(() -> {
+//            //统计条目数线程
+//            for (; ; ) {
+//                try {
+//                    Thread.sleep(5000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                long currentTime = System.nanoTime();
+//                long currentMsgCount = this.dmonMsgCounter.longValue();
+//                long currentItemCount = this.dmonItemCounter.longValue();
+//                long msgRate = (currentMsgCount - this.lastDmonMsgCount) * 1000000000 / (currentTime - this.lastReportTime);
+//                long itemRate = (currentItemCount - this.lastDmonItemCount) * 1000000000 / (currentTime - this.lastReportTime);
+//                this.logger.logInformation(String.format("Dmon id count: %d, item rate: %d, message rate: %d", this.dmonIds.size(), itemRate, msgRate));
+//                this.lastReportTime = currentTime;
+//                this.lastDmonMsgCount = currentMsgCount;
+//                this.lastDmonItemCount = currentItemCount;
+//            }
+//        }).start();
     }
 
     @Override

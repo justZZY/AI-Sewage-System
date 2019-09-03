@@ -21,6 +21,39 @@
     name: 'vMain',
     components: {
       vHead, vAside
+    },
+    methods: {
+      /*
+       * 建立实时监控连接
+       */
+      createSignalRConnect () {
+        let index = this.$store.state.ChooseData.chooseData
+        let signalrUrl = window.equipmentobjarray[index]['box']['cs']['signalrUrl']
+        let token = window.jsonobj['access_token']
+        this.$http.post('http://localhost:8081/test/createSignalRConnect', {
+          url: signalrUrl,
+          token: token
+        }).then(response => {
+          console.log(response)
+        }).catch(error => {
+          console.log(error)
+        })
+      },
+      closeSignalRConnect () {
+        this.$http.post('http://localhost:8081/test/closeSignalRConnect')
+          .then(res => {
+            console.log(res)
+          })
+          .catch(res => {
+            console.log(res)
+          })
+      }
+    },
+    created () {
+      this.createSignalRConnect()
+    },
+    beforeDestroy () {
+      this.closeSignalRConnect()
     }
   }
 </script>
