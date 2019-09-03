@@ -43,4 +43,23 @@ dependencies {
 	// gson
 	implementation 'com.google.code.gson:gson:2.8.5'
 	implementation fileTree(dir: 'libs', includes: ['*.jar'])
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.1'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'mysql:mysql-connector-java'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// web 应用程序
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	// okhttp
+	implementation 'com.squareup.okhttp3:okhttp:3.5.0'
+	// shiro
+	implementation 'org.apache.shiro:shiro-core:latest.release'
+	implementation 'org.apache.shiro:shiro-ehcache:latest.release'
+	implementation 'org.apache.shiro:shiro-web:latest.release'
+	implementation 'org.crazycake:shiro-redis:3.2.1'
+	implementation 'org.apache.shiro:shiro-spring:1.4.0'
+	implementation 'com.alibaba:fastjson:1.2.54'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.hibernate:hibernate-core'
+	implementation 'org.mybatis:mybatis:3.4.5'
 }

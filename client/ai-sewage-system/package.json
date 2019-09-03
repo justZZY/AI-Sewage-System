@@ -61,6 +61,7 @@
     "echarts": "^4.2.1",
     "element-ui": "^2.9.2",
     "jquery": "^3.4.1",
+    "js-cookie": "^2.2.1",
     "signalr": "^2.4.1",
     "vue": "^2.5.16",
     "vue-baidu-map": "^0.21.22",
