@@ -8,7 +8,6 @@ import BaiduMap from 'vue-baidu-map'
 import App from './App'
 import router from './router'
 import store from './store'
-// import 'signalr'
 // 导入图标组件
 import echarts from 'echarts'
 
