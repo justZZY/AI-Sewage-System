@@ -60,6 +60,7 @@
     "axios": "^0.18.0",
     "echarts": "^4.2.1",
     "element-ui": "^2.9.2",
+    "js-cookie": "^2.2.1",
     "vue": "^2.5.16",
     "vue-baidu-map": "^0.21.22",
     "vue-electron": "^1.0.6",

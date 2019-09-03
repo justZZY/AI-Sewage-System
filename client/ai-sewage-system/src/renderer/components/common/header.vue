@@ -12,7 +12,11 @@
         <el-menu-item index="/side_watch">站点监控</el-menu-item>
         <el-menu-item index="/remote_control">远程控制</el-menu-item>
         <el-menu-item index="/time_control">定时控制</el-menu-item>
-        <el-menu-item index="/system_manage">系统管理</el-menu-item>
+        <el-submenu index="5">
+          <template slot="title">系统管理</template>
+          <el-menu-item index="/user">用户管理</el-menu-item>
+          <el-menu-item index="/role">权限管理</el-menu-item>
+        </el-submenu>
       </el-menu>
     </el-col>
   </el-row>

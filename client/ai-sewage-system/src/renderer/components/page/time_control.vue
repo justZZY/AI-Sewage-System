@@ -136,18 +136,6 @@
        */
       minChange (scope) {
         console.log(scope)
-        // 计算拖动条数据
-        this.$confirm('此操作将关闭设备' + name + ', 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消修改'
-          })
-        })
       },
       /*
        * 通用接口
