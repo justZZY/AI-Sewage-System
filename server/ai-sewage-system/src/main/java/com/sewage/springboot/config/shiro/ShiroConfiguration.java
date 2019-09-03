@@ -44,10 +44,6 @@ public class ShiroConfiguration {
 		filterChainDefinitionMap.put("/", "anon");
 		filterChainDefinitionMap.put("/static/**", "anon");
 		filterChainDefinitionMap.put("/login/auth", "anon");
-		filterChainDefinitionMap.put("/test/testLogin","anon");
-		filterChainDefinitionMap.put("/test/testEquipments","anon");
-		filterChainDefinitionMap.put("/test/getUserByJson","anon");
-		filterChainDefinitionMap.put("/test/getEquipMonitor","anon");
 		filterChainDefinitionMap.put("/login/getInfo","anon");
 		filterChainDefinitionMap.put("/login/logout", "anon");
 		filterChainDefinitionMap.put("/user/list","anon");
@@ -59,6 +55,8 @@ public class ShiroConfiguration {
 		filterChainDefinitionMap.put("/user/addRole","anon");
 		filterChainDefinitionMap.put("/user/updateRole","anon");
 		filterChainDefinitionMap.put("/user/deleteRole","anon");
+		filterChainDefinitionMap.put("/websocket","anon");
+		filterChainDefinitionMap.put("/test/**","anon");
 		filterChainDefinitionMap.put("/error", "anon");
 		filterChainDefinitionMap.put("/**", "authc");
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);

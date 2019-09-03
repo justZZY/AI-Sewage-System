@@ -61,8 +61,8 @@ export default new Router({
 
 export const asyncRouterMap = [
   {
-    path: '/main',
-    name: 'vMain',
+    path: '/mainA',
+    name: 'Main',
     redirect: '/map',
     component: require('@/components/common/main').default,
     children: [
@@ -77,10 +77,6 @@ export const asyncRouterMap = [
         name: 'role',
         component: require('@/components/page/role').default,
         menu: 'role'
-      },
-      {
-        path: '*',
-        redirect: '/404'
       }
     ]
   }

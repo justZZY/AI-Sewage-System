@@ -127,6 +127,7 @@
         }).then(response => {
           // 解析请求到的设备数据
           window.equipmentobj = JSON.parse(JSON.stringify(response))['data']
+          window.equipmentobjarray = getArray(window.equipmentobj)
           console.log(window.equipmentobj)
           // console.log('正式设备: ' + window.equipmentobj[0]['name'])
           // console.log('正式设备: ' + window.equipmentobj[0]['boxRegs'])
@@ -139,6 +140,13 @@
         this.$router.push('/main')
       }
     }
+  }
+  function getArray (arrayObj) {
+    let array = []
+    for (let i = 0; i < arrayObj.length; i++) {
+      array = array.concat(arrayObj[i]['boxRegs'])
+    }
+    return array
   }
 </script>
 <style rel="stylesheet/scss" lang="scss">

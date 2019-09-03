@@ -173,6 +173,7 @@ public class UserController {
     String createSignalRConnect (@RequestBody JSONObject jsonObject) {
         String signalrUrl = jsonObject.getString("url");
         String token = jsonObject.getString("token");
+        System.out.println("====打开signalr");
         // 启动signalr
         ConsoleLoggerFactory loggerFactory = new ConsoleLoggerFactory();
         signalRConnection = new FBoxSignalRConnection(signalrUrl, token,

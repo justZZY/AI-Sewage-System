@@ -56,12 +56,12 @@
           </el-input>
         </el-form-item>
         <el-form-item label="角色" required>
-          <el-select v-model="tempUser.roleName" placeholder="请选择">
+          <el-select v-model="tempUser.roleId" placeholder="请选择">
             <el-option
-              v-for="item in roles"
-              :key="item.roleId"
-              :label="item.roleName"
-              :value="item.roleId">
+                v-for="item in roles"
+                :key="item.roleId"
+                :label="item.roleName"
+                :value="item.roleId">
             </el-option>
           </el-select>
         </el-form-item>
