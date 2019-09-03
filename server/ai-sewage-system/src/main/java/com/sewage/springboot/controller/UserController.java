@@ -167,7 +167,7 @@ public class UserController {
         }
     }
     /*
-     * 建立实时监控
+     * 建立signalr实时监控
      */
     @RequestMapping(value = "/createSignalRConnect", method = RequestMethod.POST)
     String createSignalRConnect (@RequestBody JSONObject jsonObject) {
@@ -175,10 +175,20 @@ public class UserController {
         String token = jsonObject.getString("token");
         // 启动signalr
         ConsoleLoggerFactory loggerFactory = new ConsoleLoggerFactory();
-        FBoxSignalRConnection signalRConnection = new FBoxSignalRConnection(signalrUrl, token,
+        signalRConnection = new FBoxSignalRConnection(signalrUrl, token,
                 Global.signalrClientId, Global.proxy, loggerFactory);
         signalRConnection.start();
         return "success";
     }
+    /*
+     * 关闭signalr监控
+     */
+    @RequestMapping(value = "/closeSignalRConnect", method = RequestMethod.POST)
+    String closeSignalRConnect () {
+        signalRConnection.stop();
+        System.out.println("closeSignalR");
+        return "success";
+    }
     public static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
+    private FBoxSignalRConnection signalRConnection = null;
 }

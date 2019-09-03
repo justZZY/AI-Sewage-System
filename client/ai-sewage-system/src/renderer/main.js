@@ -1,6 +1,3 @@
-import 'signalr'
-// 导入图标组件
-import locale from 'element-ui/lib/locale/lang/zh-CN'
 import Vue from 'vue'
 import axios from 'axios'
 /* 添加ElementUI组件 */
@@ -15,9 +12,12 @@ import '../icons' // icon
 import '../permission' // 权限
 import {default as api} from '../utils/api'
 import {hasPermission} from '../utils/hasPermission'
-Vue.use(ElementUI, {locale})
+// 导入图标组件
+import echarts from 'echarts'
+
 Vue.prototype.api = api
 Vue.prototype.hasPerm = hasPermission
+
 Vue.use(ElementUI)
 Vue.use(BaiduMap, {
   ak: 'fIaeDjiILX4C7VpyIkGed9BTjpbeaQ0w'
@@ -25,6 +25,7 @@ Vue.use(BaiduMap, {
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
+Vue.prototype.$echarts = echarts
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
