@@ -3,11 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="52d5075d-afa5-4489-bf60-991555596b80" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/components/common/main.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/common/main.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/renderer/components/page/remote_control.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/page/remote_control.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/components/page/side_watch.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/page/side_watch.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/components/page/time_control.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/page/time_control.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/java/com/sewage/springboot/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/java/com/sewage/springboot/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/main.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -142,7 +139,7 @@
       <workItem from="1566994902562" duration="4780000" />
       <workItem from="1567001226058" duration="3564000" />
       <workItem from="1567067638176" duration="6286000" />
-      <workItem from="1567126798862" duration="13972000" />
+      <workItem from="1567126798862" duration="15170000" />
     </task>
     <task id="LOCAL-00001" summary="在切换窗口时记录坐标数据">
       <created>1563524950645</created>
