@@ -29,6 +29,7 @@ public abstract class SignalRConnectionBase {
     private long lastConnectedTime = 0;
     private boolean reconnecting;
     private boolean monitorStarted;
+    private boolean quitFlag = false;
 
     public SignalRConnectionBase(String hubUrl, String token, String signalrClientId, Proxy proxy, LoggerFactory loggerFactory) {
         this.hubUrl = hubUrl;
@@ -101,11 +102,14 @@ public abstract class SignalRConnectionBase {
         //signalr重连代码
         for (; ; ) {
             do {
-//                this.logger.logTrace("Current connection state is " + this.hubConnection.getState());
+                if (this.hubConnection != null)
+                    this.logger.logTrace("Current connection state is " + this.hubConnection.getState());
                 this.connectEvent.acquire();
             }
             while (this.hubConnection != null && this.hubConnection.getState() == ConnectionState.Connected);
-
+            if (quitFlag) {
+                break;
+            }
             try {
                 if (this.hubConnection != null)
                     this.UnhookEvents();
@@ -152,5 +156,10 @@ public abstract class SignalRConnectionBase {
 
     public void stop() {
         this.hubConnection.stop();
+    }
+
+    public void disConnect() {
+        this.hubConnection.disconnect();
+        quitFlag = true;
     }
 }

@@ -186,8 +186,7 @@ public class UserController {
      */
     @RequestMapping(value = "/closeSignalRConnect", method = RequestMethod.POST)
     String closeSignalRConnect () {
-        signalRConnection.stop();
-        System.out.println("closeSignalR");
+        signalRConnection.disConnect();
         return "success";
     }
     public static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
