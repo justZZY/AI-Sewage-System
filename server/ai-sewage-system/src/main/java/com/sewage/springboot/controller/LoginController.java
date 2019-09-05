@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -28,8 +29,9 @@ public class LoginController {
 	 * @return
 	 */
 	@RequestMapping(value = "/auth", method = RequestMethod.POST)
-	String authLogin(@RequestParam Map<String, Object> params) throws IOException {
-		return loginService.authLogin(params);
+	String authLogin(@RequestBody JSONObject jsonObject) {
+		jsonObject = jsonObject.getJSONObject("data");
+		return loginService.authLogin(jsonObject);
 	}
 
 	/**

@@ -33,9 +33,9 @@ static Object user_info;
 	 * 登录表单提交
 	 */
 	@Override
-	public String authLogin(Map<String, Object> params) {
-		String username = params.get("username").toString();
-		String password = params.get("password").toString();
+	public String authLogin(JSONObject object) {
+		String username = object.getString("username");
+		String password = object.getString("password");
 		Subject currentUser = SecurityUtils.getSubject();
 		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 

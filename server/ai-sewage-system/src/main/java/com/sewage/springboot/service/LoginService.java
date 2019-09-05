@@ -13,7 +13,7 @@ public interface LoginService {
 	/**
 	 * 登录表单提交
 	 */
-	String authLogin(Map<String, Object> params);
+	String authLogin(JSONObject jsonObject);
 
 	/**
 	 * 根据用户名和密码查询对应的用户
