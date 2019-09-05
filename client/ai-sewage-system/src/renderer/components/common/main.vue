@@ -52,8 +52,12 @@
     created () {
       this.createSignalRConnect()
     },
-    beforeDestroy () {
-      this.closeSignalRConnect()
+    mounted () {
+      window.addEventListener('beforeunload', e => this.closeSignalRConnect(e))
+    },
+    destroyed () {
+      window.removeEventListener('beforeunload', e => this.closeSignalRConnect(e))
+      // this.closeSignalRConnect()
     }
   }
 </script>

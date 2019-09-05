@@ -5,46 +5,18 @@
              class="card-box login-form">
       <h3 class="title">智慧水务</h3>
       <el-form-item prop="username">
-        <span class="svg-container svg-container_login">
-          <svg-icon icon-class="user"/>
-        </span>
+<!--        <span class="svg-container svg-container_login">-->
+<!--          <svg-icon icon-class="user"/>-->
+<!--        </span>-->
         <el-input v-model="loginForm.username" autoComplete="on"/>
       </el-form-item>
       <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password"></svg-icon>
-        </span>
+<!--        <span class="svg-container">-->
+<!--          <svg-icon icon-class="password"></svg-icon>-->
+<!--        </span>-->
         <el-input type="password" @keyup.enter.native="handleLogin" v-model="loginForm.password"
                   autoComplete="on"></el-input>
       </el-form-item>
-<!--      <el-form-item prop="scope">-->
-<!--        <span class="svg-container">-->
-<!--          <svg-icon icon-class="scope"></svg-icon>-->
-<!--        </span>-->
-<!--        <el-input type="scope" @keyup.enter.native="handleLogin" v-model="loginForm.scope"-->
-<!--                  autoComplete="on"></el-input>-->
-<!--      </el-form-item>-->
-<!--      <el-form-item prop="client_id">-->
-<!--        <span class="svg-container">-->
-<!--          <svg-icon icon-class="client_id"></svg-icon>-->
-<!--        </span>-->
-<!--        <el-input type="client_id" @keyup.enter.native="handleLogin" v-model="loginForm.client_id"-->
-<!--                  autoComplete="on"></el-input>-->
-<!--      </el-form-item>-->
-<!--      <el-form-item prop="client_secret">-->
-<!--        <span class="svg-container">-->
-<!--          <svg-icon icon-class="client_secret"></svg-icon>-->
-<!--        </span>-->
-<!--        <el-input type="client_secret" @keyup.enter.native="handleLogin" v-model="loginForm.client_secret"-->
-<!--                  autoComplete="on"></el-input>-->
-<!--      </el-form-item>-->
-<!--      <el-form-item prop="grant-type">-->
-<!--        <span class="svg-container">-->
-<!--          <svg-icon icon-class="grant-type"></svg-icon>-->
-<!--        </span>-->
-<!--        <el-input type="grant-type" @keyup.enter.native="handleLogin" v-model="loginForm.grant_type"-->
-<!--                  autoComplete="on"></el-input>-->
-<!--      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
           登录

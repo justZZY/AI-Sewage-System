@@ -57,7 +57,6 @@
     },
     beforeDestroy () {
       this.over()
-      this.closeSignalRConnect()
     },
     computed: {
       rateNums: function () {
@@ -68,15 +67,6 @@
       }
     },
     methods: {
-      closeSignalRConnect () {
-        this.$http.post('http://localhost:8081/test/closeSignalRConnect')
-          .then(res => {
-            console.log(res)
-          })
-          .catch(res => {
-            console.log(res)
-          })
-      },
       /*
        * 启动websocket连接
        */

@@ -8,7 +8,6 @@ import BaiduMap from 'vue-baidu-map'
 import App from './App'
 import router from './router'
 import store from './store'
-import '../icons' // icon
 import '../permission' // 权限
 import {default as api} from '../utils/api'
 import {hasPermission} from '../utils/hasPermission'
