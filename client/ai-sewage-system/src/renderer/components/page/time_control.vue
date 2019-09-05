@@ -52,6 +52,17 @@
     created () {
       this.getEquipMonitor()
     },
+    // // 站点数据格式不统一 暂时弃用
+    // computed: {
+    //   refreshPage () {
+    //     return this.$store.state.Treedata.chooseData
+    //   }
+    // },
+    // watch: {
+    //   refreshPage: function () {
+    //     this.getEquipMonitor()
+    //   }
+    // },
     methods: {
       // 获取监控的数据 会通过计算进行变动
       // args: apiBaseUrl boxNo

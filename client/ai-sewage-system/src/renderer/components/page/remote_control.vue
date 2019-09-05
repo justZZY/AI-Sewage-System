@@ -52,10 +52,10 @@
               </el-table-column>
               <el-table-column prop="启停开关" label="启动/停止" align="center" min-width="190">
                 <template slot-scope="scope">
-                  <el-button v-if="scope.row.手自动开关 === false" type="primary" plain @click="startEquipBtn(scope)">启动</el-button>
-                  <el-button v-if="scope.row.手自动开关 === false" type="primary" plain @click="stopEquipBtn(scope)">停止</el-button>
-                  <el-button v-if="scope.row.手自动开关 === true" type="primary" disabled plain @click="startEquipBtn(scope)">启动</el-button>
-                  <el-button v-if="scope.row.手自动开关 === true" type="primary" disabled plain @click="stopEquipBtn(scope)">停止</el-button>
+                  <el-button v-if="scope.row.手自动开关 === false && scope.row.运行反馈 === '停止'" type="primary" plain @click="startEquipBtn(scope)">启动</el-button>
+                  <el-button v-if="scope.row.手自动开关 === true || scope.row.运行反馈 === '运行'" type="primary" disabled plain @click="startEquipBtn(scope)">启动</el-button>
+                  <el-button v-if="scope.row.手自动开关 === false && scope.row.运行反馈 === '运行'" type="primary" plain @click="stopEquipBtn(scope)">停止</el-button>
+                  <el-button v-if="scope.row.手自动开关 === true || scope.row.运行反馈 === '停止'" type="primary" disabled plain @click="stopEquipBtn(scope)">停止</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -78,6 +78,18 @@
         sliderData: [] // 设置频率滑动条json数组
       }
     },
+    // // 多数站点存在数据格式不统一问题
+    // // 暂时弃用切换刷新
+    // computed: {
+    //   refreshPage () {
+    //     return this.$store.state.Treedata.chooseData
+    //   }
+    // },
+    // watch: {
+    //   refreshPage: function () {
+    //     this.getEquipMonitor()
+    //   }
+    // },
     methods: {
       setTimer () {
         if (this.timer === null) {

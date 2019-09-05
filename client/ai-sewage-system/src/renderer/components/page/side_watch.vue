@@ -65,7 +65,18 @@
       monitorNums: function () {
         return this.$store.state.MonitorNums.monitorNums
       }
+      // // 站点格式不统一 暂时弃用
+      // refreshPage () {
+      //   return this.$store.state.Treedata.chooseData
+      // }
     },
+    // watch: {
+    //   refreshPage: function () {
+    //     this.over()
+    //     this.getEquipData()
+    //     this.websocket()
+    //   }
+    // },
     methods: {
       /*
        * 启动websocket连接
