@@ -39,7 +39,7 @@
         window.map = map
         // 在切换界面时返回记录坐标数据
         let posarray = window.equipmentposarray
-        let index = this.$store.state.ChooseData.chooseData
+        let index = this.$store.state.Treedata.chooseData
         let longitude = posarray[index]['pos']['longitude']
         let latitude = posarray[index]['pos']['latitude']
         let point = new window.BMap.Point(longitude, latitude)

@@ -27,7 +27,7 @@
        * 建立实时监控连接
        */
       createSignalRConnect () {
-        let index = this.$store.state.ChooseData.chooseData
+        let index = this.$store.state.Treedata.chooseData
         let signalrUrl = window.equipmentobjarray[index]['box']['cs']['signalrUrl']
         let token = window.jsonobj['access_token']
         this.$http.post('http://localhost:8081/test/createSignalRConnect', {

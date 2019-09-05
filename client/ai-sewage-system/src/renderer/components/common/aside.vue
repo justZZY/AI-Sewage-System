@@ -36,7 +36,7 @@
           for (let i = 0; i < posarray.length; i++) {
             if (posarray[i].name === data['label']) {
               this.$store.dispatch('setChooseData', i)
-              // console.log('data: ' + this.$store.state.ChooseData.chooseData)
+              // console.log('data: ' + this.$store.state.Treedata.chooseData)
               let longitude = posarray[i]['pos']['longitude']
               let latitude = posarray[i]['pos']['latitude']
               let point = new window.BMap.Point(longitude, latitude)

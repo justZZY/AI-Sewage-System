@@ -1,54 +1,92 @@
 <template>
-  <div class="login">
-      <div class="login_fields__submit">
-        <input type="button" value="测试" v-on:click="runTestFun()">
-        <input type="button" value="设备测试" v-on:click="runTestEquipment()">
-        <input type="button" value="跳转" v-on:click="gotoIndex()">
-      </div>
+  <div class="login-container">
+    <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left"
+             label-width="0px"
+             class="card-box login-form">
+      <h3 class="title">智慧水务</h3>
+      <el-form-item prop="username">
+        <el-input v-model="loginForm.username" autoComplete="on"/>
+      </el-form-item>
+      <el-form-item prop="password">
+        <el-input type="password" placeholder="请输入密码" show-password v-model="loginForm.password"
+                  autoComplete="on"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
+          登录
+        </el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'login-page',
+    name: 'log',
+    data () {
+      return {
+        loginForm: {
+          username: 'ligaofa',
+          password: 'gf229192',
+          scope: 'openid offline_access fbox email profile',
+          client_id: 'ynsk',
+          client_secret: 'af6a37beddb28136eed65bda1f16547f',
+          grant_type: 'password'
+        },
+        loginRules: {
+          username: [{required: true, trigger: 'blur', message: '请输入用户名'}],
+          password: [{required: true, trigger: 'blur', message: '请输入密码'}]
+        },
+        loading: false
+      }
+    },
     methods: {
+      handleLogin () {
+        this.$refs.loginForm.validate(valid => {
+          if (valid) {
+            this.loading = true
+            this.$http.post('http://localhost:8081/login/auth', {
+              'data': this.loginForm
+            }).then(data => {
+              this.loading = false
+              let userobj = JSON.parse(JSON.stringify(data))['data']
+              console.log(userobj)
+              if (userobj === 'success') {
+                this.runTestFun()
+              } else {
+                this.$message.error('账号/密码错误')
+              }
+            }).catch(() => {
+              this.loading = false
+            })
+          } else {
+            return false
+          }
+        })
+      },
       runTestFun () {
         this.$http.post('http://localhost:8081/test/testLogin').then(response => {
-          // 将获取到的登录消息数据设为全局,在后面的设备请求中会用到相关的token
           window.jsonobj = JSON.parse(JSON.stringify(response))['data']
           console.log('access_token: ' + window.jsonobj['access_token'])
           console.log('refresh_token: ' + window.jsonobj['refresh_token'])
-          console.log(window.jsonobj['expires_in'])
-          console.log(window.jsonobj['token_type'])
-          this.$message({
-            type: 'success',
-            message: '获取登录数据成功'
-          })
-        }).catch(error => {
+          this.runTestEquipment()
+        }).catch(function (error) {
           console.log(error)
-          this.$message.error('获取登录数据失败')
         })
       },
       runTestEquipment () {
         this.$http.get('http://localhost:8081/test/testEquipments', {
           params: {
-            Authorization: 'Bearer ' + window.jsonobj['access_token']
+            Authorization: 'Bearer ' + window.jsonobj['access_token'],
+            XFBoxClientId: 'zzy_test'
           }
         }).then(response => {
           // 解析请求到的设备数据
           window.equipmentobj = JSON.parse(JSON.stringify(response))['data']
           window.equipmentobjarray = getArray(window.equipmentobj)
-          console.log(window.equipmentobj)
-          console.log(window.equipmentobjarray)
-          console.log('正式设备: ' + window.equipmentobj[0]['name'])
-          console.log('正式设备: ' + window.equipmentobj[0]['boxRegs'])
-          this.$message({
-            type: 'success',
-            message: '获取设备数据成功'
-          })
-        }).catch(error => {
+          this.gotoIndex()
+        }).catch(function (error) {
           console.log(error)
-          this.$message.error('获取设备数据失败')
         })
       },
       gotoIndex () {
@@ -64,38 +102,82 @@
     return array
   }
 </script>
+<style rel="stylesheet/scss" lang="scss">
+  // import "../../styles/mixin.scss";
+  $bg: #2d3a4b;
+  $dark_gray: #889aa4;
+  $light_gray: #eee;
 
-<style scoped>
-  .login_fields__submit {
-    position: relative;
-    top: 190px;
-    left: 50px;
-  }
-
-  .login_fields__submit input {
-    border-radius: 50px;
-    background: transparent;
-    padding: 10px 50px;
-    border: 2px solid #4fa1d9;
-    color: #4fa1d9;
-    font-size: 11px;
-    -webkit-transition-property: background, color;
-    transition-property: background, color;
-    -webkit-transition-duration: 0.2s;
-    transition-duration: 0.2s;
-  }
-
-  .login_fields__submit input:focus {
-    box-shadow: none;
-    outline: none;
-  }
-
-  .login_fields__submit input:hover {
-    color: white;
-    background: #4fa1d9;
-    -webkit-transition-property: background, color;
-    transition-property: background, color;
-    -webkit-transition-duration: 0.2s;
-    transition-duration: 0.2s;
+  .login-container {
+    include :relative;
+    height: 100vh;
+    background-color: $bg;
+    input:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0px 1000px #293444 inset !important;
+      -webkit-text-fill-color: #fff !important;
+    }
+    input {
+      background: transparent;
+      border: 0px;
+      -webkit-appearance: none;
+      border-radius: 0px;
+      padding: 12px 5px 12px 15px;
+      color: $light_gray;
+      height: 47px;
+    }
+    .el-input {
+      display: inline-block;
+      height: 47px;
+      width: 85%;
+    }
+    .tips {
+      font-size: 14px;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .svg-container {
+      padding: 6px 5px 6px 15px;
+      color: $dark_gray;
+      vertical-align: middle;
+      width: 30px;
+      display: inline-block;
+      &_login {
+        font-size: 20px;
+      }
+    }
+    .title {
+      font-size: 26px;
+      color: $light_gray;
+      margin: 0px auto 40px auto;
+      text-align: center;
+      font-weight: bold;
+    }
+    .login-form {
+      position: absolute;
+      left: 0;
+      right: 0;
+      width: 400px;
+      padding: 35px 35px 15px 35px;
+      margin: 120px auto;
+    }
+    .el-form-item {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      color: #454545;
+    }
+    .show-pwd {
+      position: absolute;
+      right: 10px;
+      top: 7px;
+      font-size: 16px;
+      color: $dark_gray;
+      cursor: pointer;
+    }
+    .thirdparty-button {
+      position: absolute;
+      right: 35px;
+      bottom: 28px;
+    }
   }
 </style>

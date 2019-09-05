@@ -93,7 +93,7 @@
       //     console.log('打开websocket连接')
       //   }
       //   ws.onmessage = res => {
-      //     // let index = this.$store.state.ChooseData.chooseData
+      //     // let index = this.$store.state.Treedata.chooseData
       //     // let boxId = window.equipmentobjarray[index]['box']['id']
       //     // 做数据解析
       //     // solveSocketData(this.devicedata, boxId, res)
@@ -111,7 +111,7 @@
       // args: apiBaseUrl boxNo
       // 参数根据equipmentobjarray和vuex中存储的下标进行计算
       getEquipMonitor () {
-        let index = this.$store.state.ChooseData.chooseData
+        let index = this.$store.state.Treedata.chooseData
         console.log(index)
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
@@ -135,7 +135,7 @@
       },
       // 获取监控寄存器的值
       getEquipValue (dataArray, type) {
-        let index = this.$store.state.ChooseData.chooseData
+        let index = this.$store.state.Treedata.chooseData
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
@@ -224,7 +224,7 @@
        * 向服务器传值,修改相关的寄存器值
        */
       setEquipValue (name, type, value) {
-        let index = this.$store.state.ChooseData.chooseData
+        let index = this.$store.state.Treedata.chooseData
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']

@@ -7,7 +7,7 @@ export default new Router({
     {
       path: '/',
       name: 'log',
-      component: require('@/components/page/testlogin').default
+      component: require('@/components/page/login').default
     },
     {
       path: '/main',
@@ -29,11 +29,6 @@ export default new Router({
           path: '/system_manage',
           name: 'system_manage',
           component: require('@/components/page/system_manage').default
-        },
-        {
-          path: '/test',
-          name: 'vTest',
-          component: require('@/components/page/test').default
         },
         {
           path: '/remote_control',

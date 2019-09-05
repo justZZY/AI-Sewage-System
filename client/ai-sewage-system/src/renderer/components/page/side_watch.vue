@@ -76,7 +76,7 @@
           console.log('打开websocket连接')
         }
         ws.onmessage = res => {
-          let index = this.$store.state.ChooseData.chooseData
+          let index = this.$store.state.Treedata.chooseData
           let boxId = window.equipmentobjarray[index]['box']['id']
           // 做数据解析
           this.solveSocketData(boxId, res)
@@ -94,7 +94,7 @@
       // 参数根据equipmentobjarray和vuex中存储的下标进行计算
       getEquipData () {
         console.log('初始化数据')
-        let index = this.$store.state.ChooseData.chooseData
+        let index = this.$store.state.Treedata.chooseData
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
@@ -120,7 +120,7 @@
       },
       // 获取监控寄存器的值
       getEquipValue (names, type) {
-        let index = this.$store.state.ChooseData.chooseData
+        let index = this.$store.state.Treedata.chooseData
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']

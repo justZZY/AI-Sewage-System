@@ -8,14 +8,8 @@ import BaiduMap from 'vue-baidu-map'
 import App from './App'
 import router from './router'
 import store from './store'
-import '../permission' // 权限
-import {default as api} from '../utils/api'
-import {hasPermission} from '../utils/hasPermission'
 // 导入图标组件
 import echarts from 'echarts'
-
-Vue.prototype.api = api
-Vue.prototype.hasPerm = hasPermission
 
 Vue.use(ElementUI)
 Vue.use(BaiduMap, {
