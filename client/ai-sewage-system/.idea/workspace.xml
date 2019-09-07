@@ -3,22 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="3a0adb58-ded6-4971-8d0b-bc6563aca463" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/icons/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/icons/svg/example.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/icons/svg/eye.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/icons/svg/form.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/icons/svg/password.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/icons/svg/table.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/icons/svg/tree.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/icons/svg/user.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/components/SvgIcon/index.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/components/common/main.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/common/main.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/components/page/side_watch.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/page/side_watch.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/components/page/testlogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/page/testlogin.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/components/page/time_control.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/page/time_control.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../sewage_system.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../../sewage_system.sql" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,6 +13,11 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/../.." value="稳定版本Ver-1.0.0" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="ProjectId" id="1QKkQoSev9dkrf2BsI08VB20A7E" />
@@ -39,6 +30,14 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/renderer/store/modules" />
+      <recent name="$PROJECT_DIR$/src/renderer/js" />
+      <recent name="$PROJECT_DIR$/src/renderer" />
+      <recent name="$PROJECT_DIR$/src/renderer/assets" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -66,6 +65,7 @@
       <workItem from="1567530887576" duration="251000" />
       <workItem from="1567531972083" duration="621000" />
       <workItem from="1567586061746" duration="5775000" />
+      <workItem from="1567774359053" duration="7300000" />
     </task>
     <servers />
   </component>

@@ -38,6 +38,13 @@
         </el-table>
       </div>
     </el-card>
+    <el-dialog title="时间调整" :visible.sync="dialogVisible" width="30%">
+      <el-slider v-model="sliderValue" :min="sliderMin" :max="sliderMax"></el-slider>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="sendMinutes()">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -46,7 +53,13 @@
     name: 'time_control',
     data () {
       return {
-        timeDataArray: []
+        timeDataArray: [],
+        // 时间拖动条相关
+        dialogVisible: false,
+        dialogName: 'null',
+        sliderValue: 0,
+        sliderMin: 0,
+        sliderMax: 100
       }
     },
     created () {
@@ -141,12 +154,23 @@
           })
         })
       },
-      /* 关于运行时间的修改
+      /*
+       * 关于运行时间的修改
        * 先显示时间拖动条
        * 再提示是否确认修改
        */
       minChange (scope) {
         console.log(scope)
+        this.dialogVisible = true
+        let startTime = scope.row.openTime
+        let endTime = scope.row.closeTime
+        // 减去相异时间
+        let subMinutes = scope.column.property === 'runTime' ? scope.row.stopTime : scope.row.runTime
+        // 计算时间差 A+B-C
+        this.sliderMax = calcTimes(startTime, endTime, Number(subMinutes))
+        console.log('slider max:' + this.sliderMax)
+        this.sliderValue = scope.column.property === 'runTime' ? scope.row.runTime : scope.row.stopTime // 当前列分钟
+        this.dialogName = '定时_' + scope.row.name + '_' + scope.column.label
       },
       /*
        * 通用接口
@@ -170,7 +194,14 @@
             type: 'success',
             message: '修改成功'
           })
+          this.getEquipMonitor()
         })
+      },
+      sendMinutes () {
+        // 发送数据后把所有数据还原初始值
+        console.log(this.sliderValue)
+        this.setEquipValue(this.dialogName, 0, this.sliderValue)
+        this.dialogVisible = false
       }
     }
   }
@@ -250,6 +281,16 @@
       min = '0' + min
     }
     return hour + ':' + min
+  }
+  function calcTimes (startTime, endTime, subMinutes) {
+    let sTimes = startTime.split(':')
+    let eTimes = endTime.split(':')
+    let shour = Number(sTimes[0])
+    let smins = Number(sTimes[1])
+    let ehour = Number(eTimes[0])
+    let emins = Number(eTimes[1])
+    let res = (ehour - shour) * 60 + (emins - smins) - subMinutes
+    return res > 60 ? 60 : res
   }
 </script>
 
