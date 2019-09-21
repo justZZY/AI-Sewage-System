@@ -51,9 +51,9 @@
     </select>
 
     <insert id="addUser" useGeneratedKeys="true" keyProperty="userId">
-        INSERT INTO sys_user
-        (username, password, role_id) VALUES
-            (#{username}, #{password},  #{roleId})
+        INSERT INTO user
+        (username, password, salt, delete_status, pid) VALUES
+            (#{username}, #{password}, #{salt}, #{delete_status}, #{pid})
     </insert>
 
     <update id="updateUser">
@@ -185,8 +185,7 @@
     </update>
     <select id="queryExistUsername" resultType="int">
         select count(0)
-         from sys_user
-         WHERE username=#{username}
-         AND delete_status='1';
+         from user
+         WHERE username=#{username};
     </select>
 </mapper>

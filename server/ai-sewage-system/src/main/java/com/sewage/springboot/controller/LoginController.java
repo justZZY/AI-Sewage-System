@@ -6,14 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * @author: hxy
+ * @author: zzy
  * @description: 登录相关Controller
- * @date: 2017/10/24 10:33
  */
 @CrossOrigin
 @RestController
@@ -24,12 +19,12 @@ public class LoginController {
 	@Autowired
 	private LoginService loginService;
 
-	/**s
+	/**
 	 * 登录
-	 * @return
+	 * @return json:用户身份信息和地区权限信息
 	 */
 	@RequestMapping(value = "/auth", method = RequestMethod.POST)
-	String authLogin(@RequestBody JSONObject jsonObject) {
+	public JSONObject authLogin(@RequestBody JSONObject jsonObject) {
 		jsonObject = jsonObject.getJSONObject("data");
 		return loginService.authLogin(jsonObject);
 	}

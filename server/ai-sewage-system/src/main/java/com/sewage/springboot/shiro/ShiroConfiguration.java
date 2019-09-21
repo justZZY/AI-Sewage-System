@@ -1,7 +1,8 @@
-package com.sewage.springboot.config.shiro;
+package com.sewage.springboot.shiro;
 
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -16,9 +17,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * @author: hxy
+ * @author: zzy
  * @description: shiro配置类
- * @date: 2017/10/24 10:10
  */
 @Configuration
 public class ShiroConfiguration {
@@ -26,9 +26,9 @@ public class ShiroConfiguration {
 	 * Shiro的Web过滤器Factory 命名:shiroFilter
 	 */
 	@Bean(name = "shiroFilter")
-	public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
+	public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-		//Shiro的核心安全接口,这个属性是必须的
+		// shiro的核心安全接口,这个属性是必须的
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
 		Map<String, Filter> filterMap = new LinkedHashMap<>();
 		filterMap.put("authc", new AjaxPermissionsAuthorizationFilter());
@@ -69,17 +69,24 @@ public class ShiroConfiguration {
 	@Bean
 	public SecurityManager securityManager() {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-		securityManager.setRealm(userRealm());
+		securityManager.setRealm(myShiroRealm());
+		// 注入自定义session管理器
+		securityManager.setSessionManager(sessionManager());
 		return securityManager;
+	}
+
+	@Bean
+	public SessionManager sessionManager () {
+		return new CustomSessionManager();
 	}
 
 	/**
 	 * Shiro Realm 继承自AuthorizingRealm的自定义Realm,即指定Shiro验证用户登录的类为自定义的
 	 */
 	@Bean
-	public UserRealm userRealm() {
-		UserRealm userRealm = new UserRealm();
-		return userRealm;
+	public myShiroRealm myShiroRealm() {
+		myShiroRealm myShiroRealm = new myShiroRealm();
+		return myShiroRealm;
 	}
 
 	/**
@@ -89,14 +96,14 @@ public class ShiroConfiguration {
 	 * ）
 	 * 可以扩展凭证匹配器，实现 输入密码错误次数后锁定等功能，下一次
 	 */
-	@Bean(name = "credentialsMatcher")
+	@Bean
 	public HashedCredentialsMatcher hashedCredentialsMatcher() {
 		HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
 		//散列算法:这里使用MD5算法;
 		hashedCredentialsMatcher.setHashAlgorithmName("md5");
-		//散列的次数，比如散列两次，相当于 md5(md5(""));
+		//散列的次数，比如散列两次，相当于md5(md5(""));
 		hashedCredentialsMatcher.setHashIterations(2);
-		//storedCredentialsHexEncoded默认是true，此时用的是密码加密用的是Hex编码；false时用Base64编码
+		//表示是否存储散列后的密码为16进制，需要和生成密码时的一样，默认是base64
 		hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
 		return hashedCredentialsMatcher;
 	}

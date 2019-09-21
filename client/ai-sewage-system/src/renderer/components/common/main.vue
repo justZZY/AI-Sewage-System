@@ -30,9 +30,13 @@
         let index = this.$store.state.Treedata.chooseData
         let signalrUrl = window.equipmentobjarray[index]['box']['cs']['signalrUrl']
         let token = window.jsonobj['access_token']
-        this.$http.post('http://localhost:8081/test/createSignalRConnect', {
+        this.$http.post('http://localhost:8081/equip/createSignalRConnect', {
           url: signalrUrl,
           token: token
+        }, {
+          headers: {
+            'Authorization': this.$store.state.ShiroToken.token
+          }
         }).then(response => {
           console.log(response)
         }).catch(error => {
@@ -40,13 +44,15 @@
         })
       },
       closeSignalRConnect () {
-        this.$http.post('http://localhost:8081/test/closeSignalRConnect')
-          .then(res => {
-            console.log(res)
-          })
-          .catch(res => {
-            console.log(res)
-          })
+        this.$http.post('http://localhost:8081/equip/closeSignalRConnect', null, {
+          headers: {
+            'Authorization': this.$store.state.ShiroToken.token
+          }
+        }).then(res => {
+          console.log(res)
+        }).catch(res => {
+          console.log(res)
+        })
       }
     },
     created () {

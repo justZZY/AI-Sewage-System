@@ -1,7 +1,9 @@
 package com.sewage.springboot.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.sewage.springboot.dao.LoginDao;
+import com.sewage.springboot.entity.UserSessionInfo;
 import com.sewage.springboot.service.LoginService;
 import com.sewage.springboot.service.PermissionService;
 import com.sewage.springboot.util.CommonUtil;
@@ -14,16 +16,13 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 
-/**
- * @author: hxy
- * @description: 登录service实现类
- * @date: 2017/10/24 11:53
+/*
+ * 登录接口
  */
 @Service
 public class LoginServiceImpl implements LoginService {
-static Object user_info;
+	static Object user_info;
 	@Autowired
 	private LoginDao loginDao;
 	@Autowired
@@ -33,18 +32,26 @@ static Object user_info;
 	 * 登录表单提交
 	 */
 	@Override
-	public String authLogin(JSONObject object) {
+	public JSONObject authLogin(JSONObject object) {
 		String username = object.getString("username");
 		String password = object.getString("password");
 		Subject currentUser = SecurityUtils.getSubject();
 		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-
 		try {
 			currentUser.login(token);
-			user_info = currentUser.getSession().getAttribute(Constants.SESSION_USER_INFO);
-			return "success";
+			UserSessionInfo userSessionInfo = (UserSessionInfo) currentUser.getSession().getAttribute(Constants.SESSION_USER_INFO);
+			JSONObject userJson = new JSONObject();
+			userJson.put("status", "success");
+			userJson.put("username", userSessionInfo.getUsername());
+			userJson.put("deleteStatus", userSessionInfo.getDelete_status());
+			userJson.put("identity", userSessionInfo.getIdentity());
+			userJson.put("area", userSessionInfo.getArea());
+			userJson.put("shiroToken", currentUser.getSession().getId());
+			return userJson;
 		} catch (AuthenticationException e) {
-			return "fail";
+			JSONObject json = new JSONObject();
+			json.put("status", "fail");
+			return json;
 		}
 	}
 
@@ -52,8 +59,8 @@ static Object user_info;
 	 * 根据用户名和密码查询对应的用户
 	 */
 	@Override
-	public JSONObject getUser(String username, String password) {
-		return loginDao.getUser(username, password);
+	public JSONObject getUser(String username) {
+		return loginDao.getUser(username);
 	}
 
 	/**

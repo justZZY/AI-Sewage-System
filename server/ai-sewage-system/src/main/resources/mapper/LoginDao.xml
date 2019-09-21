@@ -4,14 +4,14 @@
 <mapper namespace="com.sewage.springboot.dao.LoginDao">
     <select id="getUser" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
-            u.id       userId,
-            u.username username,
-            u.password password
+            username,
+            password,
+            salt,
+            delete_status,
+            identity,
+            area
         FROM
-            sys_user u
-        WHERE u.username = #{username}
-          AND u.password = #{password}
-          AND u.delete_status = '1'
+            user u, permission p
+        WHERE u.username = #{username} and u.pid = p.pid
     </select>
-
 </mapper>

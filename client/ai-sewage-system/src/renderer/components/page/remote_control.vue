@@ -128,10 +128,14 @@
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-        this.$http.post('http://localhost:8081/test/getEquipMonitor', {
+        this.$http.post('http://localhost:8081/equip/getEquipMonitor', {
           authorization: authorization,
           apiBaseUrl: apiBaseUrl,
           boxNo: boxNo
+        }, {
+          headers: {
+            'Authorization': this.$store.state.ShiroToken.token
+          }
         }).then(res => {
           let data = res['data']
           console.log(data)
@@ -153,11 +157,15 @@
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
         let names = getMonitorNames(dataArray)
         console.log(names)
-        this.$http.post('http://localhost:8081/test/getEquipValue', {
+        this.$http.post('http://localhost:8081/equip/getEquipValue', {
           authorization: authorization,
           apiBaseUrl: apiBaseUrl,
           boxNo: boxNo,
           names: names
+        }, {
+          headers: {
+            'Authorization': this.$store.state.ShiroToken.token
+          }
         }).then(res => {
           console.log(res)
           let values = res['data']
@@ -240,13 +248,17 @@
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-        this.$http.post('http://localhost:8081/test/setEquipValue', {
+        this.$http.post('http://localhost:8081/equip/setEquipValue', {
           authorization: authorization,
           apiUrl: apiBaseUrl,
           boxNo: boxNo,
           name: name,
           type: type,
           value: value
+        }, {
+          headers: {
+            'Authorization': this.$store.state.ShiroToken.token
+          }
         }).then(res => {
           console.log(res)
           this.$message({

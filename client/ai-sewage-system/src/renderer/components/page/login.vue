@@ -5,11 +5,11 @@
              class="card-box login-form">
       <h3 class="title">智慧水务</h3>
       <el-form-item prop="username">
-        <el-input v-model="loginForm.username" autoComplete="on"/>
+        <el-input v-model="loginForm.username" placeholder="请输入用户名" autoComplete="on"/>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input type="password" placeholder="请输入密码" show-password v-model="loginForm.password"
-                  autoComplete="on"></el-input>
+        <el-input v-model="loginForm.password" type="password" placeholder="请输入密码"
+                  show-password autoComplete="on"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
@@ -26,12 +26,8 @@
     data () {
       return {
         loginForm: {
-          username: 'ligaofa',
-          password: 'gf229192',
-          scope: 'openid offline_access fbox email profile',
-          client_id: 'ynsk',
-          client_secret: 'af6a37beddb28136eed65bda1f16547f',
-          grant_type: 'password'
+          username: '',
+          password: ''
         },
         loginRules: {
           username: [{required: true, trigger: 'blur', message: '请输入用户名'}],
@@ -41,6 +37,17 @@
       }
     },
     methods: {
+      // 测试用于添加管理员账号
+      // addUser () {
+      //   this.$http.post('http://localhost:8081/user/addUser', {
+      //     'username': 'admin',
+      //     'password': 'admin',
+      //     'delete_status': 0,
+      //     'pid': 1
+      //   }).then(data => {
+      //     console.log(data)
+      //   })
+      // },
       handleLogin () {
         this.$refs.loginForm.validate(valid => {
           if (valid) {
@@ -49,36 +56,46 @@
               'data': this.loginForm
             }).then(data => {
               this.loading = false
-              let userobj = JSON.parse(JSON.stringify(data))['data']
-              console.log(userobj)
-              if (userobj === 'success') {
-                this.runTestFun()
+              let userJson = JSON.parse(JSON.stringify(data))['data']
+              console.log(userJson)
+              if (userJson['status'] === 'success') {
+                this.$store.dispatch('setShiroToken', userJson['shiroToken'])
+                this.runFBoxAccount()
               } else {
                 this.$message.error('账号/密码错误')
               }
             }).catch(() => {
+              this.$message.error('登陆服务器异常')
               this.loading = false
             })
           } else {
+            this.$message.error('登录信息不完整')
             return false
           }
         })
       },
-      runTestFun () {
-        this.$http.post('http://localhost:8081/test/testLogin').then(response => {
+      runFBoxAccount () {
+        this.$http.post('http://localhost:8081/equip/equipLogin', null, {
+          headers: {
+            'Authorization': this.$store.state.ShiroToken.token
+          }
+        }).then(response => {
           window.jsonobj = JSON.parse(JSON.stringify(response))['data']
           console.log('access_token: ' + window.jsonobj['access_token'])
           console.log('refresh_token: ' + window.jsonobj['refresh_token'])
-          this.runTestEquipment()
+          this.runEquipment()
         }).catch(function (error) {
           console.log(error)
         })
       },
-      runTestEquipment () {
-        this.$http.get('http://localhost:8081/test/testEquipments', {
+      runEquipment () {
+        this.$http.get('http://localhost:8081/equip/getEquipments', {
           params: {
             Authorization: 'Bearer ' + window.jsonobj['access_token'],
             XFBoxClientId: 'zzy_test'
+          },
+          headers: {
+            'Authorization': this.$store.state.ShiroToken.token
           }
         }).then(response => {
           // 解析请求到的设备数据
