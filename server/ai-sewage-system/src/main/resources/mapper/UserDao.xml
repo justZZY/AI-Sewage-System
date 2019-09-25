@@ -5,49 +5,23 @@
 
     <select id="countUser" resultType="Integer">
         SELECT count(0)
-        FROM sys_user u
-        WHERE u.delete_status = '1'
+        FROM user u
     </select>
-
-    <resultMap id="userMap" type="com.sewage.springboot.util.model.One2Many">
-        <id column="userId" property="userId"/>
-        <result column="username" property="username"/>
-        <result column="roleId" property="roleId"/>
-        <result column="roleName" property="roleName"/>
-        <result column="deleteStatus" property="deleteStatus"/>
-        <collection property="permissionList" ofType="String">
-            <id column="permissionName" property="permissionName"/>
-        </collection>
-    </resultMap>
-    <select id="listUser" resultMap="userMap">
-        SELECT
-            u.*,
-            r.role_name                            roleName,
-            CONCAT(p.menu_name, p.permission_name) permissionName
-        FROM (
-                 SELECT
-                     id                                      userId,
-                     username                                username,
-                     role_id                                 roleId,
-                     delete_status                           deleteStatus
-                 FROM sys_user
-                 WHERE delete_status = '1'
-                 ORDER BY id
-                 LIMIT #{offSet}, #{pageRow}
-             ) u
-            LEFT JOIN sys_role r ON r.id = u.roleId
-            LEFT JOIN sys_role_permission rp ON rp.role_id = r.id
-            LEFT JOIN sys_permission p ON p.id = rp.permission_id
-
-        ORDER BY u.userId
-    </select>
-
-    <select id="getAllRoles" resultType="com.alibaba.fastjson.JSONObject">
-        SELECT
-            id        roleId,
-            role_name roleName
-        FROM sys_role
-        WHERE delete_status='1'
+<!--暂时用不到resultMap组件做数据匹配_(:з」∠)_-->
+<!--    <resultMap id="userMap" type="com.sewage.springboot.util.model.One2Many">-->
+<!--        <id column="userId" property="userId"/>-->
+<!--        <result column="username" property="username"/>-->
+<!--        <result column="roleId" property="roleId"/>-->
+<!--        <result column="roleName" property="roleName"/>-->
+<!--        <result column="deleteStatus" property="deleteStatus"/>-->
+<!--        <collection property="permissionList" ofType="String">-->
+<!--            <id column="permissionName" property="permissionName"/>-->
+<!--        </collection>-->
+<!--    </resultMap>-->
+    <select id="listUser" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT username, delete_status, identity, area
+        FROM user u, permission p
+        WHERE u.pid = p.pid
     </select>
 
     <insert id="addUser" useGeneratedKeys="true" keyProperty="userId">

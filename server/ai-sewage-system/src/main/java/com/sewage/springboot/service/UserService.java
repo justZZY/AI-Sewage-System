@@ -12,12 +12,6 @@ public interface UserService {
 	JSONObject listUser(JSONObject jsonObject);
 
 	/**
-	 * 查询所有的角色
-	 * 在添加/修改用户的时候要使用此方法
-	 */
-	JSONObject getAllRoles();
-
-	/**
 	 * 添加用户
 	 */
 	JSONObject addUser(JSONObject jsonObject);

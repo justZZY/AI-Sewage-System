@@ -58,9 +58,11 @@
               this.loading = false
               let userJson = JSON.parse(JSON.stringify(data))['data']
               console.log(userJson)
-              if (userJson['status'] === 'success') {
-                this.$store.dispatch('setShiroToken', userJson['shiroToken'])
+              if (userJson['status'] === 'success' && userJson['deleteStatus'] === 0) {
+                this.$store.dispatch('setShiroToken', userJson)
                 this.runFBoxAccount()
+              } else if (userJson['deleteStatus'] === 1) {
+                this.$message.error('账号被冻结')
               } else {
                 this.$message.error('账号/密码错误')
               }

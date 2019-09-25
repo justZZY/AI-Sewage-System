@@ -41,6 +41,18 @@ export default new Router({
           component: require('@/components/page/time_control').default
         },
         {
+          path: '/user',
+          name: 'user',
+          component: require('@/components/page/user').default,
+          menu: 'user'
+        },
+        {
+          path: '/role',
+          name: 'role',
+          component: require('@/components/page/role').default,
+          menu: 'role'
+        },
+        {
           path: '/404',
           name: 'page404',
           component: require('@/components/page/404').default
@@ -53,26 +65,3 @@ export default new Router({
     }
   ]
 })
-
-export const asyncRouterMap = [
-  {
-    path: '/mainA',
-    name: 'Main',
-    redirect: '/map',
-    component: require('@/components/common/main').default,
-    children: [
-      {
-        path: '/user',
-        name: 'user',
-        component: require('@/components/page/user').default,
-        menu: 'user'
-      },
-      {
-        path: '/role',
-        name: 'role',
-        component: require('@/components/page/role').default,
-        menu: 'role'
-      }
-    ]
-  }
-]

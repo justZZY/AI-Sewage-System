@@ -30,7 +30,7 @@ public class UserController {
 	/**
 	 * 新增用户(由管理员分配)
 	 */
-//	@RequiresPermissions("admin")
+	@RequiresPermissions("admin")
 	@PostMapping("/addUser")
 	public JSONObject addUser(@RequestBody JSONObject userJson) {
 		String pwd = userJson.getString("password");
@@ -48,12 +48,6 @@ public class UserController {
 	public JSONObject updateUser(@RequestBody JSONObject requestJson) {
 		//CommonUtil.hasAllRequired(requestJson, "roleId, deleteStatus, userId");
 		return userService.updateUser(requestJson);
-	}
-
-//	@RequiresPermissions(value = {"user:add", "user:update"}, logical = Logical.OR)
-	@GetMapping("/getAllRoles")
-	public JSONObject getAllRoles() {
-		return userService.getAllRoles();
 	}
 
 	/**

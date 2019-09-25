@@ -9,7 +9,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer uid;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username; // 帐号
     @Column(nullable = false)
     private String salt; //密码加盐

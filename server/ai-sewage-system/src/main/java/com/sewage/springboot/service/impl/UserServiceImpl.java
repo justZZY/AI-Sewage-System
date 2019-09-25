@@ -44,16 +44,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * 查询所有的角色
-	 * 在添加/修改用户的时候要使用此方法
-	 */
-	@Override
-	public JSONObject getAllRoles() {
-		List<JSONObject> roles = userDao.getAllRoles();
-		return CommonUtil.successPage(roles);
-	}
-
-	/**
 	 * 修改用户
 	 */
 	@Override
