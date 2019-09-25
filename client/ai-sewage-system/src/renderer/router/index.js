@@ -41,16 +41,10 @@ export default new Router({
           component: require('@/components/page/time_control').default
         },
         {
-          path: '/user',
-          name: 'user',
-          component: require('@/components/page/user').default,
+          path: '/user_manage',
+          name: 'user_manage',
+          component: require('@/components/page/user_manage').default,
           menu: 'user'
-        },
-        {
-          path: '/role',
-          name: 'role',
-          component: require('@/components/page/role').default,
-          menu: 'role'
         },
         {
           path: '/404',

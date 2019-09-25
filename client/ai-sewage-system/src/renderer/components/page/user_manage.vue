@@ -102,7 +102,7 @@
 </template>
 <script>
   export default {
-    name: 'user',
+    name: 'user_manage',
     data () {
       return {
         allAreas: [], // 从外部获取的所有市级列表
@@ -227,27 +227,27 @@
             }
           })
         })
-      },
-      removeUser ($index) {
-        let _vue = this
-        this.$confirm('确定删除此用户?', '提示', {
-          confirmButtonText: '确定',
-          showCancelButton: false,
-          type: 'warning'
-        }).then(() => {
-          let user = _vue.list[$index]
-          user.deleteStatus = '2'
-          _vue.api({
-            url: 'http://localhost:8081/user/updateUser',
-            method: 'post',
-            data: user
-          }).then(() => {
-            _vue.getList()
-          }).catch(() => {
-            _vue.$message.error('删除失败')
-          })
-        })
       }
+      // removeUser ($index) {
+      //   let _vue = this
+      //   this.$confirm('确定删除此用户?', '提示', {
+      //     confirmButtonText: '确定',
+      //     showCancelButton: false,
+      //     type: 'warning'
+      //   }).then(() => {
+      //     let user = _vue.list[$index]
+      //     user_manage.deleteStatus = '2'
+      //     _vue.api({
+      //       url: 'http://localhost:8081/user/updateUser',
+      //       method: 'post',
+      //       data: user_manage
+      //     }).then(() => {
+      //       _vue.getList()
+      //     }).catch(() => {
+      //       _vue.$message.error('删除失败')
+      //     })
+      //   })
+      // }
     }
   }
   function chooseAreas (scope) {
