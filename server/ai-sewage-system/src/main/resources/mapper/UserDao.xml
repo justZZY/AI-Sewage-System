@@ -26,19 +26,32 @@
 
     <insert id="addUser" useGeneratedKeys="true" keyProperty="userId">
         INSERT INTO user
-        (username, password, salt, delete_status, pid) VALUES
-            (#{username}, #{password}, #{salt}, #{delete_status}, #{pid})
+        (username, password, salt, delete_status, pid, area) VALUES
+            (#{username}, #{password}, #{salt}, #{delete_status}, #{pid}, #{area})
     </insert>
 
     <update id="updateUser">
-        UPDATE sys_user
+        UPDATE user
         SET
         <if test="password !='' and password !=null">
             password = #{password},
+            salt = #{salt}
         </if>
-         role_id = #{roleId} ,delete_status = #{deleteStatus}
-        WHERE id = #{userId} and id != '10001'
+        area = #{area},
+        pid = #{pid}
+        WHERE username = #{username}
     </update>
+
+    <update id="frozenUser">
+        UPDATE user
+        SET delete_status = #{deleteStatus}
+        WHERE username = #{username}
+    </update>
+
+    <delete id="removeUser">
+        DELETE FROM user
+        WHERE username = #{username}
+    </delete>
 
     <resultMap id="roleMap" type="com.sewage.springboot.util.model.One2Many">
         <id column="roleId" property="roleId"/>

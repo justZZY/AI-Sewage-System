@@ -33,6 +33,7 @@ public class UserController {
 	@RequiresPermissions("admin")
 	@PostMapping("/addUser")
 	public JSONObject addUser(@RequestBody JSONObject userJson) {
+		userJson = userJson.getJSONObject("user");
 		String pwd = userJson.getString("password");
 		// 加盐 存入数据库
 		String salt = new SecureRandomNumberGenerator().nextBytes().toHex();
@@ -43,11 +44,35 @@ public class UserController {
 		return userService.addUser(userJson);
 	}
 
+	/**
+	 * 冻结用户
+	 */
+	@RequiresPermissions("admin")
+	@PostMapping("/frozenUser")
+	public JSONObject frozenUser(@RequestBody JSONObject userJson) {
+		return userService.frozenUser(userJson);
+	}
+
 	@RequiresPermissions("admin")
 	@PostMapping("/updateUser")
-	public JSONObject updateUser(@RequestBody JSONObject requestJson) {
-		//CommonUtil.hasAllRequired(requestJson, "roleId, deleteStatus, userId");
-		return userService.updateUser(requestJson);
+	public JSONObject updateUser(@RequestBody JSONObject userJson) {
+		userJson = userJson.getJSONObject("user");
+		// 密码为空的情况 更新密码和盐
+		if (!userJson.getString("password").equals("") && !(userJson.getString("password") == null)) {
+			String pwd = userJson.getString("password");
+			// 加盐 存入数据库
+			String salt = new SecureRandomNumberGenerator().nextBytes().toHex();
+			// 对加入用户的密码进行md5加密
+			String ans = new Md5Hash(pwd, salt, 2).toString();
+			userJson.put("password", ans);
+			userJson.put("salt", salt);
+		}
+		return userService.updateUser(userJson);
+	}
+	@RequiresPermissions("admin")
+	@PostMapping("/removeUser")
+	public JSONObject removeUser(@RequestBody JSONObject userJson) {
+		return userService.removeUser(userJson);
 	}
 
 	/**

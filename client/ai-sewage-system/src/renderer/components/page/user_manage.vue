@@ -200,7 +200,7 @@
       showUpdate (scope) {
         console.log(scope)
         this.tempUser.username = scope.row.username
-        this.tempUser.password = scope.row.password
+        this.tempUser.password = ''
         this.tempUser.confirmPassword = ''
         this.tempUser.identity = scope.row.identity
         this.tempUser.area = scope.row.area
@@ -226,6 +226,8 @@
       // 修改用户信息
       updateUser () {
         this.tempUser.pid = getPid(this.tempUser.identity)
+        console.log(this.tempUser.password)
+        console.log(this.tempUser.confirmPassword)
         if (this.tempUser.password === this.tempUser.confirmPassword) {
           this.$http.post('http://localhost:8081/user/updateUser', {
             user: this.tempUser
@@ -236,7 +238,7 @@
           }).then(() => {
             let msg = '修改成功'
             this.dialogFormVisible = false
-            if (this.userId === this.tempUser.userId) {
+            if (this.$store.state.ShiroToken.username === this.tempUser.username) {
               msg = '修改成功,部分信息重新登录后生效'
             }
             this.$message({
@@ -302,6 +304,7 @@
             }
           }).then(res => {
             console.log(res)
+            this.getList()
           }).catch(() => {
             this.$message.error('取消删除操作')
           })

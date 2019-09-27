@@ -1,6 +1,7 @@
 package com.sewage.springboot.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
 import com.sewage.springboot.dao.UserDao;
 import com.sewage.springboot.service.UserService;
 import com.sewage.springboot.util.CommonUtil;
@@ -43,12 +44,24 @@ public class UserServiceImpl implements UserService {
 		return CommonUtil.successJson();
 	}
 
+	@Override
+	public JSONObject frozenUser(JSONObject jsonObject) {
+		userDao.frozenUser(jsonObject);
+		return CommonUtil.successJson();
+	}
+
 	/**
 	 * 修改用户
 	 */
 	@Override
 	public JSONObject updateUser(JSONObject jsonObject) {
 		userDao.updateUser(jsonObject);
+		return CommonUtil.successJson();
+	}
+
+	@Override
+	public JSONObject removeUser(JSONObject jsonObject) {
+		userDao.removeUser(jsonObject);
 		return CommonUtil.successJson();
 	}
 

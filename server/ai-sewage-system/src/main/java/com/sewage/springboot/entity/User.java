@@ -19,6 +19,8 @@ public class User implements Serializable {
     private Integer delete_status; // 账号是否禁用情况
     @Column(nullable = false)
     private Integer pid; // 权限id
+    @Column(nullable = false)
+    private String area; // 查看地区列表
 
     public Integer getPid() {
         return pid;
@@ -66,6 +68,14 @@ public class User implements Serializable {
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 }
 

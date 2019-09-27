@@ -6,9 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * @author: hxy
  * @description: 用户/角色/权限
- * @date: 2017-11-14 15:08:45
  */
 public interface UserDao {
 	/**
@@ -41,6 +39,16 @@ public interface UserDao {
 	 * 修改用户
 	 */
 	int updateUser(JSONObject jsonObject);
+
+	/**
+	 * 冻结用户
+	 */
+	int frozenUser(JSONObject jsonObject);
+
+	/**
+	 * 移除用户
+	 */
+	int removeUser(JSONObject jsonObject);
 
 	/**
 	 * 角色列表

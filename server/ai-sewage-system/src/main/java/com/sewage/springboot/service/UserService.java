@@ -1,6 +1,7 @@
 package com.sewage.springboot.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
 
 /**
  * 用户查询操作
@@ -17,9 +18,17 @@ public interface UserService {
 	JSONObject addUser(JSONObject jsonObject);
 
 	/**
+	 * 冻结用户
+	 */
+	JSONObject frozenUser(JSONObject jsonObject);
+	/**
 	 * 修改用户
 	 */
 	JSONObject updateUser(JSONObject jsonObject);
+	/**
+	 * 移除用户
+	 */
+	JSONObject removeUser(JSONObject jsonObject);
 
 	/**
 	 * 角色列表

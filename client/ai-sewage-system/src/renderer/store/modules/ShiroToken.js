@@ -1,4 +1,5 @@
 const state = {
+  username: '', // 用户名
   token: '', // axios请求附带的shiro验证Authorization
   identity: '', // shiro用户身份
   area: '' // 用户可见地区
@@ -9,6 +10,7 @@ const mutations = {
     state.token = newData['shiroToken']
     state.identity = newData['identity']
     state.area = newData['area']
+    state.username = newData['username']
   }
 }
 
