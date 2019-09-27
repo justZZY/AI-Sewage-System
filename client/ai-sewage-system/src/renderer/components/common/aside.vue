@@ -2,14 +2,14 @@
   <div class="aside">
     <el-tree :data="equiptreedata" :props="defaultProps" @node-click="handleNodeClick"
              :default-expand-all="true" :indent="0">
-          <span class="custom-tree-node" slot-scope="{node, data}">
+      <span class="custom-tree-node" slot-scope="{node, data}">
 <!--            <i :class="data.connectClass"></i>-->
-            <span>
-              <i :class="data.connectClass"></i>
-              {{node.label}}
-            </span>
-            <i :class="data.netClass"></i>
-          </span>
+        <span>
+          <i :class="data.connectClass"></i>
+          {{node.label}}
+        </span>
+        <i :class="data.netClass"></i>
+      </span>
     </el-tree>
   </div>
 </template>

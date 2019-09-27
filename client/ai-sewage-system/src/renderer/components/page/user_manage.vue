@@ -24,7 +24,7 @@
       </el-table-column>
       <el-table-column align="center" label="地区">
         <template slot-scope="scope">
-          <el-button @click="userArea(scope)">查看</el-button>
+          <el-button @click="showUserArea(scope)">查看</el-button>
         </template>
       </el-table-column>
       <el-table-column align="center" label="是否冻结" prop="delete_status">
@@ -36,7 +36,7 @@
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-button @click="showUpdate(scope)">编辑</el-button>
-          <el-button @click="deleteUser(scope)">删除</el-button>
+          <el-button @click="removeUser(scope)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -51,10 +51,10 @@
     </el-pagination>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-dialog title="地区选择" :visible.sync="dialogFormAreaVisible" append-to-body>
-        <el-transfer v-model="allAreas" :data="allAreas"></el-transfer>
+        <el-transfer v-model="chooseCity" :data="cityArray"></el-transfer>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormAreaVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogFormAreaVisible = false">确 定</el-button>
+          <el-button type="primary" @click="chooseCityList">确 定</el-button>
         </div>
       </el-dialog>
       <el-form class="small-space" :model="tempUser" label-position="left" label-width="80px"
@@ -67,8 +67,8 @@
           <span>{{tempUser.username}}</span>
         </el-form-item>
         <el-form-item label="密码" v-if="dialogStatus === 'create'" required>
-          <el-input type="password" v-model="tempUser.password">
-          </el-input>
+          <el-input type="password" v-model="tempUser.password"></el-input>
+          <span style="color: red">初始密码默认123456</span>
         </el-form-item>
         <el-form-item label="新密码" v-if="dialogStatus === 'update'">
           <el-input type="password" v-model="tempUser.password" placeholder="不填则表示不修改">
@@ -89,13 +89,21 @@
           </el-select>
         </el-form-item>
         <el-form-item label="地区" required>
-          <el-button @click="dialogFormAreaVisible = true">查看/编辑</el-button>
+          <el-button @click="showAreaChoose">查看/编辑</el-button>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button v-if="dialogStatus==='create'" type="success" @click="createUser">创 建</el-button>
         <el-button type="primary" v-else @click="updateUser">修 改</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="区域列表" :visible.sync="dialogShowUserAreaVisible" width="20%">
+      <el-table :data="showCityArray" border stripe height="300">
+        <el-table-column prop="city" label="城市" align="center"></el-table-column>
+      </el-table>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogShowUserAreaVisible = false" type="success">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -105,7 +113,6 @@
     name: 'user_manage',
     data () {
       return {
-        allAreas: [], // 从外部获取的所有市级列表
         totalCount: 0, // 分页组件--数据总条数
         list: [], // 表格的数据
         listLoading: false, // 数据加载等待动画
@@ -117,6 +124,7 @@
         dialogStatus: 'create',
         dialogFormVisible: false,
         dialogFormAreaVisible: false,
+        dialogShowUserAreaVisible: false,
         textMap: {
           update: '编辑',
           create: '新建用户'
@@ -127,12 +135,18 @@
           confirmPassword: '',
           identity: '',
           area: '',
-          deleteStatus: 0
-        }
+          delete_status: 0,
+          pid: 1
+        },
+        compareCityArray: [],
+        cityArray: [],
+        chooseCity: [],
+        showCityArray: []
       }
     },
     created () {
       this.getList()
+      this.getAreas()
     },
     methods: {
       getList () {
@@ -179,7 +193,7 @@
         this.tempUser.confirmPassword = '123456'
         this.tempUser.identity = 'user'
         this.tempUser.area = ''
-        this.tempUser.deleteStatus = ''
+        this.tempUser.delete_status = 0
         this.dialogStatus = 'create'
         this.dialogFormVisible = true
       },
@@ -190,67 +204,167 @@
         this.tempUser.confirmPassword = ''
         this.tempUser.identity = scope.row.identity
         this.tempUser.area = scope.row.area
-        this.tempUser.deleteStatus = scope.row.deleteStatus
+        this.tempUser.delete_status = scope.row.deleteStatus
         this.dialogStatus = 'update'
         this.dialogFormVisible = true
       },
       createUser () {
+        this.tempUser.pid = getPid(this.tempUser.identity)
         // 添加新用户
-        this.api({
-          url: 'http://localhost:8081/user/addUser',
-          method: 'post',
-          data: this.tempUser
-        }).then(() => {
+        this.$http.post('http://localhost:8081/user/addUser', {
+          user: this.tempUser
+        }, {
+          headers: {
+            'Authorization': this.$store.state.ShiroToken.token
+          }
+        }).then(res => {
+          console.log(res)
           this.getList()
           this.dialogFormVisible = false
         })
       },
       // 修改用户信息
       updateUser () {
-        let _vue = this
-        this.api({
-          url: 'http://localhost:8081/user/updateUser',
-          method: 'post',
-          data: this.tempUser
-        }).then(() => {
-          let msg = '修改成功'
-          this.dialogFormVisible = false
-          if (this.userId === this.tempUser.userId) {
-            msg = '修改成功,部分信息重新登录后生效'
-          }
-          this.$message({
-            message: msg,
-            type: 'success',
-            duration: 1 * 1000,
-            onClose: () => {
-              _vue.getList()
+        this.tempUser.pid = getPid(this.tempUser.identity)
+        if (this.tempUser.password === this.tempUser.confirmPassword) {
+          this.$http.post('http://localhost:8081/user/updateUser', {
+            user: this.tempUser
+          }, {
+            headers: {
+              'Authorization': this.$store.state.ShiroToken.token
             }
+          }).then(() => {
+            let msg = '修改成功'
+            this.dialogFormVisible = false
+            if (this.userId === this.tempUser.userId) {
+              msg = '修改成功,部分信息重新登录后生效'
+            }
+            this.$message({
+              message: msg,
+              type: 'success',
+              onClose: () => {
+                this.getList()
+              }
+            })
+          })
+        } else {
+          this.$message.error('两次密码不一致')
+        }
+      },
+      frozenUser (scope) {
+        if (scope.row.delete_status === 0) {
+          this.$confirm('此操作将冻结账号' + scope.row.username + ', 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.frozen(scope.row.username, 1)
+          }).catch(() => {
+            this.$message('已取消账号冻结操作')
+          })
+        } else {
+          this.$confirm('此操作将解冻账号: ' + scope.row.username + ', 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.frozen(scope.row.username, 0)
+          }).catch(() => {
+            this.$message('已取消账号解冻操作')
+          })
+        }
+      },
+      frozen (username, deleteStatus) {
+        this.$http.post('http://localhost:8081/user/frozenUser', {
+          username: username,
+          deleteStatus: deleteStatus
+        }, {
+          headers: {
+            'Authorization': this.$store.state.ShiroToken.token
+          }
+        }).then(res => {
+          console.log(res)
+        }).catch(() => {
+          this.$message.error('取消冻结操作')
+        })
+      },
+      removeUser (scope) {
+        this.$confirm('此操作将删除用户: ' + scope.row.username + ', 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post('http://localhost:8081/user/removeUser', {
+            username: scope.row.username
+          }, {
+            headers: {
+              'Authorization': this.$store.state.ShiroToken.token
+            }
+          }).then(res => {
+            console.log(res)
+          }).catch(() => {
+            this.$message.error('取消删除操作')
           })
         })
+      },
+      getAreas () {
+        let treeData = this.$store.state.Treedata.treedata
+        console.log(treeData)
+        for (let i = 0; i < treeData.length; i++) {
+          for (let j = 0; j < treeData[i]['children'].length; j++) {
+            this.compareCityArray.push(treeData[i]['children'][j].label)
+          }
+        }
+        console.log(this.compareCityArray)
+        for (let i = 0; i < this.compareCityArray.length; i++) {
+          this.cityArray.push({key: i, label: this.compareCityArray[i]})
+        }
+      },
+      chooseCityList () {
+        this.dialogFormAreaVisible = false
+        let cityIndexList = this.chooseCity
+        let areaString = ''
+        this.chooseCity = []
+        for (let i = 0; i < cityIndexList.length; i++) {
+          areaString += (this.compareCityArray[cityIndexList[i]] + ';')
+        }
+        this.tempUser.area = areaString
+        console.log(this.tempUser)
+      },
+      transCityList () {
+        let tempCityArray = this.tempUser.area.split(';')
+        console.log(tempCityArray)
+        let indexArray = []
+        for (let i = 0; i < tempCityArray.length; i++) {
+          for (let j = 0; j < this.cityArray.length; j++) {
+            if (this.cityArray[j].label === tempCityArray[i]) {
+              indexArray.push(j)
+            }
+          }
+        }
+        return indexArray
+      },
+      showAreaChoose () {
+        this.dialogFormAreaVisible = true
+        this.chooseCity = this.transCityList()
+      },
+      // 用于用户区域权限展示
+      showUserArea (scope) {
+        this.showCityArray = []
+        let areaArray = scope.row.area.split(';')
+        areaArray.pop()
+        for (let i = 0; i < areaArray.length; i++) {
+          this.showCityArray.push({city: areaArray[i]})
+        }
+        this.dialogShowUserAreaVisible = true
       }
-      // removeUser ($index) {
-      //   let _vue = this
-      //   this.$confirm('确定删除此用户?', '提示', {
-      //     confirmButtonText: '确定',
-      //     showCancelButton: false,
-      //     type: 'warning'
-      //   }).then(() => {
-      //     let user = _vue.list[$index]
-      //     user_manage.deleteStatus = '2'
-      //     _vue.api({
-      //       url: 'http://localhost:8081/user/updateUser',
-      //       method: 'post',
-      //       data: user_manage
-      //     }).then(() => {
-      //       _vue.getList()
-      //     }).catch(() => {
-      //       _vue.$message.error('删除失败')
-      //     })
-      //   })
-      // }
     }
   }
-  function chooseAreas (scope) {
-
+  function getPid (identity) {
+    if (identity === 'user') {
+      return 2
+    } else {
+      return 1
+    }
   }
 </script>
