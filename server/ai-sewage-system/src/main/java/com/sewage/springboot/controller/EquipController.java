@@ -25,7 +25,7 @@ import java.io.IOException;
 @RequestMapping(value = "/equip")
 public class EquipController {
     /**
-     * 获取fbox连接的token信息
+     * @desc 获取fbox连接的token信息
      */
     //这里使用@RequestMapping注解表示该方法对应的二级上下文路径
     @RequestMapping(value = "/equipLogin", method = RequestMethod.POST)
@@ -52,7 +52,7 @@ public class EquipController {
     }
 
     /**
-     * 获取设备组数据
+     * @desc 获取设备组数据
      */
     @RequestMapping(value = "/getEquipments", method = RequestMethod.GET)
     String getEquipments(@RequestParam(value = "Authorization") String authorization) throws IOException {
@@ -69,7 +69,9 @@ public class EquipController {
         }
     }
 
-    // 获取监控设备信息
+    /**
+     * @desc 获取监控设备信息
+     */
     @RequestMapping(value = "/getEquipMonitor", method = RequestMethod.POST)
     String getEquipMonitor (@RequestBody JSONObject jsonObject) throws IOException {
         // 通过fastJson获取相关的post参数
@@ -88,9 +90,9 @@ public class EquipController {
             throw new IOException("Unexpected code " + response);
         }
     }
-    /*
-     * 获取设备值
-     * args: jsonObject组装的json数据 通过fastJson解析
+    /**
+     * @desc 获取设备值
+     * @args jsonObject组装的json数据 通过fastJson解析
      * jsonObject: {authorization, apiBaseUrl, boxNo, names}
      */
     @RequestMapping(value = "/getEquipValue", method = RequestMethod.POST)
@@ -185,6 +187,6 @@ public class EquipController {
         signalRConnection.disConnect();
         return "success";
     }
-    public static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
+    private static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
     private FBoxSignalRConnection signalRConnection = null;
 }
