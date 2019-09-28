@@ -1,5 +1,5 @@
 <template>
-    <baidu-map class="map" :center="center" :zoom="zoom" :scroll-wheel-zoom="true"
+    <baidu-map class="map" center="云南大学呈贡校区" :zoom="12" :scroll-wheel-zoom="true"
                @click="getPoint" @ready="handler" mapType="BMAP_HYBRID_MAP">
       <div v-for="pos in equipposarray" :key="pos.name">
         <bm-marker :position="{lng: pos.pos.longitude, lat: pos.pos.latitude}" @click="infoWindowCheck(pos)">
@@ -19,9 +19,6 @@
       // 处理地图数据
       window.equipmentposarray = getEquipmentPosArray()
       return {
-        activeIndex: '1',
-        center: '云南大学呈贡校区',
-        zoom: 12,
         equipposarray: window.equipmentposarray,
         defaultProps: {
           children: 'children',
@@ -33,18 +30,24 @@
       // 获取地图对象
       async handler ({BMap, map}) {
         console.log(BMap, map)
-        let treedata = await getTreeData(this.equipposarray, BMap)
-        await this.$store.dispatch('setTreedata', treedata)
+        // 如果vuex里面存有树节点数据则不需要重新计算节点坐标
+        // 这样可以保证每次进入程序后只进行一次节点的计算
+        if (this.$store.state.Treedata.treedata.length === 1 && this.$store.state.Treedata.treedata[0].label === '暂无数据') {
+          let treeData = await getTreeData(this.equipposarray, BMap)
+          this.getPermissionSiteTreeByCity(treeData, window.equipmentposarray)
+        }
         window.BMap = BMap
         window.map = map
         // 在切换界面时返回记录坐标数据
         let posarray = window.equipmentposarray
         let index = this.$store.state.Treedata.chooseData
+        console.log(posarray[index])
         let longitude = posarray[index]['pos']['longitude']
         let latitude = posarray[index]['pos']['latitude']
-        let point = new window.BMap.Point(longitude, latitude)
+        let point = new BMap.Point(longitude, latitude)
+        console.log(point)
         // 重新定位地图位置
-        window.map.centerAndZoom(point, 12)
+        map.centerAndZoom(point, 12)
         // 关闭以前打开的地图窗口并开启新的地图窗口
         for (let j = 0; j < posarray.length; j++) {
           posarray[j]['showflag'] = false
@@ -63,6 +66,35 @@
       },
       infoWindowOpen (pos) {
         pos.showflag = true
+      },
+      /**
+       * @desc 做城市节点筛选
+       */
+      getPermissionSiteTreeByCity (originTree, equipArray) {
+        let cityArray = this.$store.state.ShiroToken.area.split(';')
+        cityArray.pop()
+        console.log(originTree)
+        console.log(cityArray)
+        let ansTree = []
+        for (let i = 0; i < originTree.length; i++) {
+          for (let j = 0; j < originTree[i]['children'].length; j++) {
+            if (checkCityInArray(originTree[i]['children'][j].label, cityArray)) {
+              ansTree = insertCity(originTree[i]['label'], originTree[i]['children'][j]['label'],
+                originTree[i]['children'][j]['children'], ansTree)
+            }
+          }
+        }
+        console.log(ansTree)
+        // 更新树
+        this.$store.dispatch('setTreedata', ansTree)
+        // 更新选项节点
+        let chooseIndex = 0
+        for (let i = 0; i < equipArray.length; i++) {
+          if (equipArray[i].name === ansTree[0]['children'][0]['children'][0].label) {
+            chooseIndex = i
+          }
+        }
+        this.$store.dispatch('setChooseData', chooseIndex)
       }
     }
   }
@@ -190,10 +222,39 @@
       })
     })
   }
-
   async function callbackAddrArray (longitude, latitude, BMap) {
     let array = await getAddress(longitude, latitude, BMap)
     return array
+  }
+  /**
+   * @desc 检测城市是否在有权限的城市列表中
+   */
+  function checkCityInArray (city, cityArray) {
+    for (let i = 0; i < cityArray.length; i++) {
+      if (city === cityArray[i]) {
+        return true
+      }
+    }
+    return false
+  }
+
+  /**
+   * @desc 做权限城市的插值
+   */
+  function insertCity (province, city, siteArray, ansTree) {
+    let provinceIndex = -1
+    for (let i = 0; i < ansTree.length; i++) {
+      if (province === ansTree[i]['label']) {
+        provinceIndex = i
+      }
+    }
+    if (provinceIndex !== -1) {
+      ansTree[provinceIndex]['children'].push({label: city, children: siteArray})
+    } else {
+      // 不存在已有省份的情况下
+      ansTree.push({label: province, children: [{label: city, children: siteArray}]})
+    }
+    return ansTree
   }
 </script>
 

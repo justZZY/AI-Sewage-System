@@ -53,17 +53,24 @@
         }).catch(res => {
           console.log(res)
         })
+      },
+      /**
+       * @desc 退出程序时清理数据的方法_(:з」∠)_
+       */
+      clearData () {
+        this.closeSignalRConnect()
+        this.$store.commit('TREEDATA_CLEAR')
+        this.$store.commit('SHIRO_TOKEN_CLEAR')
       }
     },
     created () {
       this.createSignalRConnect()
     },
     mounted () {
-      window.addEventListener('beforeunload', e => this.closeSignalRConnect(e))
+      window.addEventListener('beforeunload', () => this.clearData())
     },
     destroyed () {
-      window.removeEventListener('beforeunload', e => this.closeSignalRConnect(e))
-      // this.closeSignalRConnect()
+      window.removeEventListener('beforeunload', () => this.clearData())
     }
   }
 </script>

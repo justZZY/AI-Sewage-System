@@ -32,7 +32,6 @@
       },
       checkIdentity () {
         let identity = this.$store.state.ShiroToken.identity
-        console.log(identity)
         if (identity === 'admin') {
           return true
         } else {

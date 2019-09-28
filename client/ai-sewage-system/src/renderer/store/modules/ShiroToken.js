@@ -11,6 +11,12 @@ const mutations = {
     state.identity = newData['identity']
     state.area = newData['area']
     state.username = newData['username']
+  },
+  SHIRO_TOKEN_CLEAR (state) {
+    state.username = ''
+    state.token = ''
+    state.identity = ''
+    state.area = ''
   }
 }
 

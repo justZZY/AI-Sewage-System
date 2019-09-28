@@ -3,7 +3,6 @@
     <el-tree :data="equiptreedata" :props="defaultProps" @node-click="handleNodeClick"
              :default-expand-all="true" :indent="0">
       <span class="custom-tree-node" slot-scope="{node, data}">
-<!--            <i :class="data.connectClass"></i>-->
         <span>
           <i :class="data.connectClass"></i>
           {{node.label}}
@@ -41,7 +40,7 @@
               let latitude = posarray[i]['pos']['latitude']
               let point = new window.BMap.Point(longitude, latitude)
               // 重新定位地图位置
-              window.map.centerAndZoom(point, 12)
+              window.map.panTo(point)
               // 关闭以前打开的地图窗口并开启新的地图窗口
               for (let j = 0; j < posarray.length; j++) {
                 posarray[j]['showflag'] = false

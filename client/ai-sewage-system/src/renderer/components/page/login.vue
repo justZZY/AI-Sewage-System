@@ -37,17 +37,6 @@
       }
     },
     methods: {
-      // 测试用于添加管理员账号
-      // addUser () {
-      //   this.$http.post('http://localhost:8081/user/addUser', {
-      //     'username': 'admin',
-      //     'password': 'admin',
-      //     'delete_status': 0,
-      //     'pid': 1
-      //   }).then(data => {
-      //     console.log(data)
-      //   })
-      // },
       handleLogin () {
         this.$refs.loginForm.validate(valid => {
           if (valid) {
