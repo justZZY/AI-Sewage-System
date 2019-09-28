@@ -10,9 +10,9 @@
                active-text-color="#ffd04b">
         <el-menu-item index="/map">站点地图</el-menu-item>
         <el-menu-item index="/side_watch">站点监控</el-menu-item>
-        <el-menu-item index="/remote_control">远程控制</el-menu-item>
-        <el-menu-item index="/time_control">定时控制</el-menu-item>
-        <el-menu-item index="/user_manage">用户管理</el-menu-item>
+        <el-menu-item index="/remote_control" v-if="checkIdentity()">远程控制</el-menu-item>
+        <el-menu-item index="/time_control" v-if="checkIdentity()">定时控制</el-menu-item>
+        <el-menu-item index="/user_manage" v-if="checkIdentity()">用户管理</el-menu-item>
       </el-menu>
     </el-col>
   </el-row>
@@ -29,6 +29,15 @@
     methods: {
       handleSelect (key, keyPath) {
         console.log(key, keyPath)
+      },
+      checkIdentity () {
+        let identity = this.$store.state.ShiroToken.identity
+        console.log(identity)
+        if (identity === 'admin') {
+          return true
+        } else {
+          return false
+        }
       }
     }
   }

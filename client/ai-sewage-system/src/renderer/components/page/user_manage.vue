@@ -286,6 +286,11 @@
           }
         }).then(res => {
           console.log(res)
+          this.getList()
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          })
         }).catch(() => {
           this.$message.error('取消冻结操作')
         })
