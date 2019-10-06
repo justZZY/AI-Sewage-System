@@ -23,7 +23,32 @@ import java.util.List;
 public class CommonUtil {
 
 
-
+	/**
+	 * 返回json串
+	 * 格式：
+	 * <br>{
+	 * <br>	"code": code, // 状态码
+	 * <br> "msg": msg,   // 提示信息
+	 * <br> "data": data  //数据
+	 * <br>}
+	 * 
+	 * @author：sc
+	 * @data： 2019年9月21日
+	 */
+	 public static JSONObject jsonResult(Object code, String msg, Object data) {
+		JSONObject json = new JSONObject();
+		json.put("code", code);
+		json.put("msg", msg);
+		json.put("data", data);
+        return json;
+	 }
+	 public static JSONObject jsonResult(Object code, String msg) {
+        return jsonResult(code, msg, null);
+	 }
+	 public static JSONObject jsonResult(Object code) {
+        return jsonResult(code, null, null);
+	 }
+	 
     /**
 
      * 返回一个info为空对象的成功消息的json
