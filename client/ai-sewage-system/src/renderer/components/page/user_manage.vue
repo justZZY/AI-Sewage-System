@@ -1,6 +1,8 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
+    <div 
+    class="filter-container"
+    style="{width: 100%; display: flex; justify-content: flex-end; margin-top: 10px;}">
       <el-form>
         <el-form-item>
           <el-button type="primary" icon="plus" @click="showCreate">添加</el-button>
@@ -40,7 +42,10 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
+    <div 
+    class="paginationContainer"
+    style="{width: 100%; display: flex; justify-content: center; margin-top: 10px;}">
+      <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="listQuery.pageNum"
@@ -48,7 +53,8 @@
         :total="totalCount"
         :page-sizes="[10, 20, 50, 100]"
         layout="total, sizes, prev, pager, next, jumper">
-    </el-pagination>
+      </el-pagination>
+    </div>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-dialog title="地区选择" :visible.sync="dialogFormAreaVisible" append-to-body>
         <el-transfer v-model="chooseCity" :data="cityArray"></el-transfer>
