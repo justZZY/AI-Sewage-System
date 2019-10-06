@@ -13,6 +13,8 @@
         <el-menu-item index="/remote_control" v-if="checkIdentity()">远程控制</el-menu-item>
         <el-menu-item index="/time_control" v-if="checkIdentity()">定时控制</el-menu-item>
         <el-menu-item index="/user_manage" v-if="checkIdentity()">用户管理</el-menu-item>
+        <el-menu-item index="/job_control">工单管理</el-menu-item>
+
       </el-menu>
     </el-col>
   </el-row>

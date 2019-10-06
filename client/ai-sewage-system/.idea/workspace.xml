@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3a0adb58-ded6-4971-8d0b-bc6563aca463" name="Default Changelist" comment="">
+    <list default="true" id="3a0adb58-ded6-4971-8d0b-bc6563aca463" name="Default Changelist" comment="Default Changelist">
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/java/com/sewage/springboot/controller/EquipController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/java/com/sewage/springboot/controller/EquipController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/components/common/header.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/common/header.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/components/page/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/page/login.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/router/index.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,15 +32,24 @@
   <component name="ProjectId" id="1QKkQoSev9dkrf2BsI08VB20A7E" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/renderer/components/page" />
     <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.standard" value="project" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.standard" value="" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="settings.javascript.linters.eslint" />
+    <property name="ts.external.directory.path" value="D:\Developer_Software\IDE\WebStorm2019\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\GitHub_Respositories\AI-Sewage-System\client\ai-sewage-system\src\renderer\components\page" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/renderer/store/modules" />
       <recent name="$PROJECT_DIR$/src/renderer/js" />
@@ -77,6 +89,7 @@
       <workItem from="1568624615900" duration="2223000" />
       <workItem from="1568796187919" duration="51175000" />
       <workItem from="1569572847446" duration="18988000" />
+      <workItem from="1569995892392" duration="16330000" />
     </task>
     <servers />
   </component>
