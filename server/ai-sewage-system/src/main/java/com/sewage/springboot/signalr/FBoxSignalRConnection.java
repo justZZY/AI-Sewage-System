@@ -110,12 +110,17 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
                 for (com.google.gson.JsonElement jsonElement : jsonElements) {
                     //报警推送消息全部打印。具体参数解释请看接口文档http://docs.flexem.net/fbox/zh-cn/tutorials/AlarmTiggerPush.html
                     System.out.println("\t" + jsonElement);
-                    WebSocket.sendAll(jsonElement.toString());
+//                    WebSocket.sendAll(jsonElement.toString());
                 }
-                //打印报警条目的值集合
-                System.out.printf("%d",jsonElements[1].getAsLong());
-                //打印boxUid
-                System.out.printf("%d",jsonElements[2].getAsLong());
+                JsonObject valuesPre = jsonElements[1].getAsJsonArray().get(0).getAsJsonObject();
+                JsonObject valuesAft = new JsonObject();
+                valuesAft.add("监控点条目uid",valuesPre.get("id"));
+                valuesAft.add("值",valuesPre.get("value"));
+                valuesAft.add("报警条目编码",valuesPre.get("name"));
+                valuesAft.add("报警信息",valuesPre.get("msg"));
+                valuesAft.add("status",valuesPre.get("status"));
+                System.out.println("WARN:" + "_" + valuesAft.toString() + jsonElements[2].toString());
+                WebSocket.sendAll("WARN:" + "_" + valuesAft.toString() + jsonElements[2].toString());
             });
         });
 
