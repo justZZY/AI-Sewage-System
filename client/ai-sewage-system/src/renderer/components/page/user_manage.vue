@@ -29,14 +29,14 @@
       </el-table-column>
       <el-table-column align="center" label="是否冻结" prop="delete_status">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.delete_status === 1" @click="frozenUser(scope)">已冻结</el-button>
-          <el-button v-if="scope.row.delete_status === 0" @click="frozenUser(scope)">未冻结</el-button>
+          <el-button type="warning" v-if="scope.row.delete_status === 1" @click="frozenUser(scope)">已冻结</el-button>
+          <el-button type="warning" v-if="scope.row.delete_status === 0" @click="frozenUser(scope)">未冻结</el-button>
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
-          <el-button @click="showUpdate(scope)">编辑</el-button>
-          <el-button @click="removeUser(scope)">删除</el-button>
+          <el-button type="warning" @click="showUpdate(scope)">编辑</el-button>
+          <el-button type="danger" @click="removeUser(scope)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

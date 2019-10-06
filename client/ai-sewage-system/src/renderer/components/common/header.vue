@@ -8,11 +8,32 @@
                background-color="#545c64"
                text-color="#fff"
                active-text-color="#ffd04b">
-        <el-menu-item index="/map">站点地图</el-menu-item>
-        <el-menu-item index="/side_watch">站点监控</el-menu-item>
-        <el-menu-item index="/remote_control" v-if="checkIdentity()">远程控制</el-menu-item>
-        <el-menu-item index="/time_control" v-if="checkIdentity()">定时控制</el-menu-item>
-        <el-menu-item index="/user_manage" v-if="checkIdentity()">用户管理</el-menu-item>
+        
+        <el-menu-item index="/map">
+          <!-- 加入map图标 -->
+          <i class="el-icon-map-location"></i>
+          站点地图
+        </el-menu-item>
+        <el-menu-item index="/side_watch">
+          <!-- 加入view图标 -->
+          <i class="el-icon-view"></i>
+          站点监控
+        </el-menu-item>
+        <el-menu-item index="/remote_control" v-if="checkIdentity()">
+          <!-- 加入promotion图标 -->
+          <i class="el-icon-s-promotion"></i>
+          远程控制
+        </el-menu-item>
+        <el-menu-item index="/time_control" v-if="checkIdentity()">
+          <!-- 加入promotion图标 -->
+          <i class="el-icon-time"></i>
+          定时控制
+        </el-menu-item>
+        <el-menu-item index="/user_manage" v-if="checkIdentity()">
+          <!-- 加入custom图标 -->
+          <i class="el-icon-s-custom"></i>
+          用户管理
+        </el-menu-item>
       </el-menu>
     </el-col>
   </el-row>
