@@ -1,5 +1,5 @@
 <template>
-    <baidu-map class="map" center="云南大学呈贡校区" :zoom="12" :scroll-wheel-zoom="true"
+    <baidu-map class="map" :center="center" :zoom="zoom" :scroll-wheel-zoom="true"
                @click="getPoint" @ready="handler" mapType="BMAP_HYBRID_MAP">
       <div v-for="pos in equipposarray" :key="pos.name">
         <bm-marker :position="{lng: pos.pos.longitude, lat: pos.pos.latitude}" @click="infoWindowCheck(pos)">
@@ -17,13 +17,19 @@
     name: 'vMap',
     data () {
       // 处理地图数据
+      let index = this.$store.state.Treedata.chooseData
       window.equipmentposarray = getEquipmentPosArray()
       return {
         equipposarray: window.equipmentposarray,
         defaultProps: {
           children: 'children',
           label: 'label'
-        }
+        },
+        center: {
+          lng: window.equipmentposarray[index]['pos']['longitude'],
+          lat: window.equipmentposarray[index]['pos']['longitude']
+        },
+        zoom: 12
       }
     },
     methods: {

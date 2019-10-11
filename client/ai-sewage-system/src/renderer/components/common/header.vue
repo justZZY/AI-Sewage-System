@@ -3,12 +3,12 @@
     <el-col :span="7">
       <img :src="imgurl">
     </el-col>
-    <el-col :span="12">
+    <el-col :span="15">
       <el-menu :router="true" :default-active="$route.path" class="el-menu" mode="horizontal" @select="handleSelect"
                background-color="#545c64"
                text-color="#fff"
                active-text-color="#ffd04b">
-        
+
         <el-menu-item index="/map">
           <!-- 加入map图标 -->
           <i class="el-icon-map-location"></i>
@@ -36,6 +36,14 @@
         </el-menu-item>
       </el-menu>
     </el-col>
+    <el-col :span="2">
+      <el-popover placement="bottom" trigger="click" width="150">
+        <ul style="list-style-type: none">
+          <li v-for="info in getUserInform()">{{info}}</li>
+        </ul>
+        <el-button slot="reference" type="info" style="height: 60px">{{userName}}</el-button>
+      </el-popover>
+    </el-col>
   </el-row>
 </template>
 
@@ -44,7 +52,8 @@
     name: 'vHeader',
     data () {
       return {
-        imgurl: require('@/assets/logo.png')
+        imgurl: require('@/assets/logo.png'),
+        userName: '当前用户: ' + this.$store.state.ShiroToken.username
       }
     },
     methods: {
@@ -53,11 +62,17 @@
       },
       checkIdentity () {
         let identity = this.$store.state.ShiroToken.identity
-        if (identity === 'admin') {
-          return true
-        } else {
-          return false
-        }
+        return identity === 'admin'
+      },
+      getUserInform () {
+        let identity = this.$store.state.ShiroToken.identity
+        let phone = this.$store.state.ShiroToken.phone
+        let mail = this.$store.state.ShiroToken.mail
+        let informArray = []
+        informArray.push('身份: ' + identity)
+        informArray.push('手机: ' + phone)
+        informArray.push('邮箱: ' + mail)
+        return informArray
       }
     }
   }

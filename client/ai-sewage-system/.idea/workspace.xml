@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="3a0adb58-ded6-4971-8d0b-bc6563aca463" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/components/common/header.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/common/header.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/components/page/map.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/page/map.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/store/modules/ShiroToken.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/store/modules/ShiroToken.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -79,6 +81,8 @@
       <workItem from="1569572847446" duration="19310000" />
       <workItem from="1569833846916" duration="60000" />
       <workItem from="1570343754232" duration="229000" />
+      <workItem from="1570616086396" duration="3615000" />
+      <workItem from="1570777669839" duration="5855000" />
     </task>
     <servers />
   </component>

@@ -2,7 +2,9 @@ const state = {
   username: '', // 用户名
   token: '', // axios请求附带的shiro验证Authorization
   identity: '', // shiro用户身份
-  area: '' // 用户可见地区
+  area: '', // 用户可见地区
+  phone: '', // 联系电话
+  mail: '' // 邮箱
 }
 
 const mutations = {
