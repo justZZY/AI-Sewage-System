@@ -48,6 +48,7 @@
               console.log(userJson)
               if (userJson['status'] === 'success' && userJson['deleteStatus'] === 0) {
                 this.$store.dispatch('setShiroToken', userJson)
+                window.loginInfo = this.loginForm
                 this.runFBoxAccount()
               } else if (userJson['deleteStatus'] === 1) {
                 this.loading = false

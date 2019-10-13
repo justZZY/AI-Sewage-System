@@ -200,7 +200,10 @@
       },
       startEquipBtn (scope) {
         console.log(scope)
-        let key = '启动开关'
+        let index = this.$store.state.Treedata.chooseData
+        let stationName = window.equipmentobjarray[index]['alias']
+        // 在fbox设备中,只有学院实训台启停开关是分开的
+        let key = (stationName === '软件学院实训台' ? '启动开关' : '启停开关')
         let name = scope['row']['name']
         let keyName = formatName(key, name)
         let type = 0
@@ -221,11 +224,15 @@
       },
       stopEquipBtn (scope) {
         console.log(scope)
-        let key = '停止开关'
+        let index = this.$store.state.Treedata.chooseData
+        let stationName = window.equipmentobjarray[index]['alias']
+        // 在fbox设备中,只有学院实训台启停开关是分开的
+        let key = (stationName === '软件学院实训台' ? '停止开关' : '启停开关')
         let name = scope['row']['name']
         let keyName = formatName(key, name)
         let type = 0
-        let value = 1
+        // 在fbox设备中,只有学院实训台启停开关是分开的,其他设备的停止是置0
+        let value = (stationName === '软件学院实训台' ? 1 : 0)
         this.$confirm('此操作将关闭设备' + name + ', 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
