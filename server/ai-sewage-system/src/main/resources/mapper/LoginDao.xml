@@ -9,7 +9,9 @@
             salt,
             delete_status,
             identity,
-            area
+            area,
+            phone,
+            mail
         FROM
             user u, permission p
         WHERE u.username = #{username} and u.pid = p.pid

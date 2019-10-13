@@ -21,6 +21,10 @@ public class User implements Serializable {
     private Integer pid; // 权限id
     @Column(nullable = false)
     private String area; // 查看地区列表
+    @Column(nullable = false)
+    private String phone; // 手机号
+    @Column(nullable = false)
+    private String mail; // 邮箱
 
     public Integer getPid() {
         return pid;
@@ -76,6 +80,22 @@ public class User implements Serializable {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 }
 

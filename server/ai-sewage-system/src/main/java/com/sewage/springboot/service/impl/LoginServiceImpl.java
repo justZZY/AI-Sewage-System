@@ -46,6 +46,8 @@ public class LoginServiceImpl implements LoginService {
 			userJson.put("deleteStatus", userSessionInfo.getDelete_status());
 			userJson.put("identity", userSessionInfo.getIdentity());
 			userJson.put("area", userSessionInfo.getArea());
+			userJson.put("phone", userSessionInfo.getPhone());
+			userJson.put("mail", userSessionInfo.getMail());
 			userJson.put("shiroToken", currentUser.getSession().getId());
 			return userJson;
 		} catch (AuthenticationException e) {

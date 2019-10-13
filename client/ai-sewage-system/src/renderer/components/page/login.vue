@@ -44,22 +44,25 @@
             this.$http.post('http://localhost:8081/login/auth', {
               'data': this.loginForm
             }).then(data => {
-              this.loading = false
               let userJson = JSON.parse(JSON.stringify(data))['data']
               console.log(userJson)
               if (userJson['status'] === 'success' && userJson['deleteStatus'] === 0) {
                 this.$store.dispatch('setShiroToken', userJson)
                 this.runFBoxAccount()
               } else if (userJson['deleteStatus'] === 1) {
+                this.loading = false
                 this.$message.error('账号被冻结')
               } else {
+                this.loading = false
                 this.$message.error('账号/密码错误')
               }
             }).catch(() => {
+              this.loading = false
               this.$message.error('登陆服务器异常')
               this.loading = false
             })
           } else {
+            this.loading = false
             this.$message.error('登录信息不完整')
             return false
           }
@@ -76,6 +79,7 @@
           console.log('refresh_token: ' + window.jsonobj['refresh_token'])
           this.runEquipment()
         }).catch(function (error) {
+          this.loading = false
           console.log(error)
         })
       },
@@ -89,11 +93,13 @@
             'Authorization': this.$store.state.ShiroToken.token
           }
         }).then(response => {
+          this.loading = false
           // 解析请求到的设备数据
           window.equipmentobj = JSON.parse(JSON.stringify(response))['data']
           window.equipmentobjarray = getArray(window.equipmentobj)
           this.gotoIndex()
         }).catch(function (error) {
+          this.loading = false
           console.log(error)
         })
       },

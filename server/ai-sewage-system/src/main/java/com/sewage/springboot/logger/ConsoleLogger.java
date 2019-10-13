@@ -14,7 +14,8 @@ public class ConsoleLogger implements Logger {
 
     @Override
     public void logInformation(String msg) {
-        System.out.println(formatter.format(new Date()) + " [Info ][" + name + "] " + msg);
+        // 注释 避免控制台大量打印
+        // System.out.println(formatter.format(new Date()) + " [Info ][" + name + "] " + msg);
     }
 
     @Override

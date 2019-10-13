@@ -57,7 +57,7 @@ public class UserController {
 	@PostMapping("/updateUser")
 	public JSONObject updateUser(@RequestBody JSONObject userJson) {
 		userJson = userJson.getJSONObject("user");
-		// 密码为空的情况 更新密码和盐
+		// 密码不为空的情况 更新密码和盐
 		if (!userJson.getString("password").equals("") && !(userJson.getString("password") == null)) {
 			String pwd = userJson.getString("password");
 			// 加盐 存入数据库

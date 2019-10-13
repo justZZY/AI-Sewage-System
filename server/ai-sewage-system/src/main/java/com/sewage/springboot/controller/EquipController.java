@@ -45,7 +45,9 @@ public class EquipController {
                 .build();
         Response response = client.newCall(request).execute();
         if (response.isSuccessful()) {
-            return response.body().string();
+            String res = response.body().string();
+            response.body().close();
+            return res;
         } else {
             throw new IOException("Unexpected code " + response);
         }
@@ -63,7 +65,9 @@ public class EquipController {
                 .build();
         Response response = client.newCall(request).execute();
         if (response.isSuccessful()){
-            return response.body().string();
+            String res = response.body().string();
+            response.body().close();
+            return res;
         }else{
             throw new IOException("Unexpected code " + response);
         }
@@ -85,7 +89,9 @@ public class EquipController {
                 .build();
         Response response = client.newCall(request).execute();
         if (response.isSuccessful()) {
-            return response.body().string();
+            String res = response.body().string();
+            response.body().close();
+            return res;
         } else {
             throw new IOException("Unexpected code " + response);
         }
@@ -125,7 +131,9 @@ public class EquipController {
                 .build();
         Response response = client.newCall(request).execute();
         if (response.isSuccessful()) {
-            return response.body().string();
+            String res = response.body().string();
+            response.body().close();
+            return res;
         } else {
             throw new IOException("Unexpected code " + response);
         }
@@ -159,7 +167,9 @@ public class EquipController {
                 .build();
         Response response = client.newCall(request).execute();
         if (response.isSuccessful()) {
-            return response.body().string();
+            String res = response.body().string();
+            response.body().close();
+            return res;
         } else {
             throw new IOException("Unexpected code " + response);
         }
@@ -171,7 +181,7 @@ public class EquipController {
     String createSignalRConnect (@RequestBody JSONObject jsonObject) {
         String signalrUrl = jsonObject.getString("url");
         String token = jsonObject.getString("token");
-        System.out.println("====打开signalr");
+        // System.out.println("====打开signalr");
         // 启动signalr
         ConsoleLoggerFactory loggerFactory = new ConsoleLoggerFactory();
         signalRConnection = new FBoxSignalRConnection(signalrUrl, token,

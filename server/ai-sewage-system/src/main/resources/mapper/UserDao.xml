@@ -19,15 +19,15 @@
 <!--        </collection>-->
 <!--    </resultMap>-->
     <select id="listUser" resultType="com.alibaba.fastjson.JSONObject">
-        SELECT username, delete_status, identity, area
+        SELECT username, delete_status, identity, area, phone, mail
         FROM user u, permission p
         WHERE u.pid = p.pid
     </select>
 
     <insert id="addUser" useGeneratedKeys="true" keyProperty="userId">
         INSERT INTO user
-        (username, password, salt, delete_status, pid, area) VALUES
-            (#{username}, #{password}, #{salt}, #{delete_status}, #{pid}, #{area})
+        (username, password, salt, delete_status, pid, area, phone, mail) VALUES
+            (#{username}, #{password}, #{salt}, #{delete_status}, #{pid}, #{area}, #{phone}, #{mail})
     </insert>
 
     <update id="updateUser">
@@ -35,10 +35,12 @@
         SET
         <if test="password !='' and password !=null">
             password = #{password},
-            salt = #{salt}
+            salt = #{salt},
         </if>
         area = #{area},
-        pid = #{pid}
+        pid = #{pid},
+        mail = #{mail},
+        phone = #{phone}
         WHERE username = #{username}
     </update>
 

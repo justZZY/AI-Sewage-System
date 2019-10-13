@@ -26,11 +26,6 @@ export default new Router({
           component: require('@/components/page/side_watch').default
         },
         {
-          path: '/system_manage',
-          name: 'system_manage',
-          component: require('@/components/page/system_manage').default
-        },
-        {
           path: '/remote_control',
           name: 'remote_control',
           component: require('@/components/page/remote_control').default

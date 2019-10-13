@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div 
+    <div
     class="filter-container"
     style="{width: 100%; display: flex; justify-content: flex-end; margin-top: 10px;}">
       <el-form>
@@ -42,7 +42,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div 
+    <div
     class="paginationContainer"
     style="{width: 100%; display: flex; justify-content: center; margin-top: 10px;}">
       <el-pagination
@@ -63,26 +63,29 @@
           <el-button type="primary" @click="chooseCityList">确 定</el-button>
         </div>
       </el-dialog>
-      <el-form class="small-space" :model="tempUser" label-position="left" label-width="80px"
+      <el-form class="small-space" :model="tempUser" ref="tempUser" label-position="left" label-width="80px"
                style='width: 300px; margin-left:50px;'>
-        <el-form-item label="用户名" required v-if="dialogStatus === 'create'">
-          <el-input type="text" v-model="tempUser.username">
-          </el-input>
+        <el-form-item label="用户名" prop="username" :rules="nameRules" v-if="dialogStatus === 'create'">
+          <el-input v-model="tempUser.username"></el-input>
         </el-form-item>
         <el-form-item label="用户名" required v-if="dialogStatus === 'update'">
           <span>{{tempUser.username}}</span>
         </el-form-item>
-        <el-form-item label="密码" v-if="dialogStatus === 'create'" required>
+        <el-form-item label="密码" prop="password" :rules="passwordRules" v-if="dialogStatus === 'create'" required>
           <el-input type="password" v-model="tempUser.password"></el-input>
           <span style="color: red">初始密码默认123456</span>
         </el-form-item>
         <el-form-item label="新密码" v-if="dialogStatus === 'update'">
-          <el-input type="password" v-model="tempUser.password" placeholder="不填则表示不修改">
-          </el-input>
+          <el-input type="password" v-model="tempUser.password" placeholder="不填则表示不修改"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" v-if="dialogStatus === 'update'">
-          <el-input type="password" v-model="tempUser.confirmPassword" placeholder="不填则表示不修改">
-          </el-input>
+          <el-input type="password" v-model="tempUser.confirmPassword" placeholder="不填则表示不修改"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号" prop="phone" :rules="phoneRules">
+          <el-input v-model.number="tempUser.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="mail" :rules="mailRules">
+          <el-input v-model="tempUser.mail"></el-input>
         </el-form-item>
         <el-form-item label="角色" required>
           <el-select v-model="tempUser.identity" placeholder="请选择" :value="tempUser.identity">
@@ -100,8 +103,8 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button v-if="dialogStatus==='create'" type="success" @click="createUser">创 建</el-button>
-        <el-button type="primary" v-else @click="updateUser">修 改</el-button>
+        <el-button v-if="dialogStatus==='create'" type="success" @click="createUser('tempUser')">创 建</el-button>
+        <el-button type="primary" v-else @click="updateUser('tempUser')">修 改</el-button>
       </div>
     </el-dialog>
     <el-dialog title="区域列表" :visible.sync="dialogShowUserAreaVisible" width="20%">
@@ -119,6 +122,12 @@
     name: 'user_manage',
     data () {
       return {
+        nameRules: [{required: true, message: '请输入用户名', trigger: 'blur'},
+          {min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur'}],
+        passwordRules: [{required: true, message: '请输入密码', trigger: 'blur'},
+          {min: 6, max: 15, message: '长度在 6 到 18 个字符', trigger: 'blur'}],
+        mailRules: [{required: true, message: '请输入邮箱', trigger: 'blur'}, {type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change']}],
+        phoneRules: [{required: true, message: '手机号不能为空'}, {type: 'number', message: '手机号必须为数字值'}],
         totalCount: 0, // 分页组件--数据总条数
         list: [], // 表格的数据
         listLoading: false, // 数据加载等待动画
@@ -142,7 +151,9 @@
           identity: '',
           area: '',
           delete_status: 0,
-          pid: 1
+          pid: 1,
+          phone: '',
+          mail: ''
         },
         compareCityArray: [],
         cityArray: [],
@@ -200,6 +211,8 @@
         this.tempUser.identity = 'user'
         this.tempUser.area = ''
         this.tempUser.delete_status = 0
+        this.tempUser.phone = ''
+        this.tempUser.mail = ''
         this.dialogStatus = 'create'
         this.dialogFormVisible = true
       },
@@ -211,53 +224,73 @@
         this.tempUser.identity = scope.row.identity
         this.tempUser.area = scope.row.area
         this.tempUser.delete_status = scope.row.deleteStatus
+        this.tempUser.phone = Number(scope.row.phone)
+        this.tempUser.mail = scope.row.mail
         this.dialogStatus = 'update'
         this.dialogFormVisible = true
       },
-      createUser () {
-        this.tempUser.pid = getPid(this.tempUser.identity)
-        // 添加新用户
-        this.$http.post('http://localhost:8081/user/addUser', {
-          user: this.tempUser
-        }, {
-          headers: {
-            'Authorization': this.$store.state.ShiroToken.token
+      createUser (formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.tempUser.pid = getPid(this.tempUser.identity)
+            // 添加新用户
+            this.$http.post('http://localhost:8081/user/addUser', {
+              user: this.tempUser
+            }, {
+              headers: {
+                'Authorization': this.$store.state.ShiroToken.token
+              }
+            }).then(res => {
+              console.log(res)
+              if (res['data']['code'] === '10009') {
+                this.$message.error(res['data']['msg'])
+              } else {
+                this.getList()
+                this.dialogFormVisible = false
+              }
+            })
+          } else {
+            console.log('error submit!')
+            return false
           }
-        }).then(res => {
-          console.log(res)
-          this.getList()
-          this.dialogFormVisible = false
         })
       },
       // 修改用户信息
-      updateUser () {
-        this.tempUser.pid = getPid(this.tempUser.identity)
-        console.log(this.tempUser.password)
-        console.log(this.tempUser.confirmPassword)
-        if (this.tempUser.password === this.tempUser.confirmPassword) {
-          this.$http.post('http://localhost:8081/user/updateUser', {
-            user: this.tempUser
-          }, {
-            headers: {
-              'Authorization': this.$store.state.ShiroToken.token
+      updateUser (formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.tempUser.pid = getPid(this.tempUser.identity)
+            console.log(this.tempUser.password)
+            console.log(this.tempUser.confirmPassword)
+            if (this.tempUser.password === this.tempUser.confirmPassword) {
+              this.$http.post('http://localhost:8081/user/updateUser', {
+                user: this.tempUser
+              }, {
+                headers: {
+                  'Authorization': this.$store.state.ShiroToken.token
+                }
+              }).then(() => {
+                let msg = '修改成功'
+                this.dialogFormVisible = false
+                if (this.$store.state.ShiroToken.username === this.tempUser.username) {
+                  msg = '修改成功,部分信息重新登录后生效'
+                }
+                this.$message({
+                  message: msg,
+                  type: 'success',
+                  onClose: () => {
+                    this.getList()
+                  }
+                })
+              })
+            } else {
+              this.$message.error('两次密码不一致')
             }
-          }).then(() => {
-            let msg = '修改成功'
-            this.dialogFormVisible = false
-            if (this.$store.state.ShiroToken.username === this.tempUser.username) {
-              msg = '修改成功,部分信息重新登录后生效'
-            }
-            this.$message({
-              message: msg,
-              type: 'success',
-              onClose: () => {
-                this.getList()
-              }
-            })
-          })
-        } else {
-          this.$message.error('两次密码不一致')
-        }
+          } else {
+            console.log('error submit!')
+            return false
+          }
+        })
       },
       frozenUser (scope) {
         if (scope.row.delete_status === 0) {

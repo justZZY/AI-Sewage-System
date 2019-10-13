@@ -69,6 +69,8 @@ public class myShiroRealm extends AuthorizingRealm {
 		userSessionInfo.setDelete_status(user.getInteger("delete_status"));
 		userSessionInfo.setIdentity(user.getString("identity"));
 		userSessionInfo.setArea(user.getString("area"));
+		userSessionInfo.setPhone(user.getString("phone"));
+		userSessionInfo.setMail(user.getString("mail"));
 		setSession(Constants.SESSION_USER_INFO, userSessionInfo);
 		return authenticationInfo;
 	}
@@ -81,7 +83,7 @@ public class myShiroRealm extends AuthorizingRealm {
 		Subject currentUser = SecurityUtils.getSubject();
 		if (currentUser != null) {
 			Session session = currentUser.getSession();
-			System.out.println("====session id:" + session.getId());
+			// System.out.println("====session id:" + session.getId());
 			// 2小时
 			session.setTimeout(7200000);
 			session.setAttribute(key, value);

@@ -3,7 +3,7 @@
     <el-col :span="7">
       <img :src="imgurl">
     </el-col>
-    <el-col :span="15">
+    <el-col :span="14">
       <el-menu :router="true" :default-active="$route.path" class="el-menu" mode="horizontal" @select="handleSelect"
                background-color="#545c64"
                text-color="#fff"
@@ -36,12 +36,12 @@
         </el-menu-item>
       </el-menu>
     </el-col>
-    <el-col :span="2">
+    <el-col :span="3">
       <el-popover placement="bottom" trigger="click" width="150">
-        <ul style="list-style-type: none">
+        <ul style="list-style-type: none; padding-left: 10px">
           <li v-for="info in getUserInform()">{{info}}</li>
         </ul>
-        <el-button slot="reference" type="info" style="height: 60px">{{userName}}</el-button>
+        <el-button slot="reference" type="info" style="height: 60px; float: right">{{userName}}</el-button>
       </el-popover>
     </el-col>
   </el-row>
@@ -69,6 +69,7 @@
         let phone = this.$store.state.ShiroToken.phone
         let mail = this.$store.state.ShiroToken.mail
         let informArray = []
+        identity = this.checkIdentity() ? '管理员' : '普通用户'
         informArray.push('身份: ' + identity)
         informArray.push('手机: ' + phone)
         informArray.push('邮箱: ' + mail)

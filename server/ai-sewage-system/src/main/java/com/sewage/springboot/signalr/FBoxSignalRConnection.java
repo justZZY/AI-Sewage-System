@@ -173,6 +173,7 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
                 .build();
         Response response = client.newCall(request).execute();
         if (response.isSuccessful()){
+            response.body().close();
             // token有效期为两小时。若token过期，demo会自动刷新token。所以返回401后均需要重试接口
             this.logger.logInformation(String.format("Start dmon points on box ok %s\n", id));
         }else{
