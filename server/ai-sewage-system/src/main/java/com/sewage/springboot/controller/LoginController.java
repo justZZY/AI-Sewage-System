@@ -89,7 +89,6 @@ public class LoginController {
 				.post(formBody)
 				.build();
 		Response response = client.newCall(request).execute();
-		System.out.println(response.toString());
 		if (response.isSuccessful()) {
 			fboxInfo = response.body().string();
 			response.body().close();

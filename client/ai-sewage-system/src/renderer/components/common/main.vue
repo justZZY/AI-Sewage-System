@@ -100,7 +100,7 @@
        */
       setTokenTimer () {
         if (this.tokenTimer === null) {
-          this.tokenTimer = setInterval(this.refresh_token, 10000)
+          this.tokenTimer = setInterval(this.refresh_token, 7000000)
         }
       }
     },
