@@ -43,6 +43,15 @@
           }
         }).then(response => {
           console.log(response)
+          let flag = response['data']['flag']
+          if (flag === 'true') {
+            let shiroToken = response['data']['shiroTokenInfo']
+            window.jsonobj = response['data']['fboxTokenInfo']
+            this.$store.dispatch('setShiroToken', shiroToken)
+            console.log('refresh token success')
+          } else {
+            console.log('refresh token fail')
+          }
         }).catch(error => {
           console.log(error)
         })
@@ -91,7 +100,7 @@
        */
       setTokenTimer () {
         if (this.tokenTimer === null) {
-          this.tokenTimer = setInterval(this.refresh_token, 600000)
+          this.tokenTimer = setInterval(this.refresh_token, 10000)
         }
       }
     },

@@ -91,12 +91,13 @@ public class LoginController {
 		Response response = client.newCall(request).execute();
 		System.out.println(response.toString());
 		if (response.isSuccessful()) {
-			fboxInfo = response.body().toString();
+			fboxInfo = response.body().string();
 			response.body().close();
 			fboxFlag = true;
 		}
 		if (fboxFlag) {
 			// 组装info
+            fboxTokenInfo = JSONObject.parseObject(fboxInfo);
 			fboxTokenInfo.put("flag", "true");
 		} else {
 			fboxTokenInfo.put("flag", "false");
