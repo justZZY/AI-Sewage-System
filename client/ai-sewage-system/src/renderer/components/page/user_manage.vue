@@ -57,7 +57,7 @@
     </div>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-dialog title="地区选择" :visible.sync="dialogFormAreaVisible" append-to-body>
-        <el-transfer v-model="chooseCity" :data="cityArray"></el-transfer>
+        <el-transfer v-model="chooseCity" :data="cityArray" filterable></el-transfer>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormAreaVisible = false">取 消</el-button>
           <el-button type="primary" @click="chooseCityList">确 定</el-button>
@@ -155,9 +155,9 @@
           phone: '',
           mail: ''
         },
-        compareCityArray: [],
-        cityArray: [],
-        chooseCity: [],
+        compareCityArray: [], // 原始city列表
+        cityArray: [], // Transfer所有city列表
+        chooseCity: [], // Transfer所选city下标索引列表
         showCityArray: []
       }
     },
@@ -359,7 +359,9 @@
         console.log(treeData)
         for (let i = 0; i < treeData.length; i++) {
           for (let j = 0; j < treeData[i]['children'].length; j++) {
-            this.compareCityArray.push(treeData[i]['children'][j].label)
+            for (let k = 0; k < treeData[i]['children'][j]['children'].length; k++) {
+              this.compareCityArray.push(treeData[i]['children'][j]['children'][k].label)
+            }
           }
         }
         console.log(this.compareCityArray)
