@@ -7,6 +7,8 @@ import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,7 @@ public class LoginController {
 	@Autowired
 	private LoginService loginService;
 
+	Logger logger = LoggerFactory.getLogger(getClass());
 	/**
 	 * 登录
 	 * @return json:用户身份信息和地区权限信息
@@ -89,11 +92,15 @@ public class LoginController {
 				.post(formBody)
 				.build();
 		Response response = client.newCall(request).execute();
-		System.out.println(response.toString());
+//		System.out.println(response.toString());
+		logger.warn(response.toString());
+		logger.warn("====body: " + response.body().toString());
 		if (response.isSuccessful()) {
 			fboxInfo = response.body().toString();
 			response.body().close();
 			fboxFlag = true;
+		} else {
+			response.body().close();
 		}
 		if (fboxFlag) {
 			// 组装info

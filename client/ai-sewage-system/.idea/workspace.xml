@@ -3,9 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="3a0adb58-ded6-4971-8d0b-bc6563aca463" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/components/common/main.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/common/main.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/components/page/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/page/login.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/components/page/remote_control.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/page/remote_control.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/components/page/map.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/page/map.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/java/com/sewage/springboot/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../server/ai-sewage-system/src/main/java/com/sewage/springboot/controller/LoginController.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -84,7 +83,10 @@
       <workItem from="1570616086396" duration="3615000" />
       <workItem from="1570777669839" duration="8728000" />
       <workItem from="1570859240189" duration="9912000" />
-      <workItem from="1570939723431" duration="8145000" />
+      <workItem from="1570939723431" duration="8786000" />
+      <workItem from="1571020185299" duration="114000" />
+      <workItem from="1571057701094" duration="715000" />
+      <workItem from="1571118417484" duration="6184000" />
     </task>
     <servers />
   </component>

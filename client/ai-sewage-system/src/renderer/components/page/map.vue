@@ -144,12 +144,14 @@
       console.log('province: ' + matchaddr[0] + 'city: ' + matchaddr[1])
       treedataarray = insertMatchAddr(treedataarray, matchaddr, name, net, connect)
     }
+    // 将站点排序, 连接正常的站点优先排序
+    treedataarray = sortTree(treedataarray)
     return treedataarray
   }
 
-  /*
-  正常情况 matchaddr经过解析后应该长度为2代表省/市
-  其他情况下可以视为错误地址
+  /**
+   * @desc 正常情况 matchaddr经过解析后应该长度为2代表省/市
+           其他情况下可以视为错误地址
   */
   function insertMatchAddr (treedataarray, matchaddr, name, net, connect) {
     let province = matchaddr[0]
@@ -261,6 +263,25 @@
       ansTree.push({label: province, children: [{label: city, children: siteArray}]})
     }
     return ansTree
+  }
+
+  /**
+   * @desc 对树节点按照是否连接优先级进行排序
+   */
+  function sortTree (tree) {
+    for (let i = 0; i < tree.length; i++) {
+      for (let j = 0; j < tree[i].children.length; j++) {
+        let siteList = tree[i].children[j].children
+        siteList.sort((a, b) => {
+          if (a.connectClass === 'el-icon-success' && b.connectClass === 'el-icon-warning-outline') {
+            return -1
+          } else {
+            return 1
+          }
+        })
+      }
+    }
+    return tree
   }
 </script>
 
