@@ -37,7 +37,7 @@ public class EquipController {
                 .add("client_id", Global.clientId)
                 .add("client_secret", Global.clientSecret)
                 .add("scope", Global.scope)
-                .add("grant_type", Global.grant_type)
+                .add("grant_type", Global.grant_type_login)
                 .build();
         Request request = new Request.Builder()
                 .url("https://account.flexem.com/core/connect/token")

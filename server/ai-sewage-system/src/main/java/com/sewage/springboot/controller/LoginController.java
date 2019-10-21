@@ -85,18 +85,15 @@ public class LoginController {
 				.add("client_id", Global.clientId)
 				.add("client_secret", Global.clientSecret)
 				.add("scope", Global.scope)
-				.add("grant_type", Global.grant_type)
+				.add("grant_type", Global.grant_type_refresh)
 				.build();
 		Request request = new Request.Builder()
 				.url("https://account.flexem.com/core/connect/token")
 				.post(formBody)
 				.build();
 		Response response = client.newCall(request).execute();
-//		System.out.println(response.toString());
-		logger.warn(response.toString());
-		logger.warn("====body: " + response.body().toString());
 		if (response.isSuccessful()) {
-			fboxInfo = response.body().toString();
+			fboxInfo = response.body().string();
 			response.body().close();
 			fboxFlag = true;
 		} else {
@@ -104,6 +101,7 @@ public class LoginController {
 		}
 		if (fboxFlag) {
 			// 组装info
+            fboxTokenInfo = JSONObject.parseObject(fboxInfo);
 			fboxTokenInfo.put("flag", "true");
 		} else {
 			fboxTokenInfo.put("flag", "false");

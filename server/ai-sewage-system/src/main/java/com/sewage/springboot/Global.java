@@ -27,5 +27,6 @@ public class Global {
     public static String clientSecret = "a89f97dc2ed2457aa0c6e58eb40142b2";
     // 登录参数
     public static String scope = "openid offline_access fbox email profile";
-    public static String grant_type = "password";
+    public static String grant_type_login = "password";
+    public static String grant_type_refresh = "refresh_token";
 }
