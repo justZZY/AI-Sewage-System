@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3a0adb58-ded6-4971-8d0b-bc6563aca463" name="Default Changelist" comment="Default Changelist">
+    <list default="true" id="3a0adb58-ded6-4971-8d0b-bc6563aca463" name="Default Changelist" comment="工单提交">
+      <change beforePath="$PROJECT_DIR$/.idea/ai-sewage-system.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ai-sewage-system.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/components/common/header.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/common/header.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/components/page/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/page/login.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/router/index.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,6 +29,7 @@
   </component>
   <component name="ProjectId" id="1QKkQoSev9dkrf2BsI08VB20A7E" />
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/renderer/components/page" />
     <property name="node.js.detected.package.eslint" value="true" />
@@ -90,7 +89,16 @@
       <workItem from="1568796187919" duration="51175000" />
       <workItem from="1569572847446" duration="18988000" />
       <workItem from="1569995892392" duration="16330000" />
+      <workItem from="1572601146732" duration="965000" />
     </task>
+    <task id="LOCAL-00001" summary="工单提交">
+      <created>1572601639277</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1572601639277</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -108,5 +116,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <MESSAGE value="工单提交" />
+    <option name="LAST_COMMIT_MESSAGE" value="工单提交" />
   </component>
 </project>
