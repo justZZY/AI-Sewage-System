@@ -26,8 +26,8 @@
     data () {
       return {
         loginForm: {
-          username: '',
-          password: ''
+          username: 's',
+          password: '123'
         },
         loginRules: {
           username: [{required: true, trigger: 'blur', message: '请输入用户名'}],

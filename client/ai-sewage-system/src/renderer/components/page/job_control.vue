@@ -4,19 +4,15 @@
       <el-row :gutter="20">
         <el-col :span="5"><div class="grid-content bg-purple">工单管理</div></el-col>
         <el-col :span="19"><div class="grid-content bg-purple" >
-            <el-form :inline="true" :model="formsearch" size="small" class="demo-form-inline">
-              <el-form-item label="标题">
-                <el-input v-model="formsearch.title" placeholder="工单标题" prefix-icon="el-icon-search"></el-input>
-              </el-form-item>
+            <el-form :inline="true" :model="formSearch" size="small" class="demo-form-inline">
               <el-form-item label="问题类型">
-                <el-select v-model="formsearch.jobType" placeholder="问题类型" :loading="jobTypeLoading">
-                  <el-option
-                      v-for="item in jobTypeList"
-                      :key="item.id"
-                      :label="item.jobTypeName"
-                      :value="item.id">
-                  </el-option>
-                </el-select>
+                <el-cascader
+                    :show-all-levels="false"
+                    v-model="formSearch.jobType"
+                    :options="jobTypeOptions"
+                    :loading="jobTypeLoading">
+                </el-cascader>
+
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="searchJobsAboutMe">查询</el-button>
@@ -32,9 +28,10 @@
         <el-menu default-active="2">
             <el-menu-item  v-for="(item,index) in jobMenu"
                          :index="index.toString()"
-                          @click="selectMenu(item.reqUrl)">
+                          @click="selectMenu(item.reqUrl)"
+                          v-bind:key="index">
               <!--              <i class="el-icon-menu"></i>-->
-              <span slot="title">{{item.title}}</span>
+              <span slot="title">{{item.title}}<el-badge class="mark" :hidden="item.num==null||item.num==''||item.num<1" :value="item.num" :max='99'/> </span>
             </el-menu-item>
         </el-menu>
       </el-aside>
@@ -66,11 +63,6 @@
               <template scope="scope"><span>{{scope.$index+(currentPage - 1) * pageSize + 1}} </span></template>
             </el-table-column>
             <el-table-column
-                class-name=""
-                prop="title"
-                label="标题" >
-            </el-table-column>
-            <el-table-column
                 prop="jobTypeName"
                 label="工单类型" >
             </el-table-column>
@@ -83,6 +75,12 @@
             <el-table-column
                 prop="createTime"
                 label="创建日期"
+                min-width="100"
+                :formatter="formatterDate">
+            </el-table-column>
+            <el-table-column
+                prop="updateTime"
+                label="更新日期"
                 min-width="100"
                 :formatter="formatterDate">
             </el-table-column>
@@ -134,31 +132,38 @@
 
         <div class="page-info" align="center" v-if="page=='detail'">
           <el-steps  align-center >
-            <el-step  v-for="(process,i) in processList" :title="statusMapper[process.type]" :status="process.type=='5'?'success':process.type=='6'?'error':'finish'" :description="new Date(process['createTime']).toLocaleString()"></el-step>
-            <el-step title="创建" v-if="processList[processList.length-1].type<1"  status="wait" description=""></el-step>
-            <el-step title="受理" v-if="processList[processList.length-1].type<2"  status="wait" description=""></el-step>
-            <el-step title="审核" v-if="processList[processList.length-1].type<4" status="wait" description=""></el-step>
-            <el-step title="完成" v-if="processList[processList.length-1].type<=4" status="wait" description=""></el-step>
-<!--            <el-step title="结束" v-if="processList[processList.length-1].type>4" status="finish" description=""></el-step>-->
+            <el-step  v-for="(process,i) in processList"
+                      :title="statusMapper[process.type]"
+                      :status="process.type=='5'?'success':process.type=='6'?'error':'finish'"
+                      :description="new Date(process['createTime']).toLocaleString()"
+                      :icon="switchJobTypeIcon(process.type)" 
+                      :key="i">
+            </el-step>
+            <el-step title="创建" :icon="switchJobTypeIcon(1)" v-if="processList[processList.length-1].type<1"  status="wait" description=""></el-step>
+            <el-step title="受理" :icon="switchJobTypeIcon(2)" v-if="processList[processList.length-1].type<2"  status="wait" description=""></el-step>
+            <el-step title="审核" :icon="switchJobTypeIcon(4)" v-if="processList[processList.length-1].type<4" status="wait" description=""></el-step>
+            <el-step title="完成" :icon="switchJobTypeIcon(5)" v-if="processList[processList.length-1].type<=4" status="wait" description=""></el-step>
+ 
           </el-steps>
 
           <el-collapse v-model="collapseOpened" style="width: 90%;margin-top: 10em" >
             <el-collapse-item title="工单详情" name="1">
               <el-form :model="jobDetail" ref="jobDetailForm" label-width="100px" disabled class="jobDetail">
-                <el-form-item label="工单标题" prop="title" >
-                  <el-input v-model="jobDetail.title"></el-input>
-                </el-form-item>
                 <el-form-item label="问题分类" prop="jobTypeName" >
                   <el-input v-model="jobDetail.jobTypeName"></el-input>
                 </el-form-item>
                 <el-form-item label="内容" prop="content" >
-                  <el-input type="textarea" v-model="jobDetail.content" :autosize="{ minRows: 10, maxRows: 20}" resize="false" ></el-input>
+                  <el-input type="textarea" v-model="jobDetail.content" :autosize="{ minRows: 5, maxRows: 20}" resize="false" ></el-input>
                 </el-form-item>
-                <el-form-item label="附件" prop="fileList">
-                  <ul class="file-list">
-                    <li>故障设备.jpg</li>
-                    <li>描述文档.xml</li>
-                  </ul>
+                <el-form-item label="附件" prop="file">
+                  <template>
+                    <el-carousel :interval="4000" type="card" height="200px">
+                      <el-carousel-item v-for="item in createProcess.file" :key="item" >
+                        <img :src="'http://localhost:8081/file/download/'+item" preview="1" preview-text=" " style="width:100%">
+                     
+                      </el-carousel-item>
+                    </el-carousel>
+                  </template>
                 </el-form-item>
                 <el-form-item  prop="email" label="联系邮箱">
                   <el-input v-model="jobDetail.email"></el-input>
@@ -172,13 +177,16 @@
             <el-collapse-item title="处理结果" name="2.1" v-if="jobDetail.status>=4">
               <el-form :model="resultProcessed"  label-width="100px" disabled  >
                 <el-form-item label="结果说明" prop="content" >
-                  <el-input type="textarea" v-model="resultProcessed.remark==null?'无':resultProcessed.remark" :autosize="{ minRows: 10, maxRows: 20}" resize="false" ></el-input>
+                  <el-input type="textarea" v-model="resultProcessed.remark" :autosize="{ minRows: 5, maxRows: 20}" resize="false" ></el-input>
                 </el-form-item>
-                <el-form-item label="附件" prop="fileList">
-                  <ul class="file-list">
-                    <li>故障设备.jpg</li>
-                    <li>描述文档.xml</li>
-                  </ul>
+                <el-form-item label="附件" prop="file">
+                  <template>
+                    <el-carousel :interval="4000" type="card" height="200px">
+                      <el-carousel-item v-for="item in resultProcessed.file" :key="item" >
+                        <img :src="'http://localhost:8081/file/download/'+item" preview="2.1" preview-text=" " style="width:100%">
+                      </el-carousel-item>
+                    </el-carousel>
+                  </template>
                 </el-form-item>
               </el-form>
             </el-collapse-item>
@@ -186,13 +194,16 @@
             <el-collapse-item title="审核结果" name="2.2" v-if="jobDetail.status>4">
               <el-form :model="resultInspected"  label-width="100px" disabled  >
                 <el-form-item label="结果说明" prop="content" >
-                  <el-input type="textarea" v-model="resultInspected.remark==null?'无':resultInspected.remark" :autosize="{ minRows: 10, maxRows: 20}" resize="false" ></el-input>
+                  <el-input type="textarea" v-model="resultInspected.remark" :autosize="{ minRows: 5, maxRows: 20}" resize="false" ></el-input>
                 </el-form-item>
-                <el-form-item label="附件" prop="fileList">
-                  <ul class="file-list">
-                    <li>故障设备.jpg</li>
-                    <li>描述文档.xml</li>
-                  </ul>
+                <el-form-item label="附件" prop="file">
+                  <template>
+                    <el-carousel :interval="4000" type="card" height="200px">
+                      <el-carousel-item v-for="item in resultInspected.file" :key="item" >
+                        <img :src="'http://localhost:8081/file/download/'+item" preview="2.2" preview-text=" " style="width:100%">
+                      </el-carousel-item>
+                    </el-carousel>
+                  </template>
                 </el-form-item>
               </el-form>
             </el-collapse-item>
@@ -206,26 +217,61 @@
               </el-form>
             </el-collapse-item>
 
-            <el-collapse-item title="工单完成确认" name="3" v-if="jobDetail.status==2 && jobDetail.processorUid==1" >  <!--工单属于当前登录用户-->
+            <el-collapse-item title="工单完成确认" name="3" v-if="jobDetail.status==2 && jobDetail.processor==currentUsername" >  <!--工单属于当前登录用户-->
               <el-form :model="processForm" rel="processForm" label-width="100px" >
                 <el-form-item label="结果说明" prop="content" >
-                  <el-input type="textarea" v-model="processForm.content" :autosize="{ minRows: 10, maxRows: 20}" resize="false" ></el-input>
+                  <el-input type="textarea" v-model="processForm.content" :autosize="{ minRows: 5, maxRows: 20}" resize="false" ></el-input>
                 </el-form-item>
-                <el-form-item label="上传附件" prop="fileList" >
-                  <el-upload
-                      align="left"
-                      class="upload-demo"
-                      ref="upload"
-                      action="https://jsonplaceholder.typicode.com/posts/"
-                      :on-preview="handlePreview"
-                      :on-remove="handleRemove"
-                      :file-list="processForm.fileList"
-                      :auto-upload="false">
-                    <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                    <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+ 
+                 <el-form-item label="上传附件" prop="fileList"  align="left">
+                  <el-upload action="http://localhost:8081/file/singleupload"
+                            list-type="picture-card"
+                            :multiple="true"
+                            :show-file-list="true"
+                            :with-credentials="true"
+                            :before-upload="handleBeforeUpload"
+                            :on-remove="handleRemove"
+                            :on-error="handleError"
+                            :on-success="handleSuccess"
+                            :on-preview="handlePictureCardPreview"
+                            :headers="{ 'Authorization': this.$store.state.ShiroToken.token }">
+                    <i class="el-icon-plus"></i>
+                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5M</div>
                   </el-upload>
+                  <el-dialog :visible.sync="dialogVisible" size="tiny">
+                    <img width="100%" :src="dialogImageUrl" alt>
+                  </el-dialog>
                 </el-form-item>
+
+                <el-form-item label="拍照" prop="photoList"  align="left">
+                  <div>
+                    <ul class="el-upload-list el-upload-list--picture-card">
+                      <li tabindex="0" class="el-upload-list__item is-success" v-for="item in photoList" :key="item">
+                        <img :src="'http://localhost:8081/file//download/' + item" alt="" class="el-upload-list__item-thumbnail"><a class="el-upload-list__item-name">
+                        <i class="el-icon-document"></i>
+                      </a>
+                        <label class="el-upload-list__item-status-label">
+                          <i class="el-icon-upload-success el-icon-check"></i>
+                        </label>
+                        <i class="el-icon-close"></i>
+                        <i class="el-icon-close-tip"></i>
+                        <span class="el-upload-list__item-actions">
+                    <span class="el-upload-list__item-preview">
+                      <i class="el-icon-zoom-in" @click="pictureCardPreview('http://localhost:8081/file//download/' + item)"></i>
+                    </span>
+                    <span class="el-upload-list__item-delete">
+                      <i class="el-icon-delete" @click="deleteFromPhotoList(item)"></i>
+                    </span>
+                  </span>
+                      </li>
+                    </ul>
+                    <!-- 拍照按钮 -->
+                    <div tabindex="0" class="el-upload el-upload--picture-card"  @click="openCamera">
+                      <i class="el-icon-camera-solid"></i>
+                    </div>
+                  </div>
+                </el-form-item>
+
                 <el-form-item align="left">
                   <el-button type="primary" @click="submitForm(4)">确认完成</el-button>
                   <el-button @click="returnToPageList">返回</el-button>
@@ -236,23 +282,57 @@
             <el-collapse-item title="工单审核确认" name="3" v-if="jobDetail.status==4 " >  <!--工单属于当前登录用户-->
               <el-form :model="processForm" rel="processForm" label-width="100px" >
                 <el-form-item label="结果说明" prop="content" >
-                  <el-input type="textarea" v-model="processForm.content" :autosize="{ minRows: 10, maxRows: 20}" resize="false" ></el-input>
+                  <el-input type="textarea" v-model="processForm.content" :autosize="{ minRows: 5, maxRows: 20}" resize="false" ></el-input>
                 </el-form-item>
-                <el-form-item label="上传附件" prop="fileList" >
-                  <el-upload
-                      align="left"
-                      class="upload-demo"
-                      ref="upload"
-                      action="https://jsonplaceholder.typicode.com/posts/"
-                      :on-preview="handlePreview"
-                      :on-remove="handleRemove"
-                      :file-list="processForm.fileList"
-                      :auto-upload="false">
-                    <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                    <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                <el-form-item label="上传附件" prop="fileList"  align="left">
+                  <el-upload action="http://localhost:8081/file/singleupload"
+                            list-type="picture-card"
+                            :multiple="true"
+                            :show-file-list="true"
+                            :with-credentials="true"
+                            :before-upload="handleBeforeUpload"
+                            :on-remove="handleRemove"
+                            :on-error="handleError"
+                            :on-success="handleSuccess"
+                            :on-preview="handlePictureCardPreview"
+                            :headers="{ 'Authorization': this.$store.state.ShiroToken.token }">
+                    <i class="el-icon-plus"></i>
+                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5M</div>
                   </el-upload>
+                  <el-dialog :visible.sync="dialogVisible" size="tiny">
+                    <img width="100%" :src="dialogImageUrl" alt>
+                  </el-dialog>
                 </el-form-item>
+
+                <el-form-item label="拍照" prop="photoList" align="left">
+                  <div>
+                    <ul class="el-upload-list el-upload-list--picture-card">
+                      <li tabindex="0" class="el-upload-list__item is-success" v-for="item in photoList" :key="item">
+                        <img :src="'http://localhost:8081/file//download/' + item" alt="" class="el-upload-list__item-thumbnail"><a class="el-upload-list__item-name">
+                        <i class="el-icon-document"></i>
+                      </a>
+                        <label class="el-upload-list__item-status-label">
+                          <i class="el-icon-upload-success el-icon-check"></i>
+                        </label>
+                        <i class="el-icon-close"></i>
+                        <i class="el-icon-close-tip"></i>
+                        <span class="el-upload-list__item-actions">
+                    <span class="el-upload-list__item-preview">
+                      <i class="el-icon-zoom-in" @click="pictureCardPreview('http://localhost:8081/file//download/' + item)"></i>
+                    </span>
+                    <span class="el-upload-list__item-delete">
+                      <i class="el-icon-delete" @click="deleteFromPhotoList(item)"></i>
+                    </span>
+                  </span>
+                      </li>
+                    </ul>
+                    <!-- 拍照按钮 -->
+                    <div tabindex="0" class="el-upload el-upload--picture-card"  @click="openCamera">
+                      <i class="el-icon-camera-solid"></i>
+                    </div>
+                  </div>
+                </el-form-item>
+
                 <el-form-item align="left">
                   <el-button type="primary" @click="submitForm(5)">审核通过</el-button>
                   <el-button type="danger"  @click="submitForm(6)">驳回</el-button>
@@ -268,15 +348,17 @@
     <el-dialog title="工单转发" :visible.sync="forwardFormVisible">
       <el-form :model="forwardForm" >
         <el-form-item label="备注" label-width="100px" >
-          <el-input v-model="forwardForm.content" type="textarea"   :autosize="{ minRows: 10, maxRows: 20}" ></el-input>
+          <el-input v-model="forwardForm.content" type="textarea"   :autosize="{ minRows: 5, maxRows: 20}" ></el-input>
         </el-form-item>
         <el-form-item label="选择转发人" label-width="100px">
-          <el-select v-model="forwardForm.uid" placeholder="情选择工单接收人" :loading="userListLoading">
+          <el-select v-model="forwardForm.user" placeholder="情选择工单接收人" :loading="userListLoading">
             <el-option
                 v-for="item in userList"
                 :key="item.id"
-                :label="item.name"
-                :value="item.id">
+                :label="item.username"
+                :value="item.username"
+                v-show="item.username!=currentUsername"
+            >
             </el-option>
           </el-select>
         </el-form-item>
@@ -287,94 +369,88 @@
       </div>
     </el-dialog>
 
-    <el-dialog
-        title="选择问题类型"
-        :visible.sync=jobtypeSelectVisible
-        center
-    >
-      <el-tabs class="jobtype" tab-position="top" type="border-card" stretch="true" style="height: 500px">
-        <el-tab-pane label="aa ">
-        <el-checkbox-group v-model="jobTypeList">
-            <el-checkbox label="复选框 A" border></el-checkbox>
-            <el-checkbox label="复选框 B" border></el-checkbox>
-            <el-checkbox label="复选框 C"></el-checkbox>
-            <el-checkbox label="禁用" disabled></el-checkbox>
-            <el-checkbox label="选中且禁用" disabled></el-checkbox>
-          </el-checkbox-group>
-        </el-tab-pane>
-
-        <el-tab-pane label="投诉" >
-          <el-checkbox-group v-model="jobTypeList"  >
-            <el-checkbox label="客服态度恶劣"   border></el-checkbox>
-            <el-checkbox  label="问题处理随意" border ></el-checkbox>
-            <el-checkbox  label="问题处理过于缓慢"border  ></el-checkbox>
-            <el-checkbox  label="就是想投诉" border ></el-checkbox>
-            <el-checkbox  label="工作人员不好看" border ></el-checkbox>
-            <el-checkbox  label="工作人员脾气不好" border ></el-checkbox>
-          </el-checkbox-group>
-        </el-tab-pane>
-
-        <el-tab-pane label="建议">
-            <el-checkbox  label="设备安全建议" border></el-checkbox>
-            <el-checkbox  label="系统功能性建议" border></el-checkbox>
-            <el-checkbox  label="吐槽建议" border></el-checkbox>
-         </el-tab-pane>
-
-
-        <el-tab-pane label="设备故障">
-          <el-checkbox  label="电力故障" border></el-checkbox>
-          <el-checkbox  label="水管问题" border></el-checkbox>
-          <el-checkbox  label="水泵故障" border></el-checkbox>
-          <el-checkbox  label="风机故障" border></el-checkbox>
-          <el-checkbox  label="进水问题" border></el-checkbox>
-          <el-checkbox  label="出水问题" border></el-checkbox>
-          <el-checkbox  label="设备不工作" border></el-checkbox>
-          <el-checkbox  label="设备损坏" border></el-checkbox>
-          <el-checkbox  label="设备老化" border></el-checkbox>
-        </el-tab-pane>
-
-        <el-tab-pane label="软件BUG">
-          <el-checkbox  label="登录异常" border></el-checkbox>
-          <el-checkbox  label="功能不可用" border></el-checkbox>
-          <el-checkbox  label="权限问题" border></el-checkbox>
-          <el-checkbox  label="体验不适" border></el-checkbox>
-        </el-tab-pane>
-        <el-tab-pane label="其他">
-          <el-checkbox  label="自定义描述" border></el-checkbox>
-        </el-tab-pane>
-      </el-tabs>
-      <span slot="footer" class="dialog-footer">
-        <el-button  @click="jobtypeSelectVisible=false">取 消</el-button>
-        <el-button type="primary"  @click="jobtypeSelectVisible=false">确 定</el-button>
-      </span>
-    </el-dialog>
-
+    <camera v-on:listenToChildEvent="receiveDataFromCamera" ref="camera"></camera>
 
   </el-container>
 </template>
 
 <script>
+  import camera from './../common/camera'
   export default {
     name: 'job_control',
+    components: { camera },
     created () {
       this.showList()
       this.queryJobTypeList()
-      this.queryUserList()
+      // this.queryUserList()
+      this.queryLoginUser()
     },
     methods: {
+      queryLoginUser () {
+        this.$http.post('http://localhost:8081/job/user/curlogin', null, {
+          headers: {
+            'Authorization': this.$store.state.ShiroToken.token
+          }
+        }).then(response => {
+          let result = response.data
+          // eslint-disable-next-line eqeqeq
+          if (result.code == 1) {
+            this.currentUsername = result.data.username
+          } else {
+            this.$alert('登录失效，请重新登录', '提示', { callback: action => {
+              location.href = '/'
+            }
+            })
+          }
+        }).catch(function (error) { // 请求失败处理
+          console.log(error)
+          this.currentUsername = null
+        }.bind(this))
+      },
+      queryMenuJobsCount () {
+        for (let i = 0, len = this.jobMenu.length; i < len; i++) {
+          this.$http('http://localhost:8081/job/query/count', {
+            params: {type: this.jobMenu[i].reqUrl},
+            headers: {
+              'Authorization': this.$store.state.ShiroToken.token
+            },
+            method: 'post'
+          }).then(response => {
+            let result = response.data
+            // eslint-disable-next-line eqeqeq
+            if (result.code == 1) {
+              this.jobMenu[i].num = result.data
+            } else {
+              this.jobMenu[i].num = 0
+            }
+          }).catch(function (error) { // 请求失败处理
+            console.log(error)
+            this.currentUsername = null
+          }.bind(this))
+        }
+      },
       showList () {
-        this.currentPage = 1
         this.page = 'list'
         this.selectJobsIds = []
         this.queryJobList()
+        this.queryMenuJobsCount()
       },
       showDetail (row) {
+        // 工单进程初始化
+        this.processList = []
+        this.jobDetail = {} // 当前显示的工单详情
+        this.createProcess = {} // 创建进程
+        this.resultProcessed = {} // 处理结果（进程已完成的数据）
+        this.resultInspected = {} // 审核结果
+        this.processForm = {} // 进程确认/完成
+        this.photoList = []
+
         let jobId = row.id
         this.collapseOpened = ['3'] // 展开的面板默认只打开第三个
         this.queryJobProcessList(jobId) // 查询进程列表
         this.updateJobDetail(jobId) // 更新当前的工单详情
         this.page = 'detail' // 显示详情页
-        this.processForm = {}
+
         console.log(row)
       },
       // 初始页currentPage、初始每页数据数pagesize和数据data
@@ -390,6 +466,7 @@
       },
       selectMenu: function (menu) {
         this.queryJobType = menu
+        this.currentPage = 1
         this.showList()
       },
       queryJobList () {
@@ -404,7 +481,7 @@
             'Authorization': this.$store.state.ShiroToken.token
           },
           method: 'post'
-        }).then(response => { // 这是从本地请求的数据接口，
+        }).then(response => {
           let result = response.data
           let pageInfo = result.data
           this.jobList = pageInfo.list
@@ -423,10 +500,11 @@
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
-        }).then(response => { // 这是从本地请求的数据接口，
+        }).then(response => {
           let result = response.data
           let list = result.data
           this.jobTypeList = list
+          this.formatJobTypeOptions()
           this.jobTypeLoading = false
         }).catch(function (error) { // 请求失败处理
           console.log(error)
@@ -442,17 +520,24 @@
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
-        }).then(response => { // 这是从本地请求的数据接口，
+        }).then(response => {
           let result = response.data
           this.processList = result.data
           // 更新当前具体进程
           for (let i = 0, len = this.processList.length; i < len; i++) {
+            if (this.processList[i].file !== undefined && this.processList[i].file !== '') {
+              this.processList[i].file = JSON.parse(this.processList[i].file) // 将文件id列表转化为json，不然就字符串
+            }
+
             // eslint-disable-next-line eqeqeq
             if (this.processList[i].type == '4') {
               this.resultProcessed = this.processList[i] // 完成进程
               // eslint-disable-next-line eqeqeq
             } else if (this.processList[i].type == '5' || this.processList[i].type == '6') {
               this.resultInspected = this.processList[i] // 审核进程
+              // eslint-disable-next-line eqeqeq
+            } else if (this.processList[i].type == '1') {
+              this.createProcess = this.processList[i] // 创建程
             }
           }
           this.tablelodingshadow = false
@@ -479,11 +564,12 @@
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
-        }).then(response => { // 这是从本地请求的数据接口，
+        }).then(response => {
           loading.close()
           let result = response.data
           let code = result.code
           let msg = result.msg
+          this.jobDetail = {}
           if (code < 0) this.$alert(msg, '提示')
           else this.jobDetail = result.data
         }).catch(function (error) { // 请求失败处理
@@ -507,6 +593,10 @@
         }
         this.processForm.jobId = this.jobDetail.id
         this.processForm.type = type
+
+        if (this.processForm.fileList !== null && this.processForm.fileList !== undefined) {
+          this.processForm.fileList = this.processForm.fileList.concat(this.photoList) // 注意提交的是processForm.fileList (注意concat方法不修改原数组，只返回新数组)
+        }
         this.$http({
           url: 'http://localhost:8081/job/' + processUrlMapping[type],
           method: 'post',
@@ -514,14 +604,16 @@
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
-        }).then(response => { // 这是从本地请求的数据接口，
+        }).then(response => {
           let result = response.data
           loading.close()
           this.$alert(result.msg, '提示',
             { callback: action => {
               this.queryJobProcessList(this.jobDetail.id) // 更新进程列表
+              this.queryMenuJobsCount()
               this.updateJobDetail(this.jobDetail.id) // 更新当前的工单详情
               this.processForm = {}
+              this.photoList = []
             }
             })
         }).catch(function (error) { // 请求失败处理
@@ -545,7 +637,7 @@
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
-        }).then(response => { // 这是从本地请求的数据接口，
+        }).then(response => {
           let result = response.data
           loading.close()
           this.$alert(result.msg, '提示', this.showList())
@@ -556,18 +648,19 @@
       },
       queryUserList () {
         this.userListLoading = true
-        this.$http.post('http://localhost:8081/user/list', null, {
+        this.$http.post('http://localhost:8081/job/user/list', null, {
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
-        }).then(response => { // 这是从本地请求的数据接口，
+        }).then(response => {
           let result = response.data
           let list = result.data
-          // this.userList = list
+          if (list == null) return
+          this.userList = list
           this.userListLoading = false
         }).catch(function (error) { // 请求失败处理
           console.log(error)
-          // this.userList = null
+          this.userList = null
           this.userListLoading = false
         }.bind(this))
       },
@@ -582,14 +675,14 @@
           url: 'http://localhost:8081/job/forward',
           data: {
             jobsIds: this.selectJobsIds,
-            receiverUid: this.forwardForm.uid,
+            receiverUsername: this.forwardForm.user,
             remark: this.forwardForm.content
           },
           method: 'post',
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
-        }).then(response => { // 这是从本地请求的数据接口，
+        }).then(response => {
           let result = response.data
           loading.close()
           this.forwardFormVisible = false
@@ -618,7 +711,7 @@
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
-        }).then(response => { // 这是从本地请求的数据接口，
+        }).then(response => {
           let result = response.data
           loading.close()
           this.forwardFormVisible = false
@@ -639,12 +732,84 @@
       returnToPageList () {
         this.page = 'list'
         this.selectJobsIds = []
+        this.jobDetail = {}
+      },
+      // 确认工单完成上传附件
+      handleBeforeUpload (file) {
+        console.log(file)
+        if (file.size > 5452595) {
+          this.$message.error('文件大小不能超过5M')
+          return false
+        }
+        if (!file.type.toLowerCase().startsWith('image')) {
+          this.$message.error('只能上传图像文件')
+          return false
+        }
+      },
+      handleRemove (file, fileList) {
+        console.log(file, fileList)
+        this.processForm.fileList = this.processForm.fileList.filter(function (item) {
+          return item !== file.response.data
+        })
+      },
+      handlePictureCardPreview (file) {
+        this.dialogImageUrl = file.url
+        this.dialogVisible = true
+      },
+      pictureCardPreview (url) {
+        this.dialogImageUrl = url
+        this.dialogVisible = true
+      },
+      handleSuccess (result, file, fileList) {
+        let fileId = result.data
+        if (this.processForm.fileList === undefined || this.processForm.fileList === '') {
+          this.processForm.fileList = []
+        }
+        this.processForm.fileList[this.processForm.fileList.length] = fileId
+      },
+      handleError (rr, file, fileList) {
+        console.log(rr)
+        console.log(file)
+        console.log(fileList)
       },
       formatterDate (row, column, cellValue, index) {
         return new Date(cellValue).toLocaleString()
       },
       formatterStatus (row, column, cellValue, index) {
         return this.statusMapper[cellValue]
+      },
+      formatJobTypeOptions () {
+        for (let key in this.jobTypeList) {
+          let json = {}
+          json.value = key
+          json.label = key
+          // eslint-disable-next-line no-array-constructor
+          let childArray = new Array()
+          for (let j = 0, len = this.jobTypeList[key].length; j < len; j++) {
+            let secJson = this.jobTypeList[key][j]
+            let json = {}
+            json.value = secJson.jobTypeName
+            json.label = secJson.jobTypeName
+            childArray.push(json)
+          }
+          json.children = childArray
+          this.jobTypeOptions.push(json)
+        }
+      },
+      // 拍照
+      openCamera () {
+        this.$refs.camera.openCamera()
+      },
+      // 删除拍下的图片
+      deleteFromPhotoList (imgId) {
+        this.photoList = this.photoList.filter(function (item) {
+          return item !== imgId
+        })
+      },
+      // 摄像头拍照回调方法
+      receiveDataFromCamera (photoObj) {
+        this.photoList.splice(this.photoList.length, 1, photoObj)
+        console.log(this.photoList)
       },
       cellClass ({row, column, rowIndex, columnIndex}) {
         // eslint-disable-next-line eqeqeq
@@ -663,40 +828,57 @@
             case '6': return 'color:#AE0F24'
           }
         }
+      },
+      switchJobTypeIcon (type) {
+        type = parseInt(type)
+        switch (type) {
+          case 1: return 'el-icon-document-add'
+          case 2: return 'el-icon-edit-outline'
+          case 3: return 'el-icon-position'
+          case 4: return 'el-icon-search'
+          case 5: return 'el-icon-success'
+          case 6: return 'el-icon-error'
+        }
       }
     },
     data () {
       return {
-        page: 'detail', // 当前显示页面(list：显示工单列表，detail：具体某条工单信息)
+        currentUsername: null, // 当期登录用户
+        page: 'list', // 当前显示页面(list：显示工单列表，detail：具体某条工单信息)
         // 工单进程
         processList: [],
         collapseOpened: ['3'], // 展开的面板
         jobDetail: {}, // 当前显示的工单
+        createProcess: {}, // 创建进程
         resultProcessed: {}, // 处理结果（进程已完成的数据）
         resultInspected: {}, // 审核结果
         processForm: {}, // 进程确认/完成
         jobTypeList: [],
+        jobTypeOptions: [],
         selectJobsIds: [], // 选中的工单
-        jobtypeSelectVisible: true,
+        // 上传图片
+        dialogImageUrl: '',
+        dialogVisible: false,
+        photoList: [], // 拍照图片列表(数据库的图片id)
         // 工单左菜单栏
         jobMenu: [
-          {title: '待领取的工单', reqUrl: 'waiting'},
-          {title: '我创建的工单', reqUrl: 'create'},
-          {title: '我的未完成的工单', reqUrl: 'processing'},
-          {title: '我的待审核的工单', reqUrl: 'processed'},
-          {title: '我的处理成功的工单', reqUrl: 'success'},
-          {title: '我的处理失败的工单', reqUrl: 'fail'},
-          {title: '所有待审核的工单', reqUrl: 'waitinspect'}
+          {title: '待领取的工单', reqUrl: 'waiting', num: 0},
+          {title: '我创建的工单', reqUrl: 'create', num: 0},
+          {title: '我的未完成的工单', reqUrl: 'processing', num: 0},
+          {title: '我的待审核的工单', reqUrl: 'processed', num: 0},
+          {title: '我的处理成功的工单', reqUrl: 'success', num: 0},
+          {title: '我的处理失败的工单', reqUrl: 'fail', num: 0},
+          {title: '所有待审核的工单', reqUrl: 'waitinspect', num: 0}
         ],
         queryJobType: 'processing', // 当前选中的左菜单栏
         // 状态编码转换名称
         statusMapper: {
           '1': '创建/待受理',
           '2': '处理中',
-          '3': '转接',
-          '4': '待审核',
-          '5': '完成',
-          '6': '驳回'
+          '3': '被转接',
+          '4': '审核中',
+          '5': '处理成功',
+          '6': '审核驳回'
         },
         // 分页配置&工单列表数据源
         currentPage: 1, // 当前页
@@ -706,9 +888,8 @@
         tablelodingshadow: false, // 表格数据加载中
         jobTypeLoading: false, // 工单类型数据加载中（下拉框）
         // 按条件查询
-        formsearch: {
-          user: '',
-          region: ''
+        formSearch: {
+          jobType: ''
         },
         // 转发工单弹窗
         forwardFormVisible: false,
@@ -717,17 +898,7 @@
           uid: ''
         },
         userListLoading: false, // 选择用户
-        userList: [{
-          id: 1, name: '孙悟空'
-        }, {
-          id: 2, name: '猪八戒'
-        }, {
-          id: 3, name: '沙悟净'
-        }, {
-          id: 4, name: '唐三藏'
-        }, {
-          id: 5, name: '白龙马'
-        }]
+        userList: [ {username: 's', id: 5}, {username: 'c', id: 6} ]
 
       }
     }
@@ -769,12 +940,7 @@
   ul.file-list > li {
     line-height: 2em;
   }
-  .el-tabs.jobtype .el-checkbox {
-    margin-top: 10px;
-    margin-bottom: 20px;
-    margin-left: 10px;
-    margin-right: 10px;
-  }
+
 
 </style>
 <style>

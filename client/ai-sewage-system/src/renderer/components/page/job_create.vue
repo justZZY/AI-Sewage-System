@@ -1,86 +1,188 @@
 <template>
-  <el-form :model="jobAddForm" :rules="rules" ref="jobAddForm" label-width="100px" class="demo-jobAddForm"  >
-    <el-form-item label="工单标题" prop="title" required>
-      <el-input v-model="jobAddForm.title"></el-input>
-    </el-form-item>
-    <el-form-item label="问题分类" prop="jobTypeId" required>
-      <el-select v-model="jobAddForm.jobTypeId" placeholder="请选择问题类型" :loading="jobTypeLoading">
-        <el-option
-            v-for="item in jobTypeList"
-            :key="item.id"
-            :label="item.jobTypeName"
-            :value="item.id">
-        </el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item label="内容" prop="content" required>
-      <el-input type="textarea" v-model="jobAddForm.content" :autosize="{ minRows: 10, maxRows: 20}" ></el-input>
-    </el-form-item>
-    <el-form-item label="上传附件" prop="fileList" style="width: fit-content">
-      <el-upload
-          class="upload-demo"
-          ref="upload"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :file-list="jobAddForm.fileList"
-          :auto-upload="false">
-        <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-      </el-upload>
-    </el-form-item>
-    <el-form-item  prop="email" label="联系邮箱">
-      <el-input v-model="jobAddForm.email"></el-input>
-    </el-form-item>
-    <el-form-item  prop="telephone" label="联系电话">
-      <el-input v-model="jobAddForm.telephone"></el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="submitForm('jobAddForm')">立即创建</el-button>
-      <router-link to="job_control"> <el-button>返回</el-button></router-link>
-    </el-form-item>
-  </el-form>
+  <el-container>
+    <el-main>
+      <el-form :model="jobAddForm" :rules="rules" ref="jobAddForm" label-width="100px" class="demo-jobAddForm" >
+        <el-form-item label="问题分类" prop="jobTypeName" required>
+          <el-button  :type="jobAddForm.jobTypeName==''?'':'primary'" plain @click="jobTypeSelectVisible=true" >{{jobAddForm.jobTypeName==''?'请选择问题类型':jobAddForm.jobTypeName}}</el-button>
+        </el-form-item>
+        <el-form-item label="内容" prop="content"  >
+          <el-input type="textarea" v-model="jobAddForm.content" :autosize="{ minRows: 5, maxRows: 20}" ></el-input>
+        </el-form-item>
+        <el-form-item label="上传附件" prop="fileList" style="width: fit-content" >
+          <el-upload action="http://localhost:8081/file/singleupload"
+                     list-type="picture-card"
+                     :file-list="jobAddForm.fileList"
+                     :multiple="true"
+                     :show-file-list="true"
+                     :with-credentials="true"
+                     :before-upload="handleBeforeUpload"
+                     :on-remove="handleRemove"
+                     :on-error="handleError"
+                     :on-success="handleSuccess"
+                     :on-preview="handlePictureCardPreview"
+                     :headers="{ 'Authorization': this.$store.state.ShiroToken.token }">
+            <i class="el-icon-plus"></i>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5M</div>
+          </el-upload>
+          <el-dialog :visible.sync="dialogVisible" size="tiny">
+            <img width="100%" :src="dialogImageUrl" alt>
+          </el-dialog>
+        </el-form-item>
+
+        <el-form-item label="拍照" prop="photoList" style="width: fit-content" >
+          <div>
+            <ul class="el-upload-list el-upload-list--picture-card">
+              <li tabindex="0" class="el-upload-list__item is-success" v-for="item in photoList" :key="item">
+                <img :src="'http://localhost:8081/file//download/' + item" alt="" class="el-upload-list__item-thumbnail"><a class="el-upload-list__item-name">
+                <i class="el-icon-document"></i>
+              </a>
+                <label class="el-upload-list__item-status-label">
+                  <i class="el-icon-upload-success el-icon-check"></i>
+                </label>
+                <i class="el-icon-close"></i>
+                <i class="el-icon-close-tip"></i>
+                <span class="el-upload-list__item-actions">
+                    <span class="el-upload-list__item-preview">
+                      <i class="el-icon-zoom-in" @click="pictureCardPreview('http://localhost:8081/file//download/' + item)"></i>
+                    </span>
+                    <span class="el-upload-list__item-delete">
+                      <i class="el-icon-delete" @click="deleteFromPhotoList(item)"></i>
+                    </span>
+                  </span>
+              </li>
+            </ul>
+            <!-- 拍照按钮 -->
+            <div tabindex="0" class="el-upload el-upload--picture-card"  @click="openCamera">
+              <i class="el-icon-camera-solid"></i>
+            </div>
+          </div>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('jobAddForm')">立即创建</el-button>
+          <router-link to="job_control"> <el-button>返回</el-button></router-link>
+        </el-form-item>
+      </el-form>
+    </el-main>
+    <el-dialog
+        title="选择问题类型"
+        :visible.sync=jobTypeSelectVisible
+        center
+    >
+      <el-tabs class="jobtype" tab-position="top" type="border-card"  style="height: 500px">
+
+        <el-tab-pane v-for="(val,key) in jobTypeListJson" :label="key" v-bind:key="key" >
+          <el-radio-group v-model="jobAddForm.jobTypeName"  >
+            <el-radio v-for="(item,k) in val" :label="item.jobTypeName"  v-bind:key="k"></el-radio>
+          </el-radio-group>
+        </el-tab-pane>
+
+        <el-tab-pane label="投诉" >
+          <el-radio-group v-model="jobAddForm.jobTypeName"  >
+            <el-radio label="客服态度恶劣"   border></el-radio>
+            <el-radio  label="问题处理随意" border ></el-radio>
+            <el-radio  label="问题处理过于缓慢"border  ></el-radio>
+            <el-radio  label="就是想投诉" border ></el-radio>
+            <el-radio  label="工作人员不好看" border ></el-radio>
+            <el-radio  label="工作人员脾气不好" border ></el-radio>
+          </el-radio-group>
+        </el-tab-pane>
+
+        <el-tab-pane label="建议">
+          <el-radio-group v-model="jobAddForm.jobTypeName">
+            <el-radio  label="设备安全建议" border></el-radio>
+            <el-radio  label="系统功能性建议" border></el-radio>
+            <el-radio  label="吐槽建议" border></el-radio>
+          </el-radio-group>
+        </el-tab-pane>
+
+
+        <el-tab-pane label="设备故障">
+          <el-radio-group v-model="jobAddForm.jobTypeName">
+            <el-radio  label="电力故障" border></el-radio>
+            <el-radio  label="水管问题" border></el-radio>
+            <el-radio  label="水泵故障" border></el-radio>
+            <el-radio  label="风机故障" border></el-radio>
+            <el-radio  label="进水问题" border></el-radio>
+            <el-radio  label="出水问题" border></el-radio>
+            <el-radio  label="设备不工作" border></el-radio>
+            <el-radio  label="设备损坏" border></el-radio>
+            <el-radio  label="设备老化" border></el-radio>
+          </el-radio-group>
+        </el-tab-pane>
+
+        <el-tab-pane label="软件BUG">
+          <el-radio-group v-model="jobAddForm.jobTypeName">
+            <el-radio  label="登录异常" border></el-radio>
+            <el-radio  label="功能不可用" border></el-radio>
+            <el-radio  label="权限问题" border></el-radio>
+            <el-radio  label="体验不适" border></el-radio>
+          </el-radio-group>
+        </el-tab-pane>
+        <el-tab-pane label="其他">
+          <el-radio-group v-model="jobAddForm.jobTypeName">
+            <el-radio  label="自定义描述" border></el-radio>
+          </el-radio-group>
+        </el-tab-pane>
+      </el-tabs>
+      <span slot="footer" class="dialog-footer">
+          <el-button type="primary"  @click="jobTypeSelectVisible=false">确 定</el-button>
+      </span>
+    </el-dialog>
+    <camera v-on:listenToChildEvent="receiveDataFromCamera" ref="camera"></camera>
+  </el-container>
 </template>
 
+
+
+
 <script>
+  import camera from './../common/camera' // 引入组件
   export default {
     name: 'job_create',
+    components: { camera },
     created () {
       this.queryJobTypeList()
     },
     data () {
       return {
-        jobTypeList: [{}, {}],
+        jobTypeListJson: { },
+        jobTypeSelectVisible: false,
+        photoList: [],
         jobAddForm: {
-          title: '',
-          jobTypeId: '',
+          jobTypeName: '',
           content: '',
           fileList: [],
           email: '',
           telephone: ''
         },
         rules: {
-          title: [
-            {required: true, message: '请输入工单问题标题', trigger: ['blur', 'change']}
-          ],
-          jobTypeId: [
+          jobTypeName: [
             {required: true, message: '请选择问题类型', trigger: ['blur', 'change']}
-          ],
-          content: [
-            {required: true, message: '请输入问题具体描述', trigger: ['blur', 'change']}
-          ],
-          email: [
-            {type: 'email', required: true, message: '邮箱格式不正确', trigger: ['blur', 'change']}
-          ],
-          telephone: [
-            {pattern: /^1[34578]\d{9}$/, required: true, message: '手机格式不正确', trigger: ['blur', 'change']}
           ]
-        }
+        },
+        // 上传图片
+        dialogImageUrl: '',
+        dialogVisible: false
       }
     },
 
     methods: {
+      initParams: function () {
+        this.jobTypeListJson = { }
+        this.jobTypeSelectVisible = false
+        this.photoList = []
+        this.jobAddForm = {
+          jobTypeName: '',
+          content: '',
+          fileList: [],
+          email: '',
+          telephone: ''
+        }
+        // 上传图片
+        this.dialogImageUrl = ''
+        this.dialogVisible = false
+      },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -90,7 +192,10 @@
               spinner: 'el-icon-loading',
               background: 'rgba(0, 0, 0, 0.7)'
             })
-            this.$http.post('http://localhost:8081/job/add', { 'form': this.jobAddForm },
+            if (this.jobAddForm.fileList !== null && this.jobAddForm.fileList !== undefined) {
+              this.jobAddForm.fileList = this.jobAddForm.fileList.concat(this.photoList) // 注意提交的是jobAddForm.fileList (注意concat方法不修改原数组，只返回新数组)
+            }
+            this.$http.post('http://localhost:8081/job/add', {'form': this.jobAddForm},
               {
                 headers: {
                   'Authorization': this.$store.state.ShiroToken.token
@@ -118,30 +223,70 @@
         })
       },
       queryJobTypeList () {
-        this.jobTypeLoading = true
         this.$http.post('http://localhost:8081/job/type/queryall', null, {
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
         }).then(response => { // 这是从本地请求的数据接口，
           let result = response.data
-          let list = result.data
-          this.jobTypeList = list
-          this.jobTypeLoading = false
+          let json = result.data
+          this.jobTypeListJson = json
         }).catch(function (error) { // 请求失败处理
           console.log(error)
-          this.jobTypeList = null
-          this.jobTypeLoading = false
+          this.jobTypeListJson = null
         }.bind(this))
       },
-      submitUpload () {
-        this.$refs.upload.submit()
+      handleBeforeUpload (file) {
+        console.log(file)
+        if (file.size > 5452595) {
+          this.$message.error('文件大小不能超过5M')
+          return false
+        }
+        if (!file.type.toLowerCase().startsWith('image')) {
+          this.$message.error('只能上传图像文件')
+          return false
+        }
       },
       handleRemove (file, fileList) {
-        console.log(file, fileList)
+        this.jobAddForm.fileList.forEach(function (item, index, arr) {
+          // eslint-disable-next-line eqeqeq
+          if (item == file.response.data) {
+            arr.splice(index, 1)
+          }
+        })
       },
-      handlePreview (file) {
+      handlePictureCardPreview (file) {
+        this.dialogImageUrl = file.url
+        this.dialogVisible = true
+      },
+      pictureCardPreview (url) {
+        this.dialogImageUrl = url
+        this.dialogVisible = true
+      },
+      handleSuccess (result, file, fileList) {
+        fileList = null
+        let fileId = result.data
+        this.jobAddForm.fileList[this.jobAddForm.fileList.length] = fileId
+      },
+      handleError (rr, file, fileList) {
+        console.log(rr)
         console.log(file)
+        console.log(fileList)
+        this.$message.error('上传失败')
+      },
+      openCamera () {
+        this.$refs.camera.openCamera()
+      },
+      // 删除拍下的图片
+      deleteFromPhotoList (imgId) {
+        this.photoList = this.photoList.filter(function (item) {
+          return item !== imgId
+        })
+      },
+      // 摄像头拍照回调方法
+      receiveDataFromCamera (photoObj) {
+        this.photoList.splice(this.photoList.length, 1, photoObj)
+        console.log(this.photoList)
       }
     }
   }
@@ -151,5 +296,11 @@
   .el-form{
     margin-top: 1em;
     height: 100%;
+  }
+  .el-tabs.jobtype .el-radio {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
   }
 </style>
