@@ -35,6 +35,22 @@
     "files": [
       "dist/electron/**/*"
     ],
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://114.55.146.36:8083/update/"
+      }
+    ],
+    "nsis": {
+      "oneClick": true,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "runAfterFinish": true,
+      "installerIcon": "./build/icon.ico",
+      "uninstallerIcon": "./build/icon.ico"
+    } ,
     "dmg": {
       "contents": [
         {
@@ -63,6 +79,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "echarts": "^4.2.1",
+    "electron-updater": "^4.2.0",
     "element-ui": "^2.9.2",
     "es-abstract": "^1.15.0",
     "js-cookie": "^2.2.1",
