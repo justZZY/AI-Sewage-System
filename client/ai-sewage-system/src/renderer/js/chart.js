@@ -34,7 +34,7 @@ export const monitorOption = {
   toolbox: {
     show: true,
     feature: {
-      mark: {show: true}
+      mark: { show: true }
     }
   },
   calculable: true,

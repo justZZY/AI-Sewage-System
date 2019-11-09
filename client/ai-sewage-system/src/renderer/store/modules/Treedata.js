@@ -1,5 +1,5 @@
 const state = {
-  treedata: [{label: '暂无数据', children: [{label: '暂无数据', netclass: 'null'}]}],
+  treedata: [{ label: '暂无数据', children: [{ label: '暂无数据', netclass: 'null' }] }],
   chooseData: 0
 }
 
@@ -13,7 +13,7 @@ const mutations = {
     state.chooseData = newData
   },
   TREEDATA_CLEAR (state) {
-    state.treedata = [{label: '暂无数据', children: [{label: '暂无数据', netclass: 'null'}]}]
+    state.treedata = [{ label: '暂无数据', children: [{ label: '暂无数据', netclass: 'null' }] }]
     state.chooseData = 0
   }
 }

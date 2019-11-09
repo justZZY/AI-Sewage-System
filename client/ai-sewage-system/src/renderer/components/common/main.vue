@@ -35,7 +35,7 @@
         let refreshToken = window.jsonobj['refresh_token']
         let loginInfo = window.loginInfo
         loginInfo['refreshToken'] = refreshToken
-        this.$http.post('http://localhost:8081/login/refreshToken', {
+        this.$http.post('http://114.55.146.36:8081/login/refreshToken', {
           loginInfo: loginInfo
         }, {
           headers: {
@@ -63,7 +63,7 @@
         let index = this.$store.state.Treedata.chooseData
         let signalrUrl = window.equipmentobjarray[index]['box']['cs']['signalrUrl']
         let token = window.jsonobj['access_token']
-        this.$http.post('http://localhost:8081/equip/createSignalRConnect', {
+        this.$http.post('http://114.55.146.36:8081/equip/createSignalRConnect', {
           url: signalrUrl,
           token: token
         }, {
@@ -77,7 +77,7 @@
         })
       },
       closeSignalRConnect () {
-        this.$http.post('http://localhost:8081/equip/closeSignalRConnect', null, {
+        this.$http.post('http://114.55.146.36:8081/equip/closeSignalRConnect', null, {
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }

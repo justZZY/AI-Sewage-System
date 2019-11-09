@@ -9,12 +9,12 @@ const state = {
 
 const mutations = {
   SET_SHIRO_TOKEN (state, newData) {
-    state.token = newData['shiroToken']
-    state.identity = newData['identity']
-    state.area = newData['area']
-    state.username = newData['username']
-    state.mail = newData['mail']
-    state.phone = newData['phone']
+    state.token = newData.shiroToken
+    state.identity = newData.identity
+    state.area = newData.area
+    state.username = newData.username
+    state.mail = newData.mail
+    state.phone = newData.phone
   },
   SHIRO_TOKEN_CLEAR (state) {
     state.username = ''

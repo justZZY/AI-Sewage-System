@@ -1,64 +1,79 @@
 import { autoUpdater } from 'electron-updater'
+
 import { ipcMain } from 'electron'
-/**
- * -1 检查更新失败 0 正在检查更新 1 检测到新版本，准备下载 2 未检测到新版本 3 下载中 4 下载暂停 5 下载暂停恢复 6 下载完成 7 下载失败 8 取消下载
- * */
-class Update {
-  mainWindow
-  constructor (mainWindow) {
-    this.mainWindow = mainWindow
-    autoUpdater.setFeedURL('http://114.55.146.36:8083/update/') // 更新地址与package.json中的build.publish.url相对应
+
+let mainWindow = null
+
+export function updateHandle (window, feedUrl) {
+  mainWindow = window
+  const message = {
+    error: '检查更新出错',
+    checking: '正在检查更新……',
+    updateAva: '检测到新版本，正在下载……',
+    updateNotAva: '现在使用的就是最新版本，不用更新'
   }
-  runUpdate () {
-    /**
-     * 根据自身需求选择下方方法
-     */
-    this.error()
-    this.start()
-    this.allow()
-    this.unallowed()
-    this.listen()
-    this.download()
-  }
-  Message (type, data) {
-    this.mainWindow.webContents.send('message', type, data)
-  }
-  error () { // 当更新发生错误的时候触发。
-    autoUpdater.on('error', (err) => {
-      this.Message(-1, err)
-      console.log(err)
+  // 设置更新包的地址
+  autoUpdater.setFeedURL(feedUrl)
+  // 监听升级失败事件
+  autoUpdater.on('error', function (error) {
+    sendUpdateMessage({
+      cmd: 'error',
+      message: error
     })
-  }
-  start () { // 当开始检查更新的时候触发
-    autoUpdater.on('checking-for-update', (event, arg) => {
-      this.Message(0)
+  })
+  // 监听开始检测更新事件
+  autoUpdater.on('checking-for-update', function (message) {
+    sendUpdateMessage({
+      cmd: 'checking-for-update',
+      message: message
     })
-  }
-  allow () { // 发现可更新数据时
-    autoUpdater.on('update-available', (event, arg) => {
-      this.Message(1)
+  })
+  // 监听发现可用更新事件
+  autoUpdater.on('update-available', function (message) {
+    sendUpdateMessage({
+      cmd: 'update-available',
+      message: message
     })
-  }
-  unallowed () { // 没有可更新数据时
-    autoUpdater.on('update-not-available', (event, arg) => {
-      this.Message(2)
+  })
+  // 监听没有可用更新事件
+  autoUpdater.on('update-not-available', function (message) {
+    sendUpdateMessage({
+      cmd: 'update-not-available',
+      message: message
     })
-  }
-  listen () { // 下载监听
-    autoUpdater.on('download-progress', () => {
-      this.Message('下载进行中')
+  })
+
+  // 更新下载进度事件
+  autoUpdater.on('download-progress', function (progressObj) {
+    sendUpdateMessage({
+      cmd: 'download-progress',
+      message: progressObj
     })
-  }
-  download () { // 下载完成
-    autoUpdater.on('update-downloaded', () => {
-      this.Message(6)
-      setTimeout(m => {
-        autoUpdater.quitAndInstall()
-      }, 1000)
+  })
+  // 监听下载完成事件
+  autoUpdater.on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl) {
+    sendUpdateMessage({
+      cmd: 'update-downloaded',
+      message: {
+        releaseNotes,
+        releaseName,
+        releaseDate,
+        updateUrl
+      }
     })
-  }
-  load () { // 触发器
-    autoUpdater.checkForUpdates()
-  }
+    // 退出并安装更新包
+    autoUpdater.quitAndInstall()
+  })
+
+  // 接收渲染进程消息，开始检查更新
+  ipcMain.on('checkForUpdate', (e, arg) => {
+    // 执行自动更新检查
+    // sendUpdateMessage({cmd:'checkForUpdate',message:arg})
+    autoUpdater.checkForUpdates().then(r => console.log(r)).catch(r1 => console.log(r1))
+  })
 }
-export default Update
+
+// 给渲染进程发送消息
+function sendUpdateMessage (text) {
+  mainWindow.webContents.send('message', text)
+}

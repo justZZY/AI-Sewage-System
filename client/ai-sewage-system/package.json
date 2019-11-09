@@ -41,16 +41,6 @@
         "url": "http://114.55.146.36:8083/update/"
       }
     ],
-    "nsis": {
-      "oneClick": true,
-      "perMachine": true,
-      "allowElevation": true,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "runAfterFinish": true,
-      "installerIcon": "./build/icon.ico",
-      "uninstallerIcon": "./build/icon.ico"
-    } ,
     "dmg": {
       "contents": [
         {
@@ -79,6 +69,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "echarts": "^4.2.1",
+    "electron-log": "^3.0.9",
     "electron-updater": "^4.2.0",
     "element-ui": "^2.9.2",
     "es-abstract": "^1.15.0",
@@ -110,9 +101,9 @@
     "css-loader": "^3.2.0",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
-    "electron": "^2.0.4",
-    "electron-builder": "^20.19.2",
-    "electron-debug": "^1.5.0",
+    "electron": "^7.1.1",
+    "electron-builder": "^22.1.0",
+    "electron-debug": "^3.0.1",
     "electron-devtools-installer": "^2.2.4",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",

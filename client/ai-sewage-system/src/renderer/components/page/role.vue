@@ -116,7 +116,7 @@
       },
       getAllPermisson () {
         // 查询所有权限
-        this.$http.get('http://localhost:8081/user/listAllPermission').then(data => {
+        this.$http.get('http://114.55.146.36:8081/user/listAllPermission').then(data => {
           this.allPermission = data.data.info.list
           // console.log(this.allPermission.length)
         })
@@ -124,7 +124,7 @@
       getList () {
         // 查询列表
         this.listLoading = true
-        this.$http.get('http://localhost:8081/user/listRole').then(data => {
+        this.$http.get('http://114.55.146.36:8081/user/listRole').then(data => {
           this.listLoading = false
           this.list = data.data.info.list
           // console.log(this.list)
@@ -165,7 +165,7 @@
         }
         // 添加新角色
         this.api({
-          url: 'http://localhost:8081/user/addRole',
+          url: 'http://114.55.146.36:8081/user/addRole',
           method: 'post',
           data: this.tempRole
         }).then(() => {
@@ -181,7 +181,7 @@
           return
         }
         // 修改角色
-        this.$http.post('http://localhost:8081/user/updateRole', {
+        this.$http.post('http://114.55.146.36:8081/user/updateRole', {
           data: this.tempRole
         }).then(() => {
           this.getList()
@@ -223,7 +223,7 @@
         }).then(() => {
           let role = _vue.list[$index]
           _vue.api({
-            url: 'http://localhost:8081/user/deleteRole',
+            url: 'http://114.55.146.36:8081/user/deleteRole',
             method: 'post',
             data: {
               roleId: role.roleId
