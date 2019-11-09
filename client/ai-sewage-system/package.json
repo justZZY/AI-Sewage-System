@@ -1,8 +1,8 @@
 {
-  "name": "ai-sewage-system",
-  "version": "0.0.1",
-  "author": "zzuoying <zzuoying@163.com>",
-  "description": "An electron-vue project",
+  "name": "intelligent-water",
+  "version": "1.0.1",
+  "author": "Yunnan University",
+  "description": "云南大学·中贸环境智能水务联合实验室",
   "license": "BSD-3-Clause",
   "main": "./dist/electron/main.js",
   "repository": {
@@ -27,7 +27,7 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "ai-sewage-system",
+    "productName": "智能水务",
     "appId": "com.sewage.app",
     "directories": {
       "output": "build"
@@ -38,7 +38,7 @@
     "publish": [
       {
         "provider": "generic",
-        "url": "http://114.55.146.36:8083/update/"
+        "url": "http://116.55.241.28:8083/update/"
       }
     ],
     "dmg": {

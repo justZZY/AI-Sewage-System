@@ -169,7 +169,7 @@
       getList () {
         // 查询列表
         this.listLoading = true
-        this.$http.get('http://114.55.146.36:8081/user/list', {
+        this.$http.get('http://116.55.241.28:8082/user/list', {
           params: this.listQuery,
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
@@ -234,7 +234,7 @@
           if (valid) {
             this.tempUser.pid = getPid(this.tempUser.identity)
             // 添加新用户
-            this.$http.post('http://114.55.146.36:8081/user/addUser', {
+            this.$http.post('http://116.55.241.28:8082/user/addUser', {
               user: this.tempUser
             }, {
               headers: {
@@ -263,7 +263,7 @@
             console.log(this.tempUser.password)
             console.log(this.tempUser.confirmPassword)
             if (this.tempUser.password === this.tempUser.confirmPassword) {
-              this.$http.post('http://114.55.146.36:8081/user/updateUser', {
+              this.$http.post('http://116.55.241.28:8082/user/updateUser', {
                 user: this.tempUser
               }, {
                 headers: {
@@ -316,7 +316,7 @@
         }
       },
       frozen (username, deleteStatus) {
-        this.$http.post('http://114.55.146.36:8081/user/frozenUser', {
+        this.$http.post('http://116.55.241.28:8082/user/frozenUser', {
           username: username,
           deleteStatus: deleteStatus
         }, {
@@ -340,7 +340,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.post('http://114.55.146.36:8081/user/removeUser', {
+          this.$http.post('http://116.55.241.28:8082/user/removeUser', {
             username: scope.row.username
           }, {
             headers: {

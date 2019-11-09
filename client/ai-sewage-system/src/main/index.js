@@ -19,6 +19,9 @@ function createWindow () {
   /**
    * Initial window options
    */
+  const electron = require('electron')
+  const Menu = electron.Menu
+  Menu.setApplicationMenu(null)
   mainWindow = new BrowserWindow({
     webPreferences: { nodeIntegration: true }
   })
@@ -29,7 +32,7 @@ function createWindow () {
     mainWindow = null
   })
 
-  updateHandle(mainWindow, 'http://114.55.146.36:8083/update/')
+  updateHandle(mainWindow, 'http://116.55.241.28:8083/update/')
 }
 
 app.on('ready', createWindow)
