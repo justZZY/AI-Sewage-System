@@ -98,6 +98,8 @@
           // 解析请求到的设备数据
           window.equipmentobj = JSON.parse(JSON.stringify(response))['data']
           window.equipmentobjarray = getArray(window.equipmentobj)
+          console.log('====equipmentobjarray:')
+          console.log(window.equipmentobjarray)
           this.gotoIndex()
         }).catch(function (error) {
           this.loading = false

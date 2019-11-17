@@ -64,3 +64,74 @@ export const monitorOption = {
     }
   ]
 }
+
+/*
+ * @des 需要写入data/links/categories/三组数据
+ */
+export const relationOption = {
+  title: {
+    text: '智能水务知识图谱',
+    top: 'top',
+    left: 'left'
+  },
+  tooltip: {
+    formatter: function (x) {
+      return x.data.des
+    }
+  },
+  toolbox: {
+    show: true,
+    feature: {
+      restore: {
+        show: true
+      },
+      saveAsImage: {
+        show: true
+      }
+    }
+  },
+  animationDuration: 1000,
+  animationEasingUpdate: 'quinticInOut',
+  series: [{
+    type: 'graph',
+    layout: 'force',
+    force: {
+      repulsion: 100,
+      edgeLength: 200,
+      layoutAnimation: true
+    },
+    // 添加标记极度影响性能,直接注释掉
+    // edgeSymbol: ['none', 'arrow'],
+    // edgeLabel: {
+    //   normal: {
+    //     show: true
+    //   }
+    // },
+    data: [],
+    links: [],
+    categories: [],
+    roam: true,
+    focusNodeAdjacency: true,
+    label: {
+      position: 'inside',
+      formatter: '{b}'
+    },
+    itemStyle: {
+      normal: {
+        borderColor: '#fff',
+        borderWidth: 1,
+        shadowBlur: 10,
+        shadowColor: 'rgba(0, 0, 0, 0.3)'
+      }
+    },
+    lineStyle: {
+      color: 'source',
+      curveness: 0.3
+    },
+    emphasis: {
+      lineStyle: {
+        width: 10
+      }
+    }
+  }]
+}

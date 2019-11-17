@@ -36,6 +36,11 @@ export default new Router({
           component: require('@/components/page/time_control').default
         },
         {
+          path: '/knowledge_graph',
+          name: 'knowledge_graph',
+          component: require('@/components/page/knowledge_graph').default
+        },
+        {
           path: '/user_manage',
           name: 'user_manage',
           component: require('@/components/page/user_manage').default,
