@@ -62,4 +62,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.hibernate:hibernate-core'
 	implementation 'org.mybatis:mybatis:3.4.5'
+	
+		
+	//springboot整合mybatis 通用mapper
+	implementation 'tk.mybatis:mapper-spring-boot-starter:2.0.1'
+	//mybatis分页
+	implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:latest.release'
+	
+	
 }

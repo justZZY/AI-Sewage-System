@@ -34,6 +34,7 @@
           <i class="el-icon-coin"></i>
           站点图谱
         </el-menu-item>
+        <el-menu-item index="/job_control">工单管理</el-menu-item>
         <el-menu-item index="/user_manage" v-if="checkIdentity()">
           <!-- 加入custom图标 -->
           <i class="el-icon-s-custom"></i>

@@ -11,6 +11,10 @@ import store from './store'
 // 导入图标组件
 import echarts from 'echarts'
 
+import preview from 'vue-photo-preview'
+import 'vue-photo-preview/dist/skin.css'
+Vue.use(preview)
+
 Vue.use(ElementUI)
 Vue.use(BaiduMap, {
   ak: 'fIaeDjiILX4C7VpyIkGed9BTjpbeaQ0w'

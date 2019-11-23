@@ -47,6 +47,16 @@ export default new Router({
           menu: 'user'
         },
         {
+          path: '/job_control',
+          name: 'job_control',
+          component: require('@/components/page/job_control').default
+        },
+        {
+          path: '/job_create',
+          name: 'job_create',
+          component: require('@/components/page/job_create').default
+        },
+        {
           path: '/404',
           name: 'page404',
           component: require('@/components/page/404').default
