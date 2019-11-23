@@ -113,7 +113,7 @@ export const relationOption = {
     roam: true,
     focusNodeAdjacency: true,
     label: {
-      position: 'inside',
+      position: 'right',
       formatter: '{b}'
     },
     itemStyle: {

@@ -6,7 +6,7 @@
 <script>
   import {relationOption} from '../../js/chart'
   let echarts = require('echarts')
-  const size = 80
+  const size = 70
   let nodeList = []
   let linkList = []
   export default {
@@ -17,9 +17,11 @@
     methods: {
       async initGraph () {
         const myGraph = echarts.init(this.$refs.main)
+        myGraph.showLoading()
         const option = await this.initOption()
         console.log(option)
         myGraph.setOption(option)
+        myGraph.hideLoading()
       },
       async initOption () {
         let option = JSON.parse(JSON.stringify(relationOption))
@@ -57,6 +59,7 @@
             name: temp.alias,
             des: temp.box.address,
             category: i,
+            symbol: 'image://http://116.55.241.28:8083/pic/1.jpg',
             symbolSize: size,
             draggable: 'true',
             label: {normal: {show: true}}
@@ -78,7 +81,8 @@
               nodeList.push({
                 name: equipName,
                 category: i,
-                symbolSize: size / 1.5,
+                symbol: 'image://http://116.55.241.28:8083/pic/2.jpg',
+                symbolSize: size / 1.3,
                 draggable: true,
                 label: {normal: {show: true}}
               })
