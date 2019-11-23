@@ -195,7 +195,7 @@
             if (this.jobAddForm.fileList !== null && this.jobAddForm.fileList !== undefined) {
               this.jobAddForm.fileList = this.jobAddForm.fileList.concat(this.photoList) // 注意提交的是jobAddForm.fileList (注意concat方法不修改原数组，只返回新数组)
             }
-            this.$http.post('http://localhost:8081/job/add', {'form': this.jobAddForm},
+            this.$http.post('http://116.55.241.28:8082/job/add', {'form': this.jobAddForm},
               {
                 headers: {
                   'Authorization': this.$store.state.ShiroToken.token
@@ -223,7 +223,7 @@
         })
       },
       queryJobTypeList () {
-        this.$http.post('http://localhost:8081/job/type/queryall', null, {
+        this.$http.post('http://116.55.241.28:8082/job/type/queryall', null, {
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }

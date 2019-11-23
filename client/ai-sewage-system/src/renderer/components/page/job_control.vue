@@ -136,14 +136,14 @@
                       :title="statusMapper[process.type]"
                       :status="process.type=='5'?'success':process.type=='6'?'error':'finish'"
                       :description="new Date(process['createTime']).toLocaleString()"
-                      :icon="switchJobTypeIcon(process.type)" 
+                      :icon="switchJobTypeIcon(process.type)"
                       :key="i">
             </el-step>
             <el-step title="创建" :icon="switchJobTypeIcon(1)" v-if="processList[processList.length-1].type<1"  status="wait" description=""></el-step>
             <el-step title="受理" :icon="switchJobTypeIcon(2)" v-if="processList[processList.length-1].type<2"  status="wait" description=""></el-step>
             <el-step title="审核" :icon="switchJobTypeIcon(4)" v-if="processList[processList.length-1].type<4" status="wait" description=""></el-step>
             <el-step title="完成" :icon="switchJobTypeIcon(5)" v-if="processList[processList.length-1].type<=4" status="wait" description=""></el-step>
- 
+
           </el-steps>
 
           <el-collapse v-model="collapseOpened" style="width: 90%;margin-top: 10em" >
@@ -160,7 +160,7 @@
                     <el-carousel :interval="4000" type="card" height="200px">
                       <el-carousel-item v-for="item in createProcess.file" :key="item" >
                         <img :src="'http://localhost:8081/file/download/'+item" preview="1" preview-text=" " style="width:100%">
-                     
+
                       </el-carousel-item>
                     </el-carousel>
                   </template>
@@ -222,7 +222,7 @@
                 <el-form-item label="结果说明" prop="content" >
                   <el-input type="textarea" v-model="processForm.content" :autosize="{ minRows: 5, maxRows: 20}" resize="false" ></el-input>
                 </el-form-item>
- 
+
                  <el-form-item label="上传附件" prop="fileList"  align="left">
                   <el-upload action="http://localhost:8081/file/singleupload"
                             list-type="picture-card"
@@ -387,7 +387,7 @@
     },
     methods: {
       queryLoginUser () {
-        this.$http.post('http://localhost:8081/job/user/curlogin', null, {
+        this.$http.post('http://116.55.241.28:8082/job/user/curlogin', null, {
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
@@ -409,7 +409,7 @@
       },
       queryMenuJobsCount () {
         for (let i = 0, len = this.jobMenu.length; i < len; i++) {
-          this.$http('http://localhost:8081/job/query/count', {
+          this.$http('http://116.55.241.28:8082/job/query/count', {
             params: {type: this.jobMenu[i].reqUrl},
             headers: {
               'Authorization': this.$store.state.ShiroToken.token
@@ -472,7 +472,7 @@
       queryJobList () {
         this.tablelodingshadow = true
         this.$http({
-          url: 'http://localhost:8081/job/query/' + this.queryJobType,
+          url: 'http://116.55.241.28:8082/job/query/' + this.queryJobType,
           params: {
             pageIndex: this.currentPage,
             pageSize: this.pageSize
@@ -496,7 +496,7 @@
       },
       queryJobTypeList () {
         this.jobTypeLoading = true
-        this.$http.post('http://localhost:8081/job/type/queryall', null, {
+        this.$http.post('http://116.55.241.28:8082/job/type/queryall', null, {
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
@@ -515,7 +515,7 @@
       queryJobProcessList (jobId) {
         this.tablelodingshadow = true
         this.$http({
-          url: 'http://localhost:8081/job/jobprocess/query/list/' + jobId,
+          url: 'http://116.55.241.28:8082/job/jobprocess/query/list/' + jobId,
           method: 'post',
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
@@ -556,7 +556,7 @@
           background: 'rgba(0, 0, 0, 0.7)'
         })
         this.$http({
-          url: 'http://localhost:8081/job/query/one',
+          url: 'http://116.55.241.28:8082/job/query/one',
           method: 'post',
           params: {
             'jobId': jobId
@@ -598,7 +598,7 @@
           this.processForm.fileList = this.processForm.fileList.concat(this.photoList) // 注意提交的是processForm.fileList (注意concat方法不修改原数组，只返回新数组)
         }
         this.$http({
-          url: 'http://localhost:8081/job/' + processUrlMapping[type],
+          url: 'http://116.55.241.28:8082/job/' + processUrlMapping[type],
           method: 'post',
           data: this.processForm,
           headers: {
@@ -629,7 +629,7 @@
           background: 'rgba(0, 0, 0, 0.7)'
         })
         this.$http({
-          url: 'http://localhost:8081/job/grab',
+          url: 'http://116.55.241.28:8082/job/grab',
           data: {
             jobsIds: this.selectJobsIds
           },
@@ -648,7 +648,7 @@
       },
       queryUserList () {
         this.userListLoading = true
-        this.$http.post('http://localhost:8081/job/user/list', null, {
+        this.$http.post('http://116.55.241.28:8082/job/user/list', null, {
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
@@ -672,7 +672,7 @@
           background: 'rgba(0, 0, 0, 0.7)'
         })
         this.$http({
-          url: 'http://localhost:8081/job/forward',
+          url: 'http://116.55.241.28:8082/job/forward',
           data: {
             jobsIds: this.selectJobsIds,
             receiverUsername: this.forwardForm.user,
@@ -701,7 +701,7 @@
           background: 'rgba(0, 0, 0, 0.7)'
         })
         this.$http({
-          url: 'http://localhost:8081/job/query/search',
+          url: 'http://116.55.241.28:8082/job/query/search',
           data: this.formsearch,
           params: {
             pageIndex: this.currentPage,
