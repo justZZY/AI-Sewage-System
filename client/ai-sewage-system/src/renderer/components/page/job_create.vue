@@ -9,7 +9,7 @@
           <el-input type="textarea" v-model="jobAddForm.content" :autosize="{ minRows: 5, maxRows: 20}" ></el-input>
         </el-form-item>
         <el-form-item label="上传附件" prop="fileList" style="width: fit-content" >
-          <el-upload action="http://localhost:8081/file/singleupload"
+          <el-upload action="http://116.55.241.28:8082/file/singleupload"
                      list-type="picture-card"
                      :file-list="jobAddForm.fileList"
                      :multiple="true"
@@ -33,7 +33,7 @@
           <div>
             <ul class="el-upload-list el-upload-list--picture-card">
               <li tabindex="0" class="el-upload-list__item is-success" v-for="item in photoList" :key="item">
-                <img :src="'http://localhost:8081/file//download/' + item" alt="" class="el-upload-list__item-thumbnail"><a class="el-upload-list__item-name">
+                <img :src="'http://116.55.241.28:8082/file/download/' + item" alt="" class="el-upload-list__item-thumbnail"><a class="el-upload-list__item-name">
                 <i class="el-icon-document"></i>
               </a>
                 <label class="el-upload-list__item-status-label">
@@ -43,7 +43,7 @@
                 <i class="el-icon-close-tip"></i>
                 <span class="el-upload-list__item-actions">
                     <span class="el-upload-list__item-preview">
-                      <i class="el-icon-zoom-in" @click="pictureCardPreview('http://localhost:8081/file//download/' + item)"></i>
+                      <i class="el-icon-zoom-in" @click="pictureCardPreview('http://116.55.241.28:8082/file//download/' + item)"></i>
                     </span>
                     <span class="el-upload-list__item-delete">
                       <i class="el-icon-delete" @click="deleteFromPhotoList(item)"></i>
@@ -73,52 +73,10 @@
 
         <el-tab-pane v-for="(val,key) in jobTypeListJson" :label="key" v-bind:key="key" >
           <el-radio-group v-model="jobAddForm.jobTypeName"  >
-            <el-radio v-for="(item,k) in val" :label="item.jobTypeName"  v-bind:key="k"></el-radio>
+            <el-radio v-for="(item,k) in val" :label="item.jobTypeName"  v-bind:key="k" border></el-radio>
           </el-radio-group>
         </el-tab-pane>
 
-        <el-tab-pane label="投诉" >
-          <el-radio-group v-model="jobAddForm.jobTypeName"  >
-            <el-radio label="客服态度恶劣"   border></el-radio>
-            <el-radio  label="问题处理随意" border ></el-radio>
-            <el-radio  label="问题处理过于缓慢"border  ></el-radio>
-            <el-radio  label="就是想投诉" border ></el-radio>
-            <el-radio  label="工作人员不好看" border ></el-radio>
-            <el-radio  label="工作人员脾气不好" border ></el-radio>
-          </el-radio-group>
-        </el-tab-pane>
-
-        <el-tab-pane label="建议">
-          <el-radio-group v-model="jobAddForm.jobTypeName">
-            <el-radio  label="设备安全建议" border></el-radio>
-            <el-radio  label="系统功能性建议" border></el-radio>
-            <el-radio  label="吐槽建议" border></el-radio>
-          </el-radio-group>
-        </el-tab-pane>
-
-
-        <el-tab-pane label="设备故障">
-          <el-radio-group v-model="jobAddForm.jobTypeName">
-            <el-radio  label="电力故障" border></el-radio>
-            <el-radio  label="水管问题" border></el-radio>
-            <el-radio  label="水泵故障" border></el-radio>
-            <el-radio  label="风机故障" border></el-radio>
-            <el-radio  label="进水问题" border></el-radio>
-            <el-radio  label="出水问题" border></el-radio>
-            <el-radio  label="设备不工作" border></el-radio>
-            <el-radio  label="设备损坏" border></el-radio>
-            <el-radio  label="设备老化" border></el-radio>
-          </el-radio-group>
-        </el-tab-pane>
-
-        <el-tab-pane label="软件BUG">
-          <el-radio-group v-model="jobAddForm.jobTypeName">
-            <el-radio  label="登录异常" border></el-radio>
-            <el-radio  label="功能不可用" border></el-radio>
-            <el-radio  label="权限问题" border></el-radio>
-            <el-radio  label="体验不适" border></el-radio>
-          </el-radio-group>
-        </el-tab-pane>
         <el-tab-pane label="其他">
           <el-radio-group v-model="jobAddForm.jobTypeName">
             <el-radio  label="自定义描述" border></el-radio>
@@ -152,9 +110,7 @@
         jobAddForm: {
           jobTypeName: '',
           content: '',
-          fileList: [],
-          email: '',
-          telephone: ''
+          fileList: []
         },
         rules: {
           jobTypeName: [
@@ -192,10 +148,11 @@
               spinner: 'el-icon-loading',
               background: 'rgba(0, 0, 0, 0.7)'
             })
+            let temp = this.jobAddForm.fileList
             if (this.jobAddForm.fileList !== null && this.jobAddForm.fileList !== undefined) {
               this.jobAddForm.fileList = this.jobAddForm.fileList.concat(this.photoList) // 注意提交的是jobAddForm.fileList (注意concat方法不修改原数组，只返回新数组)
             }
-            this.$http.post('http://116.55.241.28:8082/job/add', {'form': this.jobAddForm},
+            this.$http.post('http://116.55.241.28:8082/job/add', this.jobAddForm,
               {
                 headers: {
                   'Authorization': this.$store.state.ShiroToken.token
@@ -207,12 +164,14 @@
                 callback: action => {
                   loading.close()
                   // eslint-disable-next-line eqeqeq
-                  if (result.code == 100) {
+                  if (result.code == 1) {
                     this.$router.push('job_control')
                   }
                 }
               })
             }.bind(this)).catch(function (error) {
+              this.$alert('服务器异常，请稍后再试！', '提示')
+              this.jobAddForm.fileList = temp
               console.log(error)
               loading.close()
             })
@@ -232,6 +191,7 @@
           let json = result.data
           this.jobTypeListJson = json
         }).catch(function (error) { // 请求失败处理
+          this.$alert('服务器异常，请稍后再试！', '提示')
           console.log(error)
           this.jobTypeListJson = null
         }.bind(this))

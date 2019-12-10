@@ -3,9 +3,11 @@
  */
 package com.sewage.springboot.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,12 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.sewage.springboot.entity.po.Job;
-import com.sewage.springboot.entity.po.JobProcess;
-import com.sewage.springboot.mapper.impl.JobTypeMapper;
-import com.sewage.springboot.service.JobProcessService;
+import com.sewage.springboot.entity.UserSessionInfo;
 import com.sewage.springboot.service.JobService;
-import com.sewage.springboot.service.impl.JobTypeServiceImpl;
+import com.sewage.springboot.service.JobTypeService;
+import com.sewage.springboot.util.CommonUtil;
+import com.sewage.springboot.util.UserInfoUtils;
 
 /**
  * 
@@ -27,147 +28,151 @@ import com.sewage.springboot.service.impl.JobTypeServiceImpl;
  * @date 2019年9月10日
  *  
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/job")
 public class JobController {
 		
 	@Autowired JobService jobService;
-	@Autowired JobTypeServiceImpl jobTypeServiceImpl; 
-	@Autowired JobProcessService jobProcessService;
+	@Autowired JobTypeService jobTypeService; 
 	
-	/** 创建工单 */
-	@RequestMapping(value = "/add", /*method = RequestMethod.POST,*/ produces = "application/json;charset=UTF-8")
+	/** 当前登录用户创建工单 */
+	@RequestMapping(value = "/add", method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
 	public JSONObject create(@RequestBody JSONObject form) {
-		// 1.查询当前登录用户
-		int userId = 1;
-		form = form.getJSONObject("form");
-		return jobService.createJob(userId, form);
+		return jobService.createJob(form);
 	}
 	
 	/** 领取工单 */
 	@RequestMapping(value = "/grab")
-	public JSONObject grabOrder(@RequestBody(required = false) JSONObject json) {
+	public JSONObject grabOrder(@RequestBody JSONObject json) {
 		// 1.查询当前登录用户
 		List list = json.getObject("jobsIds", List.class);
-		int userId = 1;
-		return jobService.grabJobs(userId, list);
+		Integer singleJobId = json.getInteger("jobId");
+		if(singleJobId!=null && singleJobId.byteValue()>0)
+			return jobService.grabJobs(UserInfoUtils.getUserInfo().getUsername(), Arrays.asList(singleJobId));
+		return jobService.grabJobs(UserInfoUtils.getUserInfo().getUsername(), list);
 	}
 	
 	
 	/** 转发工单 */
 	@RequestMapping(value = "/forward")
-	public JSONObject forwardJobs(@RequestBody(required = false) JSONObject json) {
-		// 1.查询当前登录用户
-		int userId = 1;
-		List list = json.getObject("jobsIds", List.class);
-		int receiverUid = json.getInteger("receiverUid");
-		return jobService.forwardJobs(userId, list, receiverUid);
+	public JSONObject forwardJobs(@RequestBody JSONObject json) {
+		return jobService.forwardJobs(UserInfoUtils.getUserInfo().getUsername(), json);
 	}
 	
 	/** 确认工单完成 */
 	@RequestMapping(value = "/done")
-	public JSONObject doneJob(@RequestBody(required = false) JSONObject json) {
-		// 1.查询当前登录用户
-		int userId = 1;
-		return jobService.doneJob(userId, json);
+	public JSONObject doneJob(@RequestBody JSONObject json) {
+		return jobService.doneJob(UserInfoUtils.getUserInfo().getUsername(), json);
 	}
 	
 	/** 审核工单 */
 	@RequestMapping(value = "/inspect")
-	public JSONObject inspectJob(@RequestBody(required = false) JSONObject json) {
-		// 1.查询当前登录用户
-		int userId = 1;
-		return jobService.inspect(userId, json);
+	public JSONObject inspectJob(@RequestBody JSONObject json) {
+		return jobService.inspect(UserInfoUtils.getUserInfo().getUsername(), json);
 	}
 	
+	/** 查询某个工单 */
+	@RequestMapping(value = "/query/one")
+	public JSONObject inspectJob(@RequestParam Integer jobId) {
+		return jobService.queryById(jobId);
+	}
 	/**
 	 * 查询所有待领取（待处理）的工单
 	 */
 	@RequestMapping("/query/waiting")
 	public JSONObject queryJobsWaitingHandle( @RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
-		int userId = 1;
-		return jobService.queryJobsWaitinghandle(pageIndex,pageSize);
+		return jobService.queryAllJobsWaitingForHandle(pageIndex,pageSize);
 	}
 	
 	/**
 	 * 查询所有待审核的工单
 	 */
-	@RequestMapping("/query/waitinspect")
+	@RequestMapping("/query/waitingspect")
 	public JSONObject queryJobsWaitingInspect( @RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
-		int userId = 1;
-		return jobService.queryJobsWaitingInspect(pageIndex,pageSize);
+		return jobService.queryAllJobsWaitingForCheck(pageIndex,pageSize);
 	}
 	
 	/** 查询自己 创建的工单 */
 	@RequestMapping("/query/create")
 	public JSONObject queryJobsCreatedBySelf(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
-		// 1.查询当前登录用户
-		int userId = 1;
-		return jobService.queryJobsByMyself(userId,pageIndex,pageSize);
+		return jobService.queryJobsCreatedBySelf(UserInfoUtils.getUserInfo().getUsername(),pageIndex,pageSize);
 	}
 	
 	/** 查询自己未处理的工单 */
 	@RequestMapping("/query/processing")
 	public JSONObject queryJobsProcessing(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
-		// 1.查询当前登录用户
-		int userId = 1;
-		return jobService.queryJobsProcessing(userId,pageIndex,pageSize);
+		return jobService.queryJobsProcessing(UserInfoUtils.getUserInfo().getUsername(),pageIndex,pageSize);
 	}
 	
 	/** 查询自己已处理的工单 （未确认）*/
 	@RequestMapping("/query/processed")
 	public JSONObject queryJobsProcessed(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
-		// 1.查询当前登录用户
-		int userId = 1;
-		return jobService.queryJobsProcessed(userId,pageIndex,pageSize);
+		return jobService.queryJobsProcessed(UserInfoUtils.getUserInfo().getUsername(),pageIndex,pageSize);
 	}
 	
 	/** 查询自己已处理的工单 （已确认成功）*/
 	@RequestMapping("/query/success")
 	public JSONObject queryJobsProcessedSuccessful(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
-		// 1.查询当前登录用户
-		int userId = 1;
-		return jobService.queryJobsProcessedSuccessful(userId,pageIndex,pageSize);
+		return jobService.queryJobsProcessedSuccessful(UserInfoUtils.getUserInfo().getUsername(),pageIndex,pageSize);
 	}
 	
 	/** 查询自己已处理的工单 （已确认失败）*/
 	@RequestMapping("/query/fail")
 	public JSONObject queryJobsProcessedFailed(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
-		// 1.查询当前登录用户
-		int userId = 1;
-		return jobService.queryJobsProcessedFailed(userId,pageIndex,pageSize);
-	}
-	
-	@RequestMapping("/query/one")
-	public JSONObject queryOneJobAbountMeById(@RequestParam int jobId) {
-		// 1.查询当前登录用户
-		int userId = 1;
-		return jobService.queryJobAboutMe(userId, jobId);
+		return jobService.queryJobsProcessedFailed(UserInfoUtils.getUserInfo().getUsername(),pageIndex,pageSize);
 	}
 	
 	/** 根据条件查询属于用户的工单 */
 	@RequestMapping("/query/search")
-	public JSONObject searchJobsAboutMe(@RequestBody(required = false) JSONObject json) {
-		// 1.查询当前登录用户
-		int userId = 1;
-		return jobService.queryJobsAboutMeByCondition(userId, json);
+	public JSONObject searchJobsAboutMe(@RequestParam String keyword,@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
+		return jobService.queryJobsAboutMeByCondition(UserInfoUtils.getUserInfo().getUsername(), keyword, pageIndex,pageSize);
 	}
 	
+	/** 查询工单数量 */
+	@RequestMapping("/query/count")
+	public JSONObject queryJobsCount(@RequestParam(required=true) String type) {
+		return jobService.queryJobsCount(UserInfoUtils.getUserInfo().getUsername(),type);
+	}
+	
+	
+	
 	/*------------------------------ 工单进程 ------------------------------*/
+	
 	/**
 	 * 查询某工单的所有进程
 	 */
 	@RequestMapping("/jobprocess/query/list/{jobId}")
 	public JSONObject queryJobsProcesseList(@PathVariable("jobId") int jobId) {
-		// 1.查询当前登录用户
-		int userId = 1;
-		return jobProcessService.queryJobProcessByJobId(jobId);
+		return jobService.queryJobProcessListByJobId(jobId);
 	}
 	
 	/*------------------------------ 工单类型 ------------------------------*/
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/type/queryall" ,produces = "application/json;charset=UTF-8")
+	@RequestMapping(method = RequestMethod.POST, value = "/type/queryall")
 	public JSONObject queryAllJobTypes() {
-		return jobTypeServiceImpl.queryList();
+		return jobTypeService.queryList();
 	}
+	
+	
+	/*------------------------------ 与用户相关 ------------------------------*/
+	
+	/**
+	 * 查询当前会话用户，用于前端工单某些逻辑判断需要
+	 */
+	@RequestMapping(method = RequestMethod.POST, value = "/user/curlogin")
+	public JSONObject queryLoginUser() {
+		UserSessionInfo user =  UserInfoUtils.getUserInfo();
+		return CommonUtil.jsonResult(1, "查询成功", user);
+	}
+	
+	/**
+	 * 获取可接单用户列表
+	 */
+	@RequestMapping(method = RequestMethod.POST, value = "/user/list")
+	public JSONObject queryUserList() {
+		return jobService.queryUserListAvailableForReceivingJob();
+	}
+	
+	
 }	

@@ -20,9 +20,9 @@
       width="100%"
       center>
     <div style="align-content: center;text-align: center"><!--图片展示-->
-      <video ref="video"  :width="videoSize.width*zoom" :height="videoSize.height*zoom" autoplay v-show="running"></video>
+      <video ref="video"   autoplay v-show="running"></video>
       <!--canvas截取流-->
-      <canvas ref="canvas" v-show="!running" style="object-fit: fill;" :width="videoSize.width*zoom" :height="videoSize.height*zoom"></canvas>
+      <canvas ref="canvas" v-show="!running" style="object-fit: fill;" ></canvas>
     </div>
     <span slot="footer" class="dialog-footer">
     <el-button @click="photograph">{{running?'拍照':'重拍'}}</el-button>
@@ -45,7 +45,8 @@
     for (let i = 0; i < bytes.length; i++) {
       ia[i] = bytes.charCodeAt(i)
     }
-    return new Blob([ab], {type: 'image/png'})
+    let file = new File([ab], 'job_problem.png', {type: 'image/png'})
+    return file
   }
 
   export default {
@@ -53,14 +54,16 @@
       return {
         dialogVisible: false,
         running: true, // 是否正在拍照（video状态）
-        videoSize: {width: 800, height: 400},
+        videoSize: {
+          width: {ideal: 1280, max: 1920},
+          height: {ideal: 720, max: 1080}},
         zoom: 0.8 // 放大缩小倍数
       }
     },
     created: function () {
-      const {width, height} = require('electron').screen.getPrimaryDisplay().workAreaSize
-      this.videoSize.width = width
-      this.videoSize.height = height
+      // const {width, height} = require('electron').screen.getPrimaryDisplay().workAreaSize
+      this.videoSize.width.max = window.innerWidth
+      this.videoSize.height.max = window.innerHeight
     },
     // 初始化方法
     mounted: function () {
@@ -91,7 +94,9 @@
         if (this.running) { // 未拍照，则拍
           let ctx = this.$refs['canvas'].getContext('2d')
           // 把当前视频帧内容渲染到canvas上
-          ctx.drawImage(this.$refs['video'], 0, 0, this.videoSize.width * this.zoom, this.videoSize.height * this.zoom)
+          this.$refs['canvas'].width = this.$refs['video'].clientWidth
+          this.$refs['canvas'].height = this.$refs['video'].clientHeight
+          ctx.drawImage(this.$refs['video'], 0, 0, this.$refs['canvas'].width, this.$refs['canvas'].height)
         }
         // 已拍照则重拍
         this.running = !this.running
@@ -107,7 +112,7 @@
       closeCamera () {
         this.dialogVisible = false
         console.log('关闭摄像头')
-        if (!this.$refs['video'].srcObject) return
+        if (this.$refs['video'] === undefined || !this.$refs['video'].srcObject) return
         let stream = this.$refs['video'].srcObject
         let tracks = stream.getTracks()
         tracks.forEach(track => {
@@ -121,7 +126,7 @@
         let param = new FormData() // 创建form对象
         param.append('file', convertBase64UrlToBlob(image_code), 'job_problem' + new Date().getTime() + '_' + Math.floor((Math.random() * 10) + 1)) // 通过append向form对象添加数据
         this.httpRequest(
-          'http://localhost:8081/file/singleupload', null, param,
+          'http://116.55.241.28:8082/file/singleupload', null, param,
           function (code, msg, data) {
             if (code >= 1 && data !== null && data !== undefined) {
               this.sendDataToParent(data)

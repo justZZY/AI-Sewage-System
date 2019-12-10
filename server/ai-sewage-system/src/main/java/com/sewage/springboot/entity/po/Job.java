@@ -12,7 +12,6 @@ import javax.persistence.Transient;
 /**
  * 工单表
  * <br><br>
- * 映射数据库表 (项目根据此实体生成表)
  *
  * @author sc
  * @date 2019年9月5日
@@ -25,60 +24,56 @@ public class Job {
 	    @Column(name = "id")
 	    private Integer id;
 	    
-	    /** 问题标题 */
-	    @Column(name = "title")
-	    private String title;
-
-	    /** 问题描述 */
+		@Column(name = "job_type_name")
+	    private String jobTypeName;
+		 
 	    @Column(name = "content")
 	    private String content;
 	    
-	    /*** 
-	     * 问题类别<br>
-	     * 0：未知分类 (默认)
-	     */ 
-	    @Column(name = "job_type_id")
-	    private Integer jobTypeId;
-	    
-	    @Transient
-	    private String jobTypeName;
-
-	    /** 联系电话（用于客服与问题产生处的人进行沟通） */
 	    @Column(name = "telephone")
 	    private String telephone;
-
+	    
 	    @Column(name = "email")
 	    private String email;
 	    
-	    /** 工单创建人 */
-	    @Column(name = "creator_uid")
-	    private Integer creatorUid;
-	    @Transient
-	    private String creator; // 用户名字
-	   
-	    /** 工单最终处理人 */
-	    @Column(name = "processor_uid")
-	    private Integer processorUid;
-	    @Transient
-	    private String processor; // 用户名字
-	    
-	    /** 工单审核人 */
-	    @Column(name = "inspector_uid")
-	    private Integer inspectorUid;
-	    @Transient
-	    private String inspector; // 用户名字
+	    @Column(name = "creator")
+	    private String creator;
 
-	    /** 工单状态 等价于 工单当前的进程状态 
-	     * @see JobProcess#type
-	     * */
+	    @Column(name = "processor")
+	    private String processor;
+
+	    @Column(name = "inspector")
+	    private String inspector;
+
 	    @Column(name = "status")
 	    private String status;
 
 	    @Column(name = "create_time")
-	    private Date  createTime;
+	    private Date createTime;
 
-	    @Column(name = "is_valid")
-	    private Boolean  isValid;
+	    @Column(name = "update_time")
+	    private Date updateTime;
+	    
+	    
+	    public Job() {
+	    	super();
+	    }
+		public Job(Integer id, String jobTypeName, String content, String telephone, String email, String creator,
+				String processor, String inspector, String status, Date createTime, Date updateTime) {
+			super();
+			this.id = id;
+			this.jobTypeName = jobTypeName;
+			this.content = content;
+			this.telephone = telephone;
+			this.email = email;
+			this.creator = creator;
+			this.processor = processor;
+			this.inspector = inspector;
+			this.status = status;
+			this.createTime = createTime;
+			this.updateTime = updateTime;
+		}
+		 
 
 		public Integer getId() {
 			return id;
@@ -88,12 +83,12 @@ public class Job {
 			this.id = id;
 		}
 
-		public String getTitle() {
-			return title;
+		public String getJobTypeName() {
+			return jobTypeName;
 		}
 
-		public void setTitle(String title) {
-			this.title = title;
+		public void setJobTypeName(String jobTypeName) {
+			this.jobTypeName = jobTypeName;
 		}
 
 		public String getContent() {
@@ -102,22 +97,6 @@ public class Job {
 
 		public void setContent(String content) {
 			this.content = content;
-		}
-
-		public Integer getJobTypeId() {
-			return jobTypeId;
-		}
-
-		public void setJobTypeId(Integer jobTypeId) {
-			this.jobTypeId = jobTypeId;
-		}
-
-		public String getJobTypeName() {
-			return jobTypeName;
-		}
-
-		public void setJobTypeName(String jobTypeName) {
-			this.jobTypeName = jobTypeName;
 		}
 
 		public String getTelephone() {
@@ -136,14 +115,6 @@ public class Job {
 			this.email = email;
 		}
 
-		public Integer getCreatorUid() {
-			return creatorUid;
-		}
-
-		public void setCreatorUid(Integer creatorUid) {
-			this.creatorUid = creatorUid;
-		}
-
 		public String getCreator() {
 			return creator;
 		}
@@ -152,28 +123,12 @@ public class Job {
 			this.creator = creator;
 		}
 
-		public Integer getProcessorUid() {
-			return processorUid;
-		}
-
-		public void setProcessorUid(Integer processorUid) {
-			this.processorUid = processorUid;
-		}
-
 		public String getProcessor() {
 			return processor;
 		}
 
 		public void setProcessor(String processor) {
 			this.processor = processor;
-		}
-
-		public Integer getInspectorUid() {
-			return inspectorUid;
-		}
-
-		public void setInspectorUid(Integer inspectorUid) {
-			this.inspectorUid = inspectorUid;
 		}
 
 		public String getInspector() {
@@ -200,14 +155,13 @@ public class Job {
 			this.createTime = createTime;
 		}
 
-		public Boolean getIsValid() {
-			return isValid;
+		public Date getUpdateTime() {
+			return updateTime;
 		}
 
-		public void setIsValid(Boolean isValid) {
-			this.isValid = isValid;
+		public void setUpdateTime(Date updateTime) {
+			this.updateTime = updateTime;
 		}
-
 	    
 
 }

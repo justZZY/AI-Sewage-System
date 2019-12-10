@@ -15,7 +15,7 @@
 
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="searchJobsAboutMe">查询</el-button>
+                <el-button type="primary" @click="selectMenu('search')">查询</el-button>
                 <router-link to="job_create"><el-button type="primary" icon="el-icon-plus">新建工单</el-button></router-link>
             </el-form-item>
             </el-form>
@@ -29,7 +29,8 @@
             <el-menu-item  v-for="(item,index) in jobMenu"
                          :index="index.toString()"
                           @click="selectMenu(item.reqUrl)"
-                          v-bind:key="index">
+                          v-bind:key="index"
+                          v-if="currentUser.identity=='admin' || item.reqUrl!='waitingspect'">
               <!--              <i class="el-icon-menu"></i>-->
               <span slot="title">{{item.title}}<el-badge class="mark" :hidden="item.num==null||item.num==''||item.num<1" :value="item.num" :max='99'/> </span>
             </el-menu-item>
@@ -59,7 +60,7 @@
                 fixed
                 prop="number"
                 label="序号"
-                width="80">
+                width="50">
               <template scope="scope"><span>{{scope.$index+(currentPage - 1) * pageSize + 1}} </span></template>
             </el-table-column>
             <el-table-column
@@ -68,20 +69,20 @@
             </el-table-column>
             <el-table-column
                 prop="status"
-                width="150"
+                width="100"
                 label="状态"
                 :formatter="formatterStatus" >
             </el-table-column>
             <el-table-column
                 prop="createTime"
                 label="创建日期"
-                min-width="100"
+                min-width="150"
                 :formatter="formatterDate">
             </el-table-column>
             <el-table-column
                 prop="updateTime"
                 label="更新日期"
-                min-width="100"
+                min-width="150"
                 :formatter="formatterDate">
             </el-table-column>
             <el-table-column
@@ -112,7 +113,7 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page.sync="currentPage"
-                    :page-sizes="[3, 10, 100, 200]"
+                    :page-sizes="[5, 10, 100, 200]"
                     :page-size="pageSize"
                     layout="total, sizes, prev, pager, next"
                     background
@@ -132,7 +133,7 @@
 
         <div class="page-info" align="center" v-if="page=='detail'">
           <el-steps  align-center >
-            <el-step  v-for="(process,i) in processList"
+            <el-step  v-for="(process,i) in processList" 
                       :title="statusMapper[process.type]"
                       :status="process.type=='5'?'success':process.type=='6'?'error':'finish'"
                       :description="new Date(process['createTime']).toLocaleString()"
@@ -159,8 +160,7 @@
                   <template>
                     <el-carousel :interval="4000" type="card" height="200px">
                       <el-carousel-item v-for="item in createProcess.file" :key="item" >
-                        <img :src="'http://localhost:8081/file/download/'+item" preview="1" preview-text=" " style="width:100%">
-
+                        <img :src="'http://116.55.241.28:8082/file/download/'+item" preview="1" preview-text=" " style="width:100%">
                       </el-carousel-item>
                     </el-carousel>
                   </template>
@@ -183,7 +183,7 @@
                   <template>
                     <el-carousel :interval="4000" type="card" height="200px">
                       <el-carousel-item v-for="item in resultProcessed.file" :key="item" >
-                        <img :src="'http://localhost:8081/file/download/'+item" preview="2.1" preview-text=" " style="width:100%">
+                        <img :src="'http://116.55.241.28:8082/file/download/'+item" preview="2.1" preview-text=" " style="width:100%">
                       </el-carousel-item>
                     </el-carousel>
                   </template>
@@ -200,7 +200,7 @@
                   <template>
                     <el-carousel :interval="4000" type="card" height="200px">
                       <el-carousel-item v-for="item in resultInspected.file" :key="item" >
-                        <img :src="'http://localhost:8081/file/download/'+item" preview="2.2" preview-text=" " style="width:100%">
+                        <img :src="'http://116.55.241.28:8082/file/download/'+item" preview="2.2" preview-text=" " style="width:100%">
                       </el-carousel-item>
                     </el-carousel>
                   </template>
@@ -217,14 +217,14 @@
               </el-form>
             </el-collapse-item>
 
-            <el-collapse-item title="工单完成确认" name="3" v-if="jobDetail.status==2 && jobDetail.processor==currentUsername" >  <!--工单属于当前登录用户-->
+            <el-collapse-item title="工单完成确认" name="3" v-if="jobDetail.status==2 && jobDetail.processor==currentUser.username" >  <!--工单属于当前登录用户-->
               <el-form :model="processForm" rel="processForm" label-width="100px" >
                 <el-form-item label="结果说明" prop="content" >
                   <el-input type="textarea" v-model="processForm.content" :autosize="{ minRows: 5, maxRows: 20}" resize="false" ></el-input>
                 </el-form-item>
 
                  <el-form-item label="上传附件" prop="fileList"  align="left">
-                  <el-upload action="http://localhost:8081/file/singleupload"
+                  <el-upload action="http://116.55.241.28:8082/file/singleupload"
                             list-type="picture-card"
                             :multiple="true"
                             :show-file-list="true"
@@ -247,7 +247,7 @@
                   <div>
                     <ul class="el-upload-list el-upload-list--picture-card">
                       <li tabindex="0" class="el-upload-list__item is-success" v-for="item in photoList" :key="item">
-                        <img :src="'http://localhost:8081/file//download/' + item" alt="" class="el-upload-list__item-thumbnail"><a class="el-upload-list__item-name">
+                        <img :src="'http://116.55.241.28:8082/file/download/' + item" alt="" class="el-upload-list__item-thumbnail"><a class="el-upload-list__item-name">
                         <i class="el-icon-document"></i>
                       </a>
                         <label class="el-upload-list__item-status-label">
@@ -257,7 +257,7 @@
                         <i class="el-icon-close-tip"></i>
                         <span class="el-upload-list__item-actions">
                     <span class="el-upload-list__item-preview">
-                      <i class="el-icon-zoom-in" @click="pictureCardPreview('http://localhost:8081/file//download/' + item)"></i>
+                      <i class="el-icon-zoom-in" @click="pictureCardPreview('http://116.55.241.28:8082/file/download/' + item)"></i>
                     </span>
                     <span class="el-upload-list__item-delete">
                       <i class="el-icon-delete" @click="deleteFromPhotoList(item)"></i>
@@ -279,13 +279,13 @@
               </el-form>
             </el-collapse-item>
 
-            <el-collapse-item title="工单审核确认" name="3" v-if="jobDetail.status==4 " >  <!--工单属于当前登录用户-->
+            <el-collapse-item title="工单审核确认" name="3" v-if="jobDetail.status==4 && currentUser.identity=='admin'" >  <!--工单属于当前登录用户-->
               <el-form :model="processForm" rel="processForm" label-width="100px" >
                 <el-form-item label="结果说明" prop="content" >
                   <el-input type="textarea" v-model="processForm.content" :autosize="{ minRows: 5, maxRows: 20}" resize="false" ></el-input>
                 </el-form-item>
                 <el-form-item label="上传附件" prop="fileList"  align="left">
-                  <el-upload action="http://localhost:8081/file/singleupload"
+                  <el-upload action="http://116.55.241.28:8082/file/singleupload"
                             list-type="picture-card"
                             :multiple="true"
                             :show-file-list="true"
@@ -308,7 +308,7 @@
                   <div>
                     <ul class="el-upload-list el-upload-list--picture-card">
                       <li tabindex="0" class="el-upload-list__item is-success" v-for="item in photoList" :key="item">
-                        <img :src="'http://localhost:8081/file//download/' + item" alt="" class="el-upload-list__item-thumbnail"><a class="el-upload-list__item-name">
+                        <img :src="'http://116.55.241.28:8082/file/download/' + item" alt="" class="el-upload-list__item-thumbnail"><a class="el-upload-list__item-name">
                         <i class="el-icon-document"></i>
                       </a>
                         <label class="el-upload-list__item-status-label">
@@ -318,7 +318,7 @@
                         <i class="el-icon-close-tip"></i>
                         <span class="el-upload-list__item-actions">
                     <span class="el-upload-list__item-preview">
-                      <i class="el-icon-zoom-in" @click="pictureCardPreview('http://localhost:8081/file//download/' + item)"></i>
+                      <i class="el-icon-zoom-in" @click="pictureCardPreview('http://116.55.241.28:8082/file/download/' + item)"></i>
                     </span>
                     <span class="el-upload-list__item-delete">
                       <i class="el-icon-delete" @click="deleteFromPhotoList(item)"></i>
@@ -346,18 +346,18 @@
       </el-main>
     </el-container>
     <el-dialog title="工单转发" :visible.sync="forwardFormVisible">
-      <el-form :model="forwardForm" >
-        <el-form-item label="备注" label-width="100px" >
-          <el-input v-model="forwardForm.content" type="textarea"   :autosize="{ minRows: 5, maxRows: 20}" ></el-input>
+      <el-form :model="forwardForm"  :rules="rules" ref="forwardForm">
+        <el-form-item label="备注" label-width="100px">
+          <el-input v-model="forwardForm.remark" type="textarea"   :autosize="{ minRows: 5, maxRows: 20}" ></el-input>
         </el-form-item>
-        <el-form-item label="选择转发人" label-width="100px">
-          <el-select v-model="forwardForm.user" placeholder="情选择工单接收人" :loading="userListLoading">
+        <el-form-item label="选择转发人" label-width="100px" prop="username" required>
+          <el-select v-model="forwardForm.username" placeholder="情选择工单接收人" :loading="userListLoading">
             <el-option
-                v-for="item in userList"
-                :key="item.id"
-                :label="item.username"
-                :value="item.username"
-                v-show="item.username!=currentUsername"
+                v-for="username in userList"
+                :key="username"
+                :label="username"
+                :value="username"
+                v-show="username!=currentUser.username"
             >
             </el-option>
           </el-select>
@@ -382,7 +382,7 @@
     created () {
       this.showList()
       this.queryJobTypeList()
-      // this.queryUserList()
+      this.queryUserList()
       this.queryLoginUser()
     },
     methods: {
@@ -395,7 +395,8 @@
           let result = response.data
           // eslint-disable-next-line eqeqeq
           if (result.code == 1) {
-            this.currentUsername = result.data.username
+            this.currentUser = result.data
+            console.log(this.currentUser.identity)
           } else {
             this.$alert('登录失效，请重新登录', '提示', { callback: action => {
               location.href = '/'
@@ -403,8 +404,9 @@
             })
           }
         }).catch(function (error) { // 请求失败处理
+          this.$alert('服务器异常，请稍后再试！', '提示')
           console.log(error)
-          this.currentUsername = null
+          this.currentUser = {}
         }.bind(this))
       },
       queryMenuJobsCount () {
@@ -424,8 +426,9 @@
               this.jobMenu[i].num = 0
             }
           }).catch(function (error) { // 请求失败处理
+            // this.$alert('服务器异常，请稍后再试！', '提示')
             console.log(error)
-            this.currentUsername = null
+            this.jobMenu[i].num = 0
           }.bind(this))
         }
       },
@@ -471,11 +474,16 @@
       },
       queryJobList () {
         this.tablelodingshadow = true
+        let keyword = null
+        if (this.queryJobType === 'search') {
+          keyword = this.formSearch.jobType[this.formSearch.jobType.length - 1]
+        }
         this.$http({
           url: 'http://116.55.241.28:8082/job/query/' + this.queryJobType,
           params: {
             pageIndex: this.currentPage,
-            pageSize: this.pageSize
+            pageSize: this.pageSize,
+            keyword: keyword
           },
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
@@ -488,6 +496,7 @@
           this.totalNum = pageInfo.total
           this.tablelodingshadow = false
         }).catch(function (error) { // 请求失败处理
+          this.$alert('服务器异常，请稍后再试！', '提示')
           console.log(error)
           this.jobList = null
           this.totalNum = 0
@@ -507,10 +516,11 @@
           this.formatJobTypeOptions()
           this.jobTypeLoading = false
         }).catch(function (error) { // 请求失败处理
+          // this.$alert('服务器异常，请稍后再试！', '提示')
           console.log(error)
           this.jobTypeList = null
+          this.jobTypeLoading = false
         }.bind(this))
-        this.jobTypeLoading = false
       },
       queryJobProcessList (jobId) {
         this.tablelodingshadow = true
@@ -528,7 +538,6 @@
             if (this.processList[i].file !== undefined && this.processList[i].file !== '') {
               this.processList[i].file = JSON.parse(this.processList[i].file) // 将文件id列表转化为json，不然就字符串
             }
-
             // eslint-disable-next-line eqeqeq
             if (this.processList[i].type == '4') {
               this.resultProcessed = this.processList[i] // 完成进程
@@ -542,6 +551,7 @@
           }
           this.tablelodingshadow = false
         }).catch(function (error) { // 请求失败处理
+          this.$alert('服务器异常，请稍后再试！', '提示')
           console.log(error)
           this.processList = null
           this.tablelodingshadow = false
@@ -570,10 +580,12 @@
           let code = result.code
           let msg = result.msg
           this.jobDetail = {}
-          if (code < 0) this.$alert(msg, '提示')
+          if (code <= 0) this.$alert(msg, '提示')
           else this.jobDetail = result.data
         }).catch(function (error) { // 请求失败处理
+          this.$alert('服务器异常，请稍后再试！', '提示')
           console.log(error)
+          this.jobDetail = null
           loading.close()
         })
       },
@@ -593,7 +605,7 @@
         }
         this.processForm.jobId = this.jobDetail.id
         this.processForm.type = type
-
+        let temp = this.processForm.fileList
         if (this.processForm.fileList !== null && this.processForm.fileList !== undefined) {
           this.processForm.fileList = this.processForm.fileList.concat(this.photoList) // 注意提交的是processForm.fileList (注意concat方法不修改原数组，只返回新数组)
         }
@@ -617,7 +629,9 @@
             }
             })
         }).catch(function (error) { // 请求失败处理
+          this.$alert('服务器异常，请稍后再试！', '提示')
           console.log(error)
+          this.processForm.fileList = temp
           loading.close()
         })
       },
@@ -642,6 +656,7 @@
           loading.close()
           this.$alert(result.msg, '提示', this.showList())
         }).catch(function (error) { // 请求失败处理
+          this.$alert('服务器异常，请稍后再试！', '提示')
           console.log(error)
           loading.close()
         }(this))
@@ -659,39 +674,47 @@
           this.userList = list
           this.userListLoading = false
         }).catch(function (error) { // 请求失败处理
+          this.$alert('服务器异常，请稍后再试！', '提示')
           console.log(error)
           this.userList = null
           this.userListLoading = false
         }.bind(this))
       },
       forwardJobs () {
-        const loading = this.$loading({
-          lock: true,
-          text: 'Loading',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
-        })
-        this.$http({
-          url: 'http://116.55.241.28:8082/job/forward',
-          data: {
-            jobsIds: this.selectJobsIds,
-            receiverUsername: this.forwardForm.user,
-            remark: this.forwardForm.content
-          },
-          method: 'post',
-          headers: {
-            'Authorization': this.$store.state.ShiroToken.token
+        this.$refs['forwardForm'].validate((valid) => {
+          if (valid) {
+            const loading = this.$loading({
+              lock: true,
+              text: 'Loading',
+              spinner: 'el-icon-loading',
+              background: 'rgba(0, 0, 0, 0.7)'
+            })
+            this.$http({
+              url: 'http://116.55.241.28:8082/job/forward',
+              data: {
+                jobsIds: this.selectJobsIds,
+                receiverUsername: this.forwardForm.username,
+                remark: this.forwardForm.remark
+              },
+              method: 'post',
+              headers: {
+                'Authorization': this.$store.state.ShiroToken.token
+              }
+            }).then(response => {
+              let result = response.data
+              loading.close()
+              this.forwardFormVisible = false
+              this.forwardForm = {}
+              this.$alert(result.msg, '提示', this.showList())
+            }).catch(function (error) { // 请求失败处理
+              this.$alert('服务器异常，请稍后再试！', '提示')
+              console.log(error)
+              loading.close()
+              this.forwardFormVisible = false
+              this.forwardForm = {}
+            }.bind(this))
           }
-        }).then(response => {
-          let result = response.data
-          loading.close()
-          this.forwardFormVisible = false
-          this.$alert(result.msg, '提示', this.showList())
-        }).catch(function (error) { // 请求失败处理
-          console.log(error)
-          loading.close()
-          this.forwardFormVisible = false
-        }.bind(this))
+        })
       },
       searchJobsAboutMe () {
         const loading = this.$loading({
@@ -705,7 +728,8 @@
           data: this.formsearch,
           params: {
             pageIndex: this.currentPage,
-            pageSize: this.pageSize
+            pageSize: this.pageSize,
+            keyword: this.formsearch.jobType
           },
           method: 'post',
           headers: {
@@ -717,11 +741,11 @@
           this.forwardFormVisible = false
           this.$alert(result.msg, '提示', this.showList())
         }).catch(function (error) { // 请求失败处理
+          this.$alert('服务器异常，请稍后再试！', '提示')
           console.log(error)
           loading.close()
           this.forwardFormVisible = false
         }.bind(this))
-        console.log('submit!')
       },
       handleSelectionChange (selectObjs) {
         this.selectJobsIds = []
@@ -839,11 +863,49 @@
           case 5: return 'el-icon-success'
           case 6: return 'el-icon-error'
         }
+      },
+      // 通用请求方法
+      httpRequest: function (url, params, form, callback) {
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
+        this.$http({
+          url: url,
+          params: params,
+          data: form,
+          headers: { 'Authorization': this.$store.state.ShiroToken.token },
+          method: 'post'
+        }).then(response => {
+          let result = response.data
+          let code = result.code
+          let msg = result.msg
+          let data = result.data
+          if (code <= -1) {
+            this.$alert(msg, '提示')
+          } else {
+            callback(code, msg, data)
+          }
+          loading.close()
+        }).catch(function (error) { // 请求失败处理
+          this.$alert('服务器异常，请稍后再试', '提示')
+          console.log(error)
+          loading.close()
+        }.bind(this))
       }
     },
     data () {
       return {
-        currentUsername: null, // 当期登录用户
+        currentUser: {
+          username: '',
+          delete_status: '', // 禁用状态
+          identity: '', // 用户身份
+          area: '', // 用户可查看的地区
+          phone: '',
+          mail: ''
+        }, // 当期登录用户
         page: 'list', // 当前显示页面(list：显示工单列表，detail：具体某条工单信息)
         // 工单进程
         processList: [],
@@ -868,7 +930,7 @@
           {title: '我的待审核的工单', reqUrl: 'processed', num: 0},
           {title: '我的处理成功的工单', reqUrl: 'success', num: 0},
           {title: '我的处理失败的工单', reqUrl: 'fail', num: 0},
-          {title: '所有待审核的工单', reqUrl: 'waitinspect', num: 0}
+          {title: '所有待审核的工单', reqUrl: 'waitingspect', num: 0}
         ],
         queryJobType: 'processing', // 当前选中的左菜单栏
         // 状态编码转换名称
@@ -882,7 +944,7 @@
         },
         // 分页配置&工单列表数据源
         currentPage: 1, // 当前页
-        pageSize: 3, // 每页的数据
+        pageSize: 10, // 每页的数据
         totalNum: 0,
         jobList: [],
         tablelodingshadow: false, // 表格数据加载中
@@ -894,11 +956,16 @@
         // 转发工单弹窗
         forwardFormVisible: false,
         forwardForm: {
-          content: '转发备注',
-          uid: ''
+          remark: '',
+          username: ''
         },
         userListLoading: false, // 选择用户
-        userList: [ {username: 's', id: 5}, {username: 'c', id: 6} ]
+        userList: [ ],
+        rules: {
+          username: [
+            {required: true, message: '请选择工单接收人', trigger: ['blur', 'change']}
+          ]
+        }
 
       }
     }
