@@ -11,7 +11,6 @@ import javax.persistence.Id;
 /**
  * 工单完成进度表
  * <br><br>
- * 映射数据库表 (项目根据此实体生成表)
  *
  * @author sc
  * @date 2019年9月5日
@@ -29,8 +28,8 @@ public class JobProcess {
 	    private Integer jobId;
 
 	    /** 当前进程创建/处理人 */
-	    @Column(name = "user_id" )
-	    private Integer userId;
+	    @Column(name = "username" )
+	    private String username;
 	    
 	    /** 备注，每个进程状态操作时提交的备注信息 */
 	    @Column(name = "remark" )
@@ -47,7 +46,7 @@ public class JobProcess {
 	     *  1:  创建 --> 				待受理<br> （任意用户创建工单）
 	     *  2:  分配/领取 --> 			处理中<br> （客服领取工单）
 	     *  3:  转发 --> 				进程1：转发中<br> （转发产生一个转发的进程，记录转发人。然后又产生一个处理中的进程，记录第二个处理人，相当于进入到了状态2）
-	     *      转发 --> 				进程2：处理中<br>  
+	     *  * 转发--> 				进程2：处理中<br>  
 	     *  4:  客服处理完成 --> 		待检测人员确认问题已解决<br> （客服处理后，提交处理证明，点击完成。然后等待控制中心确认结果）
 	     *  5：     检测人员确认问题已解决 --> 已完成 （控制中心确认结果处理OK）
 	     *  6：     检测人员确认问题未解决 --> 已驳回|处理失败 （控制中心确认问题未解决）
@@ -59,8 +58,25 @@ public class JobProcess {
 	    @Column(name = "create_time")
 	    private Date  createTime;
 
-	    @Column(name = "is_valid")
-	    private Boolean  isValid;
+	    @Column(name = "update_time")
+	    private Date  updateTime;
+
+	    public JobProcess() {
+	    	super();
+	    }
+	    
+		public JobProcess(Integer id, Integer jobId, String username, String remark, String file, String type,
+				Date createTime, Date updateTime) {
+			super();
+			this.id = id;
+			this.jobId = jobId;
+			this.username = username;
+			this.remark = remark;
+			this.file = file;
+			this.type = type;
+			this.createTime = createTime;
+			this.updateTime = updateTime;
+		}
 
 		public Integer getId() {
 			return id;
@@ -78,12 +94,12 @@ public class JobProcess {
 			this.jobId = jobId;
 		}
 
-		public Integer getUserId() {
-			return userId;
+		public String getUsername() {
+			return username;
 		}
 
-		public void setUserId(Integer userId) {
-			this.userId = userId;
+		public void setUsername(String username) {
+			this.username = username;
 		}
 
 		public String getRemark() {
@@ -118,15 +134,15 @@ public class JobProcess {
 			this.createTime = createTime;
 		}
 
-		public Boolean getIsValid() {
-			return isValid;
+		public Date getUpdateTime() {
+			return updateTime;
 		}
 
-		public void setIsValid(Boolean isValid) {
-			this.isValid = isValid;
+		public void setUpdateTime(Date updateTime) {
+			this.updateTime = updateTime;
 		}
  
-
+	    
 	    
 
 }
