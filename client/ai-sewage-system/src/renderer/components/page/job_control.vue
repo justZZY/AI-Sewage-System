@@ -473,17 +473,20 @@
         this.showList()
       },
       queryJobList () {
-        this.tablelodingshadow = true
-        let keyword = null
+        let keyword_val = null
         if (this.queryJobType === 'search') {
-          keyword = this.formSearch.jobType[this.formSearch.jobType.length - 1]
+          keyword_val = this.formSearch.jobType[this.formSearch.jobType.length - 1]
+          if (keyword_val == null) {
+            return
+          }
         }
+        this.tablelodingshadow = true
         this.$http({
           url: 'http://116.55.241.28:8082/job/query/' + this.queryJobType,
           params: {
             pageIndex: this.currentPage,
             pageSize: this.pageSize,
-            keyword: keyword
+            keyword: keyword_val
           },
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
@@ -925,12 +928,12 @@
         // 工单左菜单栏
         jobMenu: [
           {title: '待领取的工单', reqUrl: 'waiting', num: 0},
+          {title: '所有待审核的工单', reqUrl: 'waitingspect', num: 0},
           {title: '我创建的工单', reqUrl: 'create', num: 0},
           {title: '我的未完成的工单', reqUrl: 'processing', num: 0},
           {title: '我的待审核的工单', reqUrl: 'processed', num: 0},
           {title: '我的处理成功的工单', reqUrl: 'success', num: 0},
-          {title: '我的处理失败的工单', reqUrl: 'fail', num: 0},
-          {title: '所有待审核的工单', reqUrl: 'waitingspect', num: 0}
+          {title: '我的处理失败的工单', reqUrl: 'fail', num: 0}
         ],
         queryJobType: 'processing', // 当前选中的左菜单栏
         // 状态编码转换名称
