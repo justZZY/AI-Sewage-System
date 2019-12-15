@@ -32,7 +32,7 @@ function createWindow () {
     mainWindow = null
   })
 
-  updateHandle(mainWindow, 'http://116.55.241.28:8083/update/')
+  updateHandle(mainWindow, 'http://localhost:8083/update/')
 }
 
 app.on('ready', createWindow)

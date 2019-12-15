@@ -133,7 +133,7 @@
 
         <div class="page-info" align="center" v-if="page=='detail'">
           <el-steps  align-center >
-            <el-step  v-for="(process,i) in processList" 
+            <el-step  v-for="(process,i) in processList"
                       :title="statusMapper[process.type]"
                       :status="process.type=='5'?'success':process.type=='6'?'error':'finish'"
                       :description="new Date(process['createTime']).toLocaleString()"
