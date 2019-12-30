@@ -3,9 +3,15 @@
 * 应用级别的配置，供所有页面公用
 */
 import util from './util'
+import equipmentHelper from './common/entity/equipmentHelper'
 
 export default {
-  showMenu: util.showMenu,
-  createShortcut: util.createShortcut
+  equipmentHelper: equipmentHelper,
+  toast: util.toast,
+  alert: util.alert,
+  get: util.get,
+  post: util.post,
+  route: util.route,
+  goback: util.goback
 }
 </script>

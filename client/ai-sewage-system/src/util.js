@@ -1,72 +1,112 @@
+
 /**
- * 显示菜单
+ * toast
  */
-function showMenu () {
+function toast (msg, time=1500){
   const prompt = require('@system.prompt')
-  const router = require('@system.router')
-  const appInfo = require('@system.app').getInfo()
-  prompt.showContextMenu({
-    itemList: ['保存桌面', '关于', '取消'],
-    success: function (ret) {
-      switch (ret.index) {
-      case 0:
-        // 保存桌面
-        createShortcut()
-        break
-      case 1:
-        // 关于
-        router.push({
-          uri: '/About',
-          params: {
-            name: appInfo.name,
-            icon: appInfo.icon
-          }
-        })
-        break
-      case 2:
-        // 取消
-        break
-      default:
-        prompt.showToast({
-          message: 'error'
-        })
+  prompt.showToast({
+    message: msg,
+    duration: time
+  })
+}
+
+/**
+ * alert
+ */
+function alert (msg, title='提示', callback){
+  const prompt = require('@system.prompt')
+  prompt.showDialog({
+    title: title,
+    message: msg,
+    buttons: [
+      {
+        text: '确定',
+        color: '#33dd44'
       }
+    ],
+    success: function (data) {
+      if(callback==='function')
+        callback(data)
+    },
+    cancel: function (data) {
+      console.log('handling cancel')
+    },
+    fail: function (data, code) {
+      console.log('fail')
     }
   })
 }
 
 /**
- * 创建桌面图标
- * 注意：使用加载器测试`创建桌面快捷方式`功能时，请先在`系统设置`中打开`应用加载器`的`桌面快捷方式`权限
+ * 发送GET请求
  */
-function createShortcut () {
-  const prompt = require('@system.prompt')
-  const shortcut = require('@system.shortcut')
-  shortcut.hasInstalled({
-    success: function (ret) {
-      if (ret) {
-        prompt.showToast({
-          message: '已创建桌面图标'
-        })
-      } else {
-        shortcut.install({
-          success: function () {
-            prompt.showToast({
-              message: '成功创建桌面图标'
-            })
-          },
-          fail: function (errmsg, errcode) {
-            prompt.showToast({
-              message: `${errcode}: ${errmsg}`
-            })
-          }
-        })
-      }
+function get(url, header, callback){
+  const fetch = require('@system.fetch')
+  if (typeof header === 'function'){
+    callback = header
+    header = null
+  }
+  fetch.fetch({
+    url: url,
+    header: header,
+    method: 'GET',
+    success: function (response_data) {
+      callback(JSON.parse(response_data.data))
+    },
+    fail: function (response_data, code) {
+      alert('服务器维护中，请稍后再试！')
+      console.log('errorcode:'+code)
     }
   })
 }
+
+/**
+ * 发送POST请求
+ */
+function post(url, data, header, callback){
+  const fetch = require('@system.fetch')
+  if (typeof data === 'function'){
+    callback = data
+    data = null
+    header = null
+  }
+  if (typeof header === 'function'){
+    callback = header
+    header = null
+  }
+  fetch.fetch({
+    url: url,
+    data: data,
+    header: header,
+    method: 'POST',
+    success: function (response_data) {
+      callback(JSON.parse(response_data.data))
+    },
+    fail: function (dresponse_dataata, code) {
+      alert('服务器维护中，请稍后再试！')
+      console.log('errorcode:'+code)
+    }
+  })
+}
+
+function route(uriPath,paramJson=null){
+  const router = require('@system.router') 
+  router.push({
+    uri: uriPath,
+    params: paramJson
+  })
+}
+
+function goback(){
+  const router = require('@system.router') 
+  router.back()
+} 
 
 export default {
-  showMenu,
-  createShortcut
+  toast,
+  alert,
+  get,
+  post,
+  route,
+  goback
 }

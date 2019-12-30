@@ -14,7 +14,8 @@
     },
     {
       "name": "system.shortcut"
-    }
+    },
+    {"name": "system.fetch"}
   ],
   "permissions": [
     {
@@ -22,33 +23,24 @@
     }
   ],
   "config": {
-    "logLevel": "off"
+    "logLevel": "off",
+    "data":{
+      "shiroToken": "",
+      "equipmentList": []
+    }
   },
   "router": {
-    "entry": "Demo",
+    "entry": "login",
     "pages": {
-      "Demo": {
+      "login": {
         "component": "index"
       },
-      "DemoDetail": {
-        "component": "index"
-      },
-      "About": {
+      "control/equipment_list": {
         "component": "index"
       }
     },
     "widgets": {
-      "CardDemo": {
-        "name": "CardDemo",
-        "description": "快应用卡片展示",
-        "component": "index",
-        "path": "/CardDemo",
-        "minPlatformVersion": 1032,
-        "targetManufactorys": [
-          "vivo"
-        ],
-        "features": []
-      }
+
     }
   },
   "display": {
@@ -56,14 +48,8 @@
     "titleBarTextColor": "#414141",
     "menu": true,
     "pages": {
-      "Demo": {
-        "titleBarText": "示例页",
-        "menu": false
-      },
-      "DemoDetail": {
-        "titleBarText": "详情页"
-      },
-      "About": {
+      "login": {
+        "titleBarText": "登录页",
         "menu": false
       }
     }
