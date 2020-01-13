@@ -1,5 +1,20 @@
 <template>
   <div>
+    <!-- 站点详情 -->
+    <el-row :gutter="20">
+      <el-col :span="24">
+        <el-card shadow="always">
+          <div slot="header">
+            <span>站点详情</span>
+          </div>
+          <div v-for="i in monitorNums">
+            <div class="line">
+              <div class="lineChat" :id="i"></div>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
     <!-- 设备传感器数据 -->
     <el-row :gutter="20">
       <el-col :span="24">
