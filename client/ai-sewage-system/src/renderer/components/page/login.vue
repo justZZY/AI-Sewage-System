@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container">
+  <div class="login-container" style="background-image:url('src/renderer/assets/bg1.jpg'); background-repeat: no-repeat;background-size: 100% 100%;"  >
     <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left"
              label-width="0px"
              class="card-box login-form">
@@ -18,6 +18,7 @@
       </el-form-item>
     </el-form>
   </div>
+
 </template>
 
 <script>
@@ -128,7 +129,7 @@
   .login-container {
     include :relative;
     height: 100vh;
-    background-color: $bg;
+    background-color: transparent;
     input:-webkit-autofill {
       -webkit-box-shadow: 0 0 0px 1000px #293444 inset !important;
       -webkit-text-fill-color: #fff !important;
@@ -175,7 +176,9 @@
       right: 0;
       width: 400px;
       padding: 35px 35px 15px 35px;
-      margin: 120px auto;
+      background-color: #60626680;
+      border-radius:5px;
+      margin: 200px auto;
     }
     .el-form-item {
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -195,6 +198,31 @@
       position: absolute;
       right: 35px;
       bottom: 28px;
+    }
+  }
+  .el-input__inner {
+    &::placeholder {
+      color: white;
+    }
+
+    &::-webkit-input-placeholder {
+      /* WebKit browsers 适配谷歌 */
+      color: white;
+    }
+
+    &:-moz-placeholder {
+      /* Mozilla Firefox 4 to 18 适配火狐 */
+      color: white;
+    }
+
+    &::-moz-placeholder {
+      /* Mozilla Firefox 19+ 适配火狐 */
+      color: white;
+    }
+
+    &:-ms-input-placeholder {
+      /* Internet Explorer 10+  适配ie*/
+      color: white;
     }
   }
 </style>
