@@ -1,5 +1,43 @@
 <template>
   <div>
+    <!-- 站点详情 -->
+    <el-row :gutter="10">
+      <el-col :span="24">
+        <el-card shadow="always">
+          <div slot="header">
+            <span>站点详情</span>
+          </div>
+          <div>
+            <el-col :span="12">
+              <el-image
+                  style="width: 600px; height: 350px"
+                  :src="pic">
+              </el-image>
+            </el-col>
+            <el-col :span="6">
+              <el-table :data="table1" style="width: 100%; margin-top: 10%" :show-header="false" stripe>
+                <el-table-column prop="name" width="90"/>
+                <el-table-column prop="value" width="200" style="color: blue">
+                  <template scope="scope">
+                    <span style="color: blue">{{scope.row.value}}</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-col>
+            <el-col :span="6">
+              <el-table :data="table2" style="width: 100%; margin-top: 10%" :show-header="false" stripe>
+                <el-table-column prop="name" width="80"/>
+                <el-table-column prop="value" width="210">
+                  <template scope="scope">
+                    <span style="color: blue">{{scope.row.value}}</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-col>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
     <!-- 设备传感器数据 -->
     <el-row :gutter="20">
       <el-col :span="24">
@@ -40,7 +78,7 @@
    * 初始化时获取一遍设备数据来构造起始数据
    */
   import {monitorOption, rateOption} from '../../js/chart'
-
+  import {siteDetail} from '../../js/site_detail'
   const echarts = require('echarts')
   const MONITOR_WATCH_CLASS = 'monitorWatch'
   const RATE_WATCH_CLASS = 'rateWatch'
@@ -49,11 +87,20 @@
   let monitorOptionArray = []
   let rateChartObjArray = []
   let monitorChartObjArray = []
+  let site = {}
   export default {
-    name: 'side_watch',
+    name: 'site_watch',
+    data () {
+      return {
+        pic: site.pic,
+        table1: this.table1Get(site),
+        table2: this.table2Get(site)
+      }
+    },
     created () {
       this.getEquipData()
       this.websocket()
+      site = this.siteGet().value
     },
     beforeDestroy () {
       this.over()
@@ -64,20 +111,57 @@
       },
       monitorNums: function () {
         return this.$store.state.MonitorNums.monitorNums
+      },
+      refreshPage () {
+        return this.$store.state.Treedata.chooseData
       }
-      // // 站点格式不统一 暂时弃用
-      // refreshPage () {
-      //   return this.$store.state.Treedata.chooseData
-      // }
     },
-    // watch: {
-    //   refreshPage: function () {
-    //     this.over()
-    //     this.getEquipData()
-    //     this.websocket()
-    //   }
-    // },
+    watch: {
+      refreshPage: function () {
+        // this.over()
+        this.$router.replace({
+          path: '@/components/page/site_skip',
+          name: 'site_skip'
+        })
+        // this.getEquipData()
+        // this.websocket()
+        // site = this.siteGet().value
+      }
+    },
     methods: {
+      /*
+       * 获取远程json数据
+       * 查找指定key的数据
+       */
+      siteGet () {
+        let index = this.$store.state.Treedata.chooseData
+        let boxUid = window.equipmentobjarray[index].boxUid
+        let site = siteDetail.find(s => s.id === Number(boxUid))
+        console.log(site)
+        return site
+      },
+      // 构建表单1
+      table1Get (site) {
+        let ans1 = []
+        ans1.push({name: '站点名称', value: site.name})
+        ans1.push({name: '站点地址', value: site.address})
+        ans1.push({name: '站点经度', value: site.longitude})
+        ans1.push({name: '处理工艺', value: site.process})
+        ans1.push({name: '盒子编号', value: site.boxUid})
+        ans1.push({name: '运维人员', value: site.operator})
+        return ans1
+      },
+      // 构建表单2
+      table2Get (site) {
+        let ans2 = []
+        ans2.push({name: '站点能源', value: site.energy})
+        ans2.push({name: '处理量', value: site.efficiency})
+        ans2.push({name: '站点纬度', value: site.latitude})
+        ans2.push({name: '出水水质', value: site.quality})
+        ans2.push({name: '安装时间', value: site.date})
+        ans2.push({name: '联系电话', value: site.phone})
+        return ans2
+      },
       /*
        * 启动websocket连接
        */

@@ -14,7 +14,7 @@
           <i class="el-icon-map-location"></i>
           站点地图
         </el-menu-item>
-        <el-menu-item index="/side_watch">
+        <el-menu-item index="/site_watch">
           <!-- 加入view图标 -->
           <i class="el-icon-view"></i>
           站点监控

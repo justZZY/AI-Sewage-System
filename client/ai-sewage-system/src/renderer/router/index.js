@@ -21,9 +21,14 @@ export default new Router({
           component: require('@/components/page/map').default
         },
         {
-          path: '/side_watch',
-          name: 'side_watch',
-          component: require('@/components/page/side_watch').default
+          path: '/site_watch',
+          name: 'site_watch',
+          component: require('@/components/page/site_watch').default
+        },
+        {
+          path: '/site_skip',
+          name: 'site_skip',
+          component: require('@/components/page/site_skip').default
         },
         {
           path: '/remote_control',
