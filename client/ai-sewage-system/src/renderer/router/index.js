@@ -28,12 +28,17 @@ export default new Router({
         {
           path: '/site_skip',
           name: 'site_skip',
-          component: require('@/components/page/site_skip').default
+          component: require('@/components/page/skip/site_skip').default
         },
         {
           path: '/remote_control',
           name: 'remote_control',
           component: require('@/components/page/remote_control').default
+        },
+        {
+          path: '/control_skip',
+          name: 'control_skip',
+          component: require('@/components/page/skip/control_skip').default
         },
         {
           path: '/time_control',

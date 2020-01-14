@@ -133,17 +133,18 @@
     min-width: 1200px;
   }
   .el-header {
-    background-color: #545c64;
+    background-color: black;
     color: #333;
     padding-right: 0px;
   }
   .el-aside {
     color: #333;
-    background-color: #545c64;
+    background-color: #131212;
   }
   .el-tree {
     color: #ffffff;
-    background-color: #545c64;
+    font-size: 14px;
+    background-color: #131212;
   }
   /* 修改树形节点hover样式 */
   .el-tree-node__content:hover {

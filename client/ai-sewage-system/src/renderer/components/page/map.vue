@@ -1,6 +1,6 @@
 <template>
     <baidu-map class="map" :center="center" :zoom="zoom" :scroll-wheel-zoom="true"
-               @click="getPoint" @ready="handler" mapType="BMAP_HYBRID_MAP">
+               @click="getPoint" @ready="handler" mapType="BMAP_NORMAL_MAP">
       <div v-for="pos in equipposarray" :key="pos.name">
         <bm-marker :position="{lng: pos.pos.longitude, lat: pos.pos.latitude}" @click="infoWindowCheck(pos)">
           <bm-info-window :show="pos.showflag" @close="infoWindowClose(pos)" @open="infoWindowOpen(pos)" style="font-size: 14px">
@@ -29,7 +29,7 @@
           lng: window.equipmentposarray[index]['pos']['longitude'],
           lat: window.equipmentposarray[index]['pos']['longitude']
         },
-        zoom: 12
+        zoom: 9
       }
     },
     methods: {
@@ -53,7 +53,7 @@
         let point = new BMap.Point(longitude, latitude)
         console.log(point)
         // 重新定位地图位置
-        map.centerAndZoom(point, 12)
+        map.centerAndZoom(point, 9)
         // 关闭以前打开的地图窗口并开启新的地图窗口
         for (let j = 0; j < posarray.length; j++) {
           posarray[j]['showflag'] = false

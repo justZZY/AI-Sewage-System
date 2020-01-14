@@ -4,10 +4,10 @@
              :default-expand-all="true" :indent="0">
       <span class="custom-tree-node" slot-scope="{node, data}">
         <span>
-          <i :class="data.connectClass"></i>
+          <i :class="data.connectClass"/>
           {{node.label}}
         </span>
-        <i :class="data.netClass"></i>
+        <i :class="data.netClass"/>
       </span>
     </el-tree>
   </div>

@@ -5,7 +5,7 @@
     </el-col>
     <el-col :span="14">
       <el-menu :router="true" :default-active="$route.path" class="el-menu" mode="horizontal" @select="handleSelect"
-               background-color="#545c64"
+               background-color="black"
                text-color="#fff"
                active-text-color="#ffd04b">
 
@@ -24,11 +24,11 @@
           <i class="el-icon-s-promotion"></i>
           远程控制
         </el-menu-item>
-        <el-menu-item index="/time_control" v-if="checkIdentity()">
-          <!-- 加入promotion图标 -->
-          <i class="el-icon-time"></i>
-          定时控制
-        </el-menu-item>
+<!--        <el-menu-item index="/time_control" v-if="checkIdentity()">-->
+<!--          &lt;!&ndash; 加入promotion图标 &ndash;&gt;-->
+<!--          <i class="el-icon-time"></i>-->
+<!--          定时控制-->
+<!--        </el-menu-item>-->
         <el-menu-item index="/knowledge_graph">
           <!-- 加入map图标 -->
           <i class="el-icon-coin"></i>

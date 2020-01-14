@@ -8,28 +8,24 @@
             <span>站点详情</span>
           </div>
           <div>
-            <el-col :span="12">
+            <el-col :span="10">
               <el-image
-                  style="width: 600px; height: 350px"
+                  style="width: 100%; height: 300px"
                   :src="pic">
               </el-image>
             </el-col>
-            <el-col :span="6">
-              <el-table :data="table1" style="width: 100%; margin-top: 10%" :show-header="false" stripe>
-                <el-table-column prop="name" width="90"/>
-                <el-table-column prop="value" width="200" style="color: blue">
+            <el-col :span="14">
+              <el-table :data="table" style="width: 100%" :show-header="false" stripe>
+                <el-table-column prop="name1" width="80"/>
+                <el-table-column prop="value1" width="200">
                   <template scope="scope">
-                    <span style="color: blue">{{scope.row.value}}</span>
+                    <span style="color: blue">{{scope.row.value1}}</span>
                   </template>
                 </el-table-column>
-              </el-table>
-            </el-col>
-            <el-col :span="6">
-              <el-table :data="table2" style="width: 100%; margin-top: 10%" :show-header="false" stripe>
-                <el-table-column prop="name" width="80"/>
-                <el-table-column prop="value" width="210">
+                <el-table-column prop="name2" width="80"/>
+                <el-table-column prop="value2" width="210">
                   <template scope="scope">
-                    <span style="color: blue">{{scope.row.value}}</span>
+                    <span style="color: blue">{{scope.row.value2}}</span>
                   </template>
                 </el-table-column>
               </el-table>
@@ -91,16 +87,15 @@
   export default {
     name: 'site_watch',
     data () {
+      site = this.siteGet().value
       return {
         pic: site.pic,
-        table1: this.table1Get(site),
-        table2: this.table2Get(site)
+        table: this.tableGet(site)
       }
     },
     created () {
       this.getEquipData()
       this.websocket()
-      site = this.siteGet().value
     },
     beforeDestroy () {
       this.over()
@@ -118,14 +113,10 @@
     },
     watch: {
       refreshPage: function () {
-        // this.over()
         this.$router.replace({
-          path: '@/components/page/site_skip',
+          path: '@/components/page/skip/site_skip',
           name: 'site_skip'
         })
-        // this.getEquipData()
-        // this.websocket()
-        // site = this.siteGet().value
       }
     },
     methods: {
@@ -136,31 +127,21 @@
       siteGet () {
         let index = this.$store.state.Treedata.chooseData
         let boxUid = window.equipmentobjarray[index].boxUid
+        console.log(boxUid)
         let site = siteDetail.find(s => s.id === Number(boxUid))
         console.log(site)
         return site
       },
-      // 构建表单1
-      table1Get (site) {
-        let ans1 = []
-        ans1.push({name: '站点名称', value: site.name})
-        ans1.push({name: '站点地址', value: site.address})
-        ans1.push({name: '站点经度', value: site.longitude})
-        ans1.push({name: '处理工艺', value: site.process})
-        ans1.push({name: '盒子编号', value: site.boxUid})
-        ans1.push({name: '运维人员', value: site.operator})
-        return ans1
-      },
-      // 构建表单2
-      table2Get (site) {
-        let ans2 = []
-        ans2.push({name: '站点能源', value: site.energy})
-        ans2.push({name: '处理量', value: site.efficiency})
-        ans2.push({name: '站点纬度', value: site.latitude})
-        ans2.push({name: '出水水质', value: site.quality})
-        ans2.push({name: '安装时间', value: site.date})
-        ans2.push({name: '联系电话', value: site.phone})
-        return ans2
+      // 构建表单
+      tableGet (site) {
+        let ans = []
+        ans.push({name1: '站点名称', value1: site.name, name2: '站点能源', value2: site.energy})
+        ans.push({name1: '站点地址', value1: site.address, name2: '处理量', value2: site.efficiency})
+        ans.push({name1: '站点经度', value1: site.longitude, name2: '站点纬度', value2: site.latitude})
+        ans.push({name1: '处理工艺', value1: site.process, name2: '出水水质', value2: site.quality})
+        ans.push({name1: '盒子编号', value1: site.boxUid, name2: '安装时间', value2: site.date})
+        ans.push({name1: '运维人员', value1: site.operator, name2: '联系电话', value2: site.phone})
+        return ans
       },
       /*
        * 启动websocket连接
