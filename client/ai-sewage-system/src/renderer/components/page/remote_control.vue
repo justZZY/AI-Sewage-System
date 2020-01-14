@@ -51,11 +51,11 @@
                   </el-switch>
                 </div>
                 <div class="desc">
-                  <span>启停状态: </span><span style="color: green">{{equip.rsSwitch === true? '启动' : '停止'}}</span>
-                  <el-button v-if="equip.maSwitch === false && equip.rsSwitch === false" type="primary" plain @click="startEquipBtn(equip)">启动</el-button>
-                  <el-button v-if="equip.maSwitch === true || equip.rsSwitch === true" type="primary" disabled plain @click="startEquipBtn(equip)">启动</el-button>
-                  <el-button v-if="equip.maSwitch === false && equip.rsSwitch === true" type="primary" plain @click="stopEquipBtn(equip)">停止</el-button>
-                  <el-button v-if="equip.maSwitch === true || equip.rsSwitch === false" type="primary" disabled plain @click="stopEquipBtn(equip)">停止</el-button>
+                  <span>启停状态: </span><span style="color: green">{{equip.runFeedback === '运行'? '启动' : '停止'}}</span>
+                  <el-button v-if="equip.maSwitch === false && equip.runFeedback === '停止'" type="primary" plain @click="startEquipBtn(equip)">启动</el-button>
+                  <el-button v-if="equip.maSwitch === true || equip.runFeedback === '运行'" type="primary" disabled plain @click="startEquipBtn(equip)">启动</el-button>
+                  <el-button v-if="equip.maSwitch === false && equip.runFeedback === '运行'" type="primary" plain @click="stopEquipBtn(equip)">停止</el-button>
+                  <el-button v-if="equip.maSwitch === true || equip.runFeedback === '停止'" type="primary" disabled plain @click="stopEquipBtn(equip)">停止</el-button>
                 </div>
                 <div class="desc">
                   <span>启动时间: </span>
@@ -157,7 +157,7 @@
     methods: {
       setTimer () {
         if (this.timer === null) {
-          this.timer = setInterval(this.getEquipMonitor, 5000)
+          this.timer = setInterval(this.getEquipMonitor, 1000)
         }
       },
       // 获取监控的数据 会通过计算进行变动
@@ -212,7 +212,9 @@
           console.log(res)
           let values = res['data']
           if (type === 'device') {
-            this.devicedata = formatDeviceData(values, dataArray)
+            let index = this.$store.state.Treedata.chooseData
+            let stationName = window.equipmentobjarray[index]['alias']
+            this.devicedata = formatDeviceData(values, dataArray, stationName)
             console.log(this.devicedata)
           } else if (type === 'rate') {
             this.sliderData = formatSliderData(values)
@@ -246,7 +248,7 @@
         let key = '手自动开关'
         let name = scope['name']
         let value = 0
-        if (scope['手自动开关'] === true) {
+        if (scope['maSwitch'] === true) {
           value = 1
         }
         this.$confirm('此操作将修改设备' + name + '的值, 是否继续?', '提示', {
@@ -318,7 +320,7 @@
         let stationName = window.equipmentobjarray[index]['alias']
         // 在fbox设备中,只有学院实训台启停开关是分开的
         let key = (stationName === '云南大学测试平台' ? '启动开关' : '启停开关')
-        let name = scope['row']['name']
+        let name = scope['name']
         let keyName = formatName(key, name)
         let type = 0
         let value = 1
@@ -329,7 +331,6 @@
         }).then(() => {
           this.setEquipValue(keyName, type, value)
         }).catch(() => {
-          scope['row']['启停开关'] = !scope['row']['启停开关']
           this.$message({
             type: 'info',
             message: '已取消修改'
@@ -342,11 +343,11 @@
         let stationName = window.equipmentobjarray[index]['alias']
         // 在fbox设备中,只有学院实训台启停开关是分开的
         let key = (stationName === '云南大学测试平台' ? '停止开关' : '启停开关')
-        let name = scope['row']['name']
+        let name = scope['name']
         let keyName = formatName(key, name)
         let type = 0
         // 在fbox设备中,只有学院实训台启停开关是分开的,其他设备的停止是置0
-        let value = (stationName === '软件学院实训台' ? 1 : 0)
+        let value = (stationName === '云南大学测试平台' ? 1 : 0)
         this.$confirm('此操作将关闭设备' + name + ', 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -386,10 +387,12 @@
             type: 'success',
             message: '修改成功'
           })
-          this.$router.replace({
-            path: '@/components/page/skip/control_skip',
-            name: 'control_skip'
-          })
+          setTimeout(() => {
+            this.$router.replace({
+              path: '@/components/page/skip/control_skip',
+              name: 'control_skip'
+            })
+          }, 1000)
         })
       },
       sliderChange (value, index) {
@@ -415,12 +418,11 @@
       },
       // 1.14 新增
       // 启停时间控制
-      timeChange (scope) {
+      timeChange (scope, type) {
         console.log(scope)
-        let title = scope['column']['property']
-        let label = scope['column']['label']
+        let label = type === 'open' ? '开机时间' : '关机时间'
         let name = scope['name']
-        let newTime = scope['row']
+        let newTime = type === 'open' ? scope['openTime'] : scope['closeTime']
         let timeArray = newTime.split(':')
         let equipName = '定时_' + name + '_'
         this.$confirm('此操作将修改设备' + name + '的' + label + '为' + newTime + ', 是否继续?', '提示', {
@@ -459,18 +461,18 @@
        * 先显示时间拖动条
        * 再提示是否确认修改
        */
-      minChange (scope) {
+      minChange (scope, type) {
         console.log(scope)
         this.dialogVisible = true
-        let startTime = scope.row.openTime
-        let endTime = scope.row.closeTime
+        let startTime = scope.openTime
+        let endTime = scope.closeTime
         // 减去相异时间
-        let subMinutes = scope.column.property === 'runTime' ? scope.row.stopTime : scope.row.runTime
+        let subMinutes = type === 'run' ? scope.stopTime : scope.runTime
         // 计算时间差 A+B-C
         this.sliderMax = calcTimes(startTime, endTime, Number(subMinutes))
         console.log('slider max:' + this.sliderMax)
-        this.sliderValue = scope.column.property === 'runTime' ? scope.row.runTime : scope.row.stopTime // 当前列分钟
-        this.dialogName = '定时_' + scope.row.name + '_' + scope.column.label
+        this.sliderValue = type === 'run' ? scope.runTime : scope.stopTime // 当前列分钟
+        this.dialogName = '定时_' + scope.name + '_' + (type === 'run' ? '运行时间' : '停止时间')
       },
       sendMinutes () {
         // 发送数据后把所有数据还原初始值
@@ -520,6 +522,8 @@
     if (indexState !== -1 && indexRemote !== -1 && indexTime !== -1) {
       // 组合数组
       newData = data[indexState]['items'].concat(data[indexRemote]['items']).concat(data[indexTime]['items'])
+    } else if (indexState !== -1 && indexRemote !== -1 && indexTime === -1) {
+      newData = data[indexState]['items'].concat(data[indexRemote]['items'])
     }
     return newData
   }
@@ -561,7 +565,7 @@
    * arg: data:原始json拼凑的设备数据
    * return: 设备控制表数据
    */
-  function formatDeviceData (datas, labelArray) {
+  function formatDeviceData (datas, labelArray, name) {
     console.log(datas)
     let firstMergeArray = []
     for (let i = 0; i < datas.length; i++) {
@@ -579,36 +583,53 @@
         firstMergeArray[index][labelName] = label
       }
     }
+    console.log(firstMergeArray)
     // 1.14 新增时间数据
     // 格式化deviceArray以满足需求
-    let secondMergeArray = []
-    for (let i = 0; i < firstMergeArray.length; i++) {
-      // 通过命名规则保证存在以下命名数据
-      let openHour = firstMergeArray[i]['开机小时']
-      let openMin = firstMergeArray[i]['开机分钟']
-      let closeHour = firstMergeArray[i]['关机小时']
-      let closeMin = firstMergeArray[i]['关机分钟']
-      let obj = {
-        name: firstMergeArray[i]['name'],
-        openTime: mergeTime(openHour, openMin),
-        closeTime: mergeTime(closeHour, closeMin),
-        runTime: firstMergeArray[i]['运行时间'],
-        stopTime: firstMergeArray[i]['停止时间'],
-        rsSwitch: firstMergeArray[i]['启停开关'],
-        maSwitch: firstMergeArray[i]['手自动开关'],
-        errorFeedback: firstMergeArray[i]['故障反馈'],
-        runFeedback: firstMergeArray[i]['运行反馈']
+    if (name !== '云南大学测试平台') {
+      let secondMergeArray = []
+      for (let i = 0; i < firstMergeArray.length; i++) {
+        // 通过命名规则保证存在以下命名数据
+        let openHour = firstMergeArray[i]['开机小时']
+        let openMin = firstMergeArray[i]['开机分钟']
+        let closeHour = firstMergeArray[i]['关机小时']
+        let closeMin = firstMergeArray[i]['关机分钟']
+        let obj = {
+          name: firstMergeArray[i]['name'],
+          openTime: mergeTime(openHour, openMin),
+          closeTime: mergeTime(closeHour, closeMin),
+          runTime: firstMergeArray[i]['运行时间'],
+          stopTime: firstMergeArray[i]['停止时间'],
+          rsSwitch: firstMergeArray[i]['启停开关'],
+          maSwitch: firstMergeArray[i]['手自动开关'],
+          errorFeedback: firstMergeArray[i]['故障反馈'],
+          runFeedback: firstMergeArray[i]['运行反馈']
+        }
+        secondMergeArray.push(obj)
       }
-      secondMergeArray.push(obj)
-    }
-    // 1.14 新增设备筛选逻辑
-    let thirdArray = []
-    for (let i = 0; i < secondMergeArray.length; i++) {
-      if (equipName.indexOf(secondMergeArray[i].name) > -1) {
-        thirdArray.push(secondMergeArray[i])
+      // 1.14 新增设备筛选逻辑
+      let thirdArray = []
+      for (let i = 0; i < secondMergeArray.length; i++) {
+        if (equipName.indexOf(secondMergeArray[i].name) > -1) {
+          thirdArray.push(secondMergeArray[i])
+        }
       }
+      return thirdArray
+    } else {
+      let ynuArray = []
+      for (let i = 0; i < firstMergeArray.length; i++) {
+        let rsFlag = firstMergeArray[i]['启动开关'] === true
+        let obj = {
+          name: firstMergeArray[i]['name'],
+          rsSwitch: rsFlag,
+          maSwitch: firstMergeArray[i]['手自动开关'],
+          errorFeedback: firstMergeArray[i]['故障反馈'],
+          runFeedback: firstMergeArray[i]['运行反馈']
+        }
+        ynuArray.push(obj)
+      }
+      return ynuArray
     }
-    return thirdArray
   }
   /*
    * 合并时间小时:分钟
