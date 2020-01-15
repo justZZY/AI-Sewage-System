@@ -2,7 +2,7 @@
   <el-container>
     <el-header>
       <el-row :gutter="20">
-        <el-col :span="5"><div class="grid-content bg-purple">工单管理</div></el-col>
+        <el-col :span="5"><div class="grid-content bg-purple">工单管理({{currentUser.identity}})</div></el-col>
         <el-col :span="19"><div class="grid-content bg-purple" >
             <el-form :inline="true" :model="formSearch" size="small" class="demo-form-inline">
               <el-form-item label="问题类型">
@@ -24,13 +24,13 @@
       </el-row>
     </el-header>
     <el-container>
-      <el-aside width="200px">
-        <el-menu default-active="2">
+      <el-aside width="auto">
+        <el-menu default-active="-1">
             <el-menu-item  v-for="(item,index) in jobMenu"
                          :index="index.toString()"
                           @click="selectMenu(item.reqUrl)"
                           v-bind:key="index"
-                          v-if="currentUser.identity=='admin' || item.reqUrl!='waitingspect'">
+                          v-if="(currentUser.identity!='admin' && item.reqUrl!='waitingspect' && item.reqUrl!='waiting' && item.reqUrl!='all') || (currentUser.identity=='admin' && (item.reqUrl=='waitingspect' || item.reqUrl=='waiting' || item.reqUrl=='all'))">
               <!--              <i class="el-icon-menu"></i>-->
               <span slot="title">{{item.title}}<el-badge class="mark" :hidden="item.num==null||item.num==''||item.num<1" :value="item.num" :max='99'/> </span>
             </el-menu-item>
@@ -124,20 +124,20 @@
             </div></el-col>
             <el-col :span="12"><div class="grid-content bg-purple">
               <div class="block pag" style="text-align: right" v-show="selectJobsIds.length>0">
-                <el-button type="primary" icon="el-icon-plus" v-show="queryJobType=='waiting'" @click="grabJobs">领取工单</el-button>
+                <el-button type="primary" icon="el-icon-plus" v-show="queryJobType=='waiting'" @click="allocateFormVisible=true">派单</el-button>
                 <el-button type="primary" icon="el-icon-s-promotion" v-show="queryJobType=='processing'" @click="forwardFormVisible=true">转发</el-button>
               </div>
             </div></el-col>
           </el-row>
         </div>
 
-        <div class="page-info" align="center" v-if="page=='detail'">
+        <div class="page-info" align="center" v-if="page=='detail'" style="width:max-content;min-width:100%">
           <el-steps  align-center >
             <el-step  v-for="(process,i) in processList"
                       :title="statusMapper[process.type]"
+                      :icon="switchJobTypeIcon(process.type)"
                       :status="process.type=='5'?'success':process.type=='6'?'error':'finish'"
                       :description="new Date(process['createTime']).toLocaleString()"
-                      :icon="switchJobTypeIcon(process.type)"
                       :key="i">
             </el-step>
             <el-step title="创建" :icon="switchJobTypeIcon(1)" v-if="processList[processList.length-1].type<1"  status="wait" description=""></el-step>
@@ -171,11 +171,23 @@
                 <el-form-item  prop="telephone" label="联系电话">
                   <el-input v-model="jobDetail.telephone"></el-input>
                 </el-form-item>
+                <el-form-item label="创建人" prop="creator" v-if="jobDetail.creator">
+                  <el-input v-model="jobDetail.creator"></el-input>
+                </el-form-item>
+                <el-form-item label="处理人" prop="processor" v-if="jobDetail.processor">
+                  <el-input v-model="jobDetail.processor"></el-input>
+                </el-form-item>
+                <el-form-item label="审核人" prop="inspector" v-if="jobDetail.inspector" >
+                  <el-input v-model="jobDetail.inspector"></el-input>
+                </el-form-item>
               </el-form>
             </el-collapse-item>
 
             <el-collapse-item title="处理结果" name="2.1" v-if="jobDetail.status>=4">
               <el-form :model="resultProcessed"  label-width="100px" disabled  >
+                <el-form-item label="处理人" prop="username" >
+                  <el-input v-model="resultProcessed.username"></el-input>
+                </el-form-item>
                 <el-form-item label="结果说明" prop="content" >
                   <el-input type="textarea" v-model="resultProcessed.remark" :autosize="{ minRows: 5, maxRows: 20}" resize="false" ></el-input>
                 </el-form-item>
@@ -193,6 +205,9 @@
 
             <el-collapse-item title="审核结果" name="2.2" v-if="jobDetail.status>4">
               <el-form :model="resultInspected"  label-width="100px" disabled  >
+                <el-form-item label="审核人" prop="username" >
+                  <el-input v-model="resultInspected.username"></el-input>
+                </el-form-item>
                 <el-form-item label="结果说明" prop="content" >
                   <el-input type="textarea" v-model="resultInspected.remark" :autosize="{ minRows: 5, maxRows: 20}" resize="false" ></el-input>
                 </el-form-item>
@@ -208,10 +223,10 @@
               </el-form>
             </el-collapse-item>
 
-            <el-collapse-item title="接单" name="3" v-if="jobDetail.status==1" >
+            <el-collapse-item title="派单" name="3" v-if="jobDetail.status==1 && currentUser.identity=='admin'" >
               <el-form :model="processForm" rel="processForm" label-width="100px" >
                 <el-form-item align="left">
-                  <el-button type="primary" @click="submitForm(2)" >接单</el-button>
+                  <el-button type="primary" @click="allocateFormVisible=true" >派单</el-button>
                   <el-button @click="returnToPageList">返回</el-button>
                 </el-form-item>
               </el-form>
@@ -334,8 +349,9 @@
                 </el-form-item>
 
                 <el-form-item align="left">
+                  <el-button type="warning"  @click="submitForm(7)">驳回</el-button>
                   <el-button type="primary" @click="submitForm(5)">审核通过</el-button>
-                  <el-button type="danger"  @click="submitForm(6)">驳回</el-button>
+                  <el-button type="danger"  @click="submitForm(6)">中断</el-button>
                   <el-button @click="returnToPageList">返回</el-button>
                 </el-form-item>
               </el-form>
@@ -351,7 +367,7 @@
           <el-input v-model="forwardForm.remark" type="textarea"   :autosize="{ minRows: 5, maxRows: 20}" ></el-input>
         </el-form-item>
         <el-form-item label="选择转发人" label-width="100px" prop="username" required>
-          <el-select v-model="forwardForm.username" placeholder="情选择工单接收人" :loading="userListLoading">
+          <el-select v-model="forwardForm.username" placeholder="请选择工单接收人" :loading="userListLoading">
             <el-option
                 v-for="username in userList"
                 :key="username"
@@ -366,6 +382,30 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="forwardFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="forwardJobs">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="派单" :visible.sync="allocateFormVisible">
+      <el-form :model="allocateForm"  :rules="rules" ref="allocateForm">
+        <el-form-item label="备注" label-width="100px">
+          <el-input v-model="allocateForm.remark" type="textarea"   :autosize="{ minRows: 5, maxRows: 20}" ></el-input>
+        </el-form-item>
+        <el-form-item label="选择维护人" label-width="100px" prop="username" required>
+          <el-select v-model="allocateForm.username" placeholder="请选择维护人" :loading="userListLoading">
+            <el-option
+                v-for="username in userList"
+                :key="username"
+                :label="username"
+                :value="username"
+                v-show="username!=currentUser.username"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="allocateFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="allocateJobs">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -434,6 +474,7 @@
       },
       showList () {
         this.page = 'list'
+        this.jobDetail = {}
         this.selectJobsIds = []
         this.queryJobList()
         this.queryMenuJobsCount()
@@ -473,6 +514,9 @@
         this.showList()
       },
       queryJobList () {
+        if (this.queryJobType === null) {
+          return
+        }
         let keyword_val = null
         if (this.queryJobType === 'search') {
           keyword_val = this.formSearch.jobType[this.formSearch.jobType.length - 1]
@@ -601,10 +645,11 @@
           background: 'rgba(0, 0, 0, 0.7)'
         })
         const processUrlMapping = {
-          '2': 'grab',
+          '2': 'grab', // 不存在了，接单功能去除，换成派单
           '4': 'done',
           '5': 'inspect',
-          '6': 'inspect'
+          '6': 'inspect',
+          '7': 'reject'
         }
         this.processForm.jobId = this.jobDetail.id
         this.processForm.type = type
@@ -715,6 +760,48 @@
               loading.close()
               this.forwardFormVisible = false
               this.forwardForm = {}
+            }.bind(this))
+          }
+        })
+      },
+      allocateJobs () {
+        this.$refs['allocateForm'].validate((valid) => {
+          if (valid) {
+            const loading = this.$loading({
+              lock: true,
+              text: 'Loading',
+              spinner: 'el-icon-loading',
+              background: 'rgba(0, 0, 0, 0.7)'
+            })
+            let allocateJobsIds = []
+            if (this.jobDetail.id != null) {
+              allocateJobsIds = [this.jobDetail.id]
+            } else {
+              allocateJobsIds = this.selectJobsIds
+            }
+            this.$http({
+              url: 'http://116.55.241.28:8082/job/allocate',
+              data: {
+                jobsIds: allocateJobsIds,
+                username: this.allocateForm.username,
+                remark: this.allocateForm.remark
+              },
+              method: 'post',
+              headers: {
+                'Authorization': this.$store.state.ShiroToken.token
+              }
+            }).then(response => {
+              let result = response.data
+              loading.close()
+              this.allocateFormVisible = false
+              this.allocateForm = {}
+              this.$alert(result.msg, '提示', this.showList())
+            }).catch(function (error) { // 请求失败处理
+              this.$alert('服务器异常，请稍后再试！', '提示')
+              console.log(error)
+              loading.close()
+              this.allocateFormVisible = false
+              this.allocateForm = {}
             }.bind(this))
           }
         })
@@ -865,6 +952,7 @@
           case 4: return 'el-icon-search'
           case 5: return 'el-icon-success'
           case 6: return 'el-icon-error'
+          case 7: return 'el-icon-refresh-left'
         }
       },
       // 通用请求方法
@@ -927,15 +1015,16 @@
         photoList: [], // 拍照图片列表(数据库的图片id)
         // 工单左菜单栏
         jobMenu: [
-          {title: '待领取的工单', reqUrl: 'waiting', num: 0},
-          {title: '所有待审核的工单', reqUrl: 'waitingspect', num: 0},
+          {title: '未指派工单', reqUrl: 'waiting', num: 0},
+          {title: '待审核工单', reqUrl: 'waitingspect', num: 0},
+          {title: '所有工单', reqUrl: 'all', num: 0},
           {title: '我创建的工单', reqUrl: 'create', num: 0},
           {title: '我的未完成的工单', reqUrl: 'processing', num: 0},
           {title: '我的待审核的工单', reqUrl: 'processed', num: 0},
           {title: '我的处理成功的工单', reqUrl: 'success', num: 0},
-          {title: '我的处理失败的工单', reqUrl: 'fail', num: 0}
+          {title: '我的处理中断的工单', reqUrl: 'fail', num: 0}
         ],
-        queryJobType: 'processing', // 当前选中的左菜单栏
+        queryJobType: null, // 当前选中的左菜单栏
         // 状态编码转换名称
         statusMapper: {
           '1': '创建/待受理',
@@ -943,7 +1032,8 @@
           '3': '被转接',
           '4': '审核中',
           '5': '处理成功',
-          '6': '审核驳回'
+          '6': '处理中断',
+          '7': '驳回'
         },
         // 分页配置&工单列表数据源
         currentPage: 1, // 当前页
@@ -959,6 +1049,12 @@
         // 转发工单弹窗
         forwardFormVisible: false,
         forwardForm: {
+          remark: '',
+          username: ''
+        },
+        // 派单
+        allocateFormVisible: false,
+        allocateForm: {
           remark: '',
           username: ''
         },

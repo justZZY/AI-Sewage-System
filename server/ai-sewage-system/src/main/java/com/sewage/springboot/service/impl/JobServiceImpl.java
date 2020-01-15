@@ -167,6 +167,7 @@ public class JobServiceImpl implements JobService {
 
 	@Override
 	public JSONObject queryAllJobsWaitingForHandle(Integer pageIndex, Integer pageSize) {
+		if(!UserInfoUtils.getUserInfo().getIdentity().equals("admin")) throw new BussinessException(-1, "权限不足");
 		Job job = new Job();
 		job.setStatus(JobConstant.JOB_STATUS_CREATE);
 		return queryJobs(job, pageIndex, pageSize);
@@ -174,6 +175,7 @@ public class JobServiceImpl implements JobService {
 	
 	@Override
 	public JSONObject queryAllJobsWaitingForCheck(Integer pageIndex, Integer pageSize) {
+		if(!UserInfoUtils.getUserInfo().getIdentity().equals("admin")) throw new BussinessException(-1, "权限不足");
 		Job job = new Job();
 		job.setStatus(JobConstant.JOB_STATUS_PROCESSED);
 		return queryJobs(job, pageIndex, pageSize);
@@ -181,6 +183,7 @@ public class JobServiceImpl implements JobService {
 
 	@Override
 	public JSONObject queryAllJobsCheckSuccessful(Integer pageIndex, Integer pageSize) {
+		if(!UserInfoUtils.getUserInfo().getIdentity().equals("admin")) throw new BussinessException(-1, "权限不足");
 		Job job = new Job();
 		job.setStatus(JobConstant.JOB_STATUS_SUCCESS);
 		return queryJobs(job, pageIndex, pageSize);
@@ -188,19 +191,28 @@ public class JobServiceImpl implements JobService {
 
 	@Override
 	public JSONObject queryAllJobsCheckFailed(Integer pageIndex, Integer pageSize) {
+		if(!UserInfoUtils.getUserInfo().getIdentity().equals("admin")) throw new BussinessException(-1, "权限不足");
 		Job job = new Job();
 		job.setStatus(JobConstant.JOB_STATUS_FAIL);
 		return queryJobs(job, pageIndex, pageSize);
 	}
 	
 	@Override
-	public JSONObject queryJobsAboutMeByCondition(String username, String keyword, Integer pageIndex, Integer pageSize) {
+	public JSONObject queryAllJobs(Integer pageIndex, Integer pageSize) {
+		if(!UserInfoUtils.getUserInfo().getIdentity().equals("admin")) throw new BussinessException(-1, "权限不足");
+		return queryJobs(null, pageIndex, pageSize);
+	}
+	
+	@Override
+	public JSONObject queryJobsAboutMeByCondition(String keyword, Integer pageIndex, Integer pageSize) {
 		if(pageIndex==null) pageIndex=PAGE_INDEX;
 		if(pageSize==null) pageSize=PAGE_SIZE;
+		String username = UserInfoUtils.getUserInfo().getUsername();
 		PageHelper.startPage(pageIndex, pageSize, true);
 		Example ex = new Example(Job.class);
 		keyword = "%" + keyword + "%";
-		ex.and().orEqualTo("creator", username).orEqualTo("processor", username).orEqualTo("inspector", username);
+		if(!UserInfoUtils.getUserInfo().getIdentity().equals("admin"))
+			ex.and().orEqualTo("creator", username).orEqualTo("processor", username).orEqualTo("inspector", username);
 		ex.and().orLike("jobTypeName", keyword).orLike("content", keyword);
 		ex.orderBy("updateTime").desc();
 		List<Job> list = jobMapper.selectByExample(ex);
@@ -215,7 +227,12 @@ public class JobServiceImpl implements JobService {
 	}
 
 	@Override
-	public JSONObject grabJobs(String user,List<Integer> jobsIds) {
+	public JSONObject allocate(JSONObject json) {
+		List<Integer> jobsIds = json.getObject("jobsIds", List.class);
+		String user = json.getString("username");
+		String remark = json.getString("remark");
+		if(!UserInfoUtils.getUserInfo().getIdentity().equals("admin"))
+			throw new BussinessException(-1, "权限不足");
 		if(jobsIds==null || jobsIds.isEmpty())  throw new BussinessException(-1, "选择工单无效！");
 		Job job = new Job();
 		// 添加工单处理人，更新工单状态
@@ -233,7 +250,7 @@ public class JobServiceImpl implements JobService {
 					null,
 					jobId,
 					user,
-					null,
+					remark,
 					null,
 					JobConstant.JOB_STATUS_PROCESSING,
 					new Date(),
@@ -242,8 +259,8 @@ public class JobServiceImpl implements JobService {
 		}
 		int j = jobProcessMapper.insertList(recordList);
 		if(i<1 || i!=j || i!=jobsIds.size()) 
-			throw new BussinessException(0, "领取工单失败！");
-		return CommonUtil.jsonResult(1, "领取成功！", i);
+			throw new BussinessException(0, "派单失败！");
+		return CommonUtil.jsonResult(1, "派单成功！", i);
 	}
 
 	@Override
@@ -254,9 +271,9 @@ public class JobServiceImpl implements JobService {
 		if(jobsIds==null ||jobsIds.size()<1 || owner==null || receiver==null) throw new BussinessException(-1, "转发失败！");
 		if(owner.equals(receiver)) throw new BussinessException(-1, "禁止重复转发给自己！");
 		// 查询接收人是否存在
-		JSONObject query = new JSONObject();
-		query.put("username", receiver);
-		if(userDao.queryExistUsername(query)<1) throw  new BussinessException(-1, "用户["+receiver+"]不存在！"); 
+		JSONObject queryUser = userDao.queryUserByName(receiver);
+		if(queryUser==null) throw  new BussinessException(-1, "用户["+receiver+"]不存在！"); 
+		if(!queryUser.getString("identity").equals("user") || !queryUser.getString("delete_status").equals("0")) throw  new BussinessException(-1, "只可以转发给正常普通用户！"); 
 		// 1. 更新工单当前处理人
 		Example example = new Example(Job.class);
 		example.and().andIn("id", jobsIds)
@@ -360,6 +377,49 @@ public class JobServiceImpl implements JobService {
 		return CommonUtil.jsonResult(1, "确认成功");
 	}
 	
+	// 需要权限
+	@Override
+	public JSONObject reject(String inspector, JSONObject json) {
+		if(!UserInfoUtils.getUserInfo().getIdentity().equals("admin"))
+			throw new BussinessException(-1, "权限不足");
+		Integer jobId = json.getInteger("jobId");
+		String file = json.getString("fileList");
+		String content = json.getString("content");
+		String type = json.getString("type");
+		if(jobId==null) throw new BussinessException(-1, "操作失败，原因：工单无效");
+		/* 1.更新工单状态，添加审核人
+		 */
+		Example example = new Example(Job.class);
+		example.and().andEqualTo("id", jobId)
+		.andEqualTo("status",  JobConstant.JOB_STATUS_PROCESSED);
+		Job job = new Job();
+		job.setStatus(JobConstant.JOB_STATUS_PROCESSING);
+		job.setInspector(inspector);
+		job.setUpdateTime(new Date());
+		job.setId(jobId); 
+		int i = jobMapper.updateByPrimaryKeySelective(job);
+		if(i<1) throw new BussinessException(-1, "操作失败");
+		
+		/* 2.添加新的进程：驳回和处理中
+		 */
+		JobProcess jobProcess1 = new JobProcess(
+				null, jobId, inspector, content, file, JobConstant.JOB_STATUS_REJECT, new Date(), new Date());
+		int j = jobProcessMapper.insertSelective(jobProcess1);
+		if(j<1) throw new BussinessException(-1, "操作失败");
+		
+		JobProcess jobProcess2 = new JobProcess(
+				null, jobId, jobMapper.selectByPrimaryKey(jobId).getProcessor(), null, null, JobConstant.JOB_STATUS_PROCESSING, new Date(), new Date());
+		int k = jobProcessMapper.insertSelective(jobProcess2);
+		if(k<1) throw new BussinessException(-1, "操作失败");
+		
+		/*
+		 * 3.更新文件状态
+		 */
+		List<Integer> fileList = json.getObject("fileList", ArrayList.class);
+		if(fileList!=null && !fileList.isEmpty()) fileTransferService.updateFileStatus(fileList);
+		return CommonUtil.jsonResult(1, "已驳回");
+	}
+	
 	@Override
 	public JSONObject queryById(Integer jobId) {
 		Job job = jobMapper.selectByPrimaryKey(jobId);
@@ -380,7 +440,7 @@ public class JobServiceImpl implements JobService {
 		List<JSONObject> list = userDao.listUser(null);
 		JSONArray userlist = new JSONArray();
 		list.forEach(json->{
-			if (json.getInteger("delete_status").intValue() == 0 /* && json.getString("identity").equals("user") */)
+			if (json.getInteger("delete_status").intValue() == 0  && json.getString("identity").equals("user") )
 				userlist.add(json.get("username"));
 		});
 		return CommonUtil.jsonResult(1, "查询成功", userlist);

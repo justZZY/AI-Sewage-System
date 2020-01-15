@@ -42,15 +42,10 @@ public class JobController {
 		return jobService.createJob(form);
 	}
 	
-	/** 领取工单 */
-	@RequestMapping(value = "/grab")
-	public JSONObject grabOrder(@RequestBody JSONObject json) {
-		// 1.查询当前登录用户
-		List list = json.getObject("jobsIds", List.class);
-		Integer singleJobId = json.getInteger("jobId");
-		if(singleJobId!=null && singleJobId.byteValue()>0)
-			return jobService.grabJobs(UserInfoUtils.getUserInfo().getUsername(), Arrays.asList(singleJobId));
-		return jobService.grabJobs(UserInfoUtils.getUserInfo().getUsername(), list);
+	/** 派单 */
+	@RequestMapping(value = "/allocate")
+	public JSONObject allocateOrder(@RequestBody JSONObject json) {
+		return jobService.allocate(json);
 	}
 	
 	
@@ -72,13 +67,28 @@ public class JobController {
 		return jobService.inspect(UserInfoUtils.getUserInfo().getUsername(), json);
 	}
 	
+	/** 驳回工单 */
+	@RequestMapping(value = "/reject")
+	public JSONObject rejectJob(@RequestBody JSONObject json) {
+		return jobService.reject(UserInfoUtils.getUserInfo().getUsername(), json);
+	}
+	
 	/** 查询某个工单 */
 	@RequestMapping(value = "/query/one")
 	public JSONObject inspectJob(@RequestParam Integer jobId) {
 		return jobService.queryById(jobId);
 	}
+	
 	/**
-	 * 查询所有待领取（待处理）的工单
+	 * 查询所有工单
+	 */
+	@RequestMapping("/query/all")
+	public JSONObject queryAllJobs( @RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
+		return jobService.queryAllJobs(pageIndex,pageSize);
+	}
+	
+	/**
+	 * 查询所有待分配（待处理）的工单
 	 */
 	@RequestMapping("/query/waiting")
 	public JSONObject queryJobsWaitingHandle( @RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
@@ -126,7 +136,7 @@ public class JobController {
 	/** 根据条件查询属于用户的工单 */
 	@RequestMapping("/query/search")
 	public JSONObject searchJobsAboutMe(@RequestParam String keyword,@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
-		return jobService.queryJobsAboutMeByCondition(UserInfoUtils.getUserInfo().getUsername(), keyword, pageIndex,pageSize);
+		return jobService.queryJobsAboutMeByCondition( keyword, pageIndex,pageSize);
 	}
 	
 	/** 查询工单数量 */
@@ -167,7 +177,7 @@ public class JobController {
 	}
 	
 	/**
-	 * 获取可接单用户列表
+	 * 获取可接单用户列表(仅 :user用户)
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/user/list")
 	public JSONObject queryUserList() {

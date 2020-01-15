@@ -72,6 +72,7 @@ public interface JobService {
 	 */
 	public JSONObject queryAllJobsCheckFailed(Integer pageIndex, Integer pageSize);
 	
+	public JSONObject queryAllJobs(Integer pageIndex, Integer pageSize);
 	
 	/** 创建一个工单 */
 	public JSONObject createJob(JSONObject form);
@@ -83,8 +84,8 @@ public interface JobService {
 	/** 查询所有工单列表  */
 	public JSONObject selectJobList(Integer pageIndex, Integer pageSize);
 	
-	/** 抢单（领取工单） */
-	public JSONObject grabJobs(String user, List<Integer> jobsIds);
+	/** 管理员派单 */
+	public JSONObject allocate(JSONObject json);
 	
 	/**
 	 *  转发工单
@@ -113,12 +114,11 @@ public interface JobService {
 	public JSONObject queryJobProcessListByJobId(int jobId);
 	
 	/**
-	 * 模糊查询
-	 * @param username 与username有关的工单
+	 * 模糊查询（查询当前用户可查询的工单）
 	 * @param keyword  模糊查询关键字 
 	 * @return
 	 */
-	public JSONObject queryJobsAboutMeByCondition(String username, String keyword, Integer pageIndex, Integer pageSize);
+	public JSONObject queryJobsAboutMeByCondition(  String keyword, Integer pageIndex, Integer pageSize);
 
 	/**
 	 * 查询可接单的用户列表
@@ -130,6 +130,13 @@ public interface JobService {
 	public JSONObject queryJobsCount(String username, String type);
 
 	public JSONObject queryById(Integer jobId);
+
+	/**
+	 * 审核-驳回工单，处理者接着处理 
+	 */
+	public JSONObject reject(String inspector, JSONObject json);
+
+	
 
 
 }
