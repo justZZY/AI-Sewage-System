@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container" style="background-image:url('src/renderer/assets/bg1.jpg'); background-repeat: no-repeat;background-size: 100% 100%;"  >
+  <div class="login-container" style="background-image:url('http://116.55.241.28:8083/pic/bg1.jpg'); background-repeat: no-repeat;background-size: 100% 100%;"  >
     <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left"
              label-width="0px"
              class="card-box login-form">

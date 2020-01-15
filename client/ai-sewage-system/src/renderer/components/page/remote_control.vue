@@ -129,7 +129,7 @@
     data () {
       this.getEquipMonitor()
       return {
-        imgUrl: 'src/renderer/assets/EquipState.png',
+        imgUrl: 'http://116.55.241.28:8083/pic/EquipState.png',
         devicedata: [],
         sliderData: [], // 设置频率滑动条json数组
         // 1.14新增
