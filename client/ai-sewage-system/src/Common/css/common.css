@@ -18,12 +18,12 @@
   border-bottom-width: 2px;
 }
 
-.item-container {
+/* .item-container {
   margin-bottom: 50px;
   margin-right: 60px;
   margin-left: 60px;
   flex-direction: column;
-}
+} */
 .item-content {
   flex-direction: column;
   background-color: #ffffff;

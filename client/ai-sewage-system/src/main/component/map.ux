@@ -1,0 +1,79 @@
+<template>
+    <stack>
+      <map 
+        id="map"
+        style="width:{{width}}; height:{{height}}" 
+        scale="{{scale}}" 
+        markers="{{markers}}"
+        latitude="{{latitude}}"
+        longitude="{{longitude}}"
+      >
+      </map>
+      <div class="card-container">
+        <text>this is a test.</text>
+      </div>
+    </stack>
+</template>
+
+<script>
+const MARKER_PATH = '/common/pic/site.png'
+const MARKER_SAMPLE = {
+  latitude: 0,
+  longitude: 0,
+  coordType: 'wgs84',
+  iconPath: MARKER_PATH,
+  callout: {
+    content: 'null',
+    padding: '20px 5px 20px 5px',
+    borderRadius: '20px',
+    textAlign: 'left',
+    display: 'byclick'
+  }
+}
+export default {
+  data: {
+    width: '100%',
+    height: '100%',
+    latitude: 0,
+    longitude: 0,
+    currentIndex: 0,
+    scale: 10,
+    markers: []
+  },
+  /**
+   * @description 初始化地图数据
+   */
+  onReady() {
+    this.markers = this.getMapMarkers()
+    this.latitude = this.markers[0].latitude
+    this.longitude = this.markers[0].longitude
+  },    
+  /**
+   * @description 获取设备站点信息
+   * @returns 站点地图makers列表
+   */
+  getMapMarkers () {
+    let markers = []
+    let equipments = this.$app.$data.equipmentList
+    for (let i = 0; i < equipments.length; i++) {
+      // 省份信息->城市信息
+      const cityArray = equipments[i].child
+      for (let j = 0; j < cityArray.length; j++) {
+        cityArray[j].child.forEach(site => {
+          // 避免浅拷贝指向同一个对象
+          let marker = JSON.parse(JSON.stringify(MARKER_SAMPLE)) 
+          marker.latitude = site.latitude
+          marker.longitude = site.longitude
+          marker.callout.content = site.alias
+          markers.push(marker)
+        })
+      }
+    }
+    return markers
+  }
+}
+</script>
+
+<style>
+
+</style>

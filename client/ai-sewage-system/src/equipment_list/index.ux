@@ -3,9 +3,7 @@
     <div class="page-title-wrap">
       <text class="page-title">{{componentName}}</text>
     </div>
-
-
-
+    
     <!--tab组件-->
     <tabs class="tabs" onchange="changeTabactive" index="0">
       <tab-bar class="tab-bar">
@@ -49,10 +47,8 @@ export default {
 </script>
 
 <style>
-  @import './../../common/css/common.css';
-  *{
-    font-size: 23px;
-  }
+  @import './../common/css/common.css';
+  
   .tabs {
     flex: 1;
     margin-top: 20px;
@@ -79,6 +75,10 @@ export default {
     padding-top: 30px;
     padding-left: 30px;
     padding-right: 30px;
+    margin-bottom: 50px;
+    margin-right: 60px;
+    margin-left: 60px;
+    flex-direction: column;
   }
   .item-title{
     color: #09ba07;

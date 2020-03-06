@@ -1,19 +1,19 @@
-function Equipment(uid,boxNo,alias,address,boxnet,connectionState){
+function Equipment(uid,boxNo,alias,address,boxnet,connectionState, latitude, longitude){
   this.uid=uid
   this.boxNo=boxNo
   this.alias=alias
   this.address=address
   this.boxnet=boxnet
   this.connectionState=connectionState
+  this.latitude = latitude
+  this.longitude = longitude
 }
-
- 
 
 function formatList(responseData){
   if(responseData===null || responseData===undefined) return null
   let areaJson = new Object()
   let temp = areaJson
-  let reg = /.+?(省|市|自治区|自治州)/g;
+  let reg = /.+?(省|市|自治区|自治州)/g
   for (let i = 0, len=responseData.length; i<len; i++) {
     let boxRegs = responseData[i]['boxRegs']
     for(let j=0; j<boxRegs.length; j++){
@@ -24,7 +24,9 @@ function formatList(responseData){
         boxReg.alias,
         boxReg.box.address,
         boxReg.box.boxnet,
-        boxReg.box.connectionState
+        boxReg.box.connectionState,
+        boxReg.box.latitude,
+        boxReg.box.longitude
       )
       let areas = item.address.substring(0,item.address.indexOf('市')+1).match(reg)
       if (areas===null) areas = ['其他']

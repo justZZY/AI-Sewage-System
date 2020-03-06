@@ -3,7 +3,7 @@
     <!-- 应用图标 -->
     <image id="icon" src="{{icon}}"></image>
     <!-- 应用名 -->
-    <text id="登录">智慧水务</text>
+    <text id="name">智慧水务</text>
     <!-- 应用详情 -->
     <div class="detail detail-first">
       <text class="detail-title">账号：</text>
@@ -25,7 +25,6 @@
 </template>
 
 <script>
-
 /**
  * 默认的菜单页(可自定义)
  * name默认为manifest文件中的name字段
@@ -36,7 +35,7 @@
 export default {
   protected: {
     name: '登录',
-    icon: '/Common/logo.png'
+    icon: '/common/pic/logo.png'
   },
   private: {
     username: 'admin',
@@ -85,10 +84,10 @@ export default {
     const equipmentHelper = this.$app.$def.equipmentHelper
     this.$app.$def.get(
       'http://116.55.241.28:8082/equip/getEquipments?Authorization=' + ('Bearer '+access_token) + '&XFBoxClientId=zzy_test',
-      {'Authorization':  this.$app.$data.shiroToken}, 
+      { 'Authorization':  this.$app.$data.shiroToken}, 
       function(data){
         this.$app.$data.equipmentList = equipmentHelper.formatList(data)
-        this.$app.$def.route('/control/equipment_list')
+        this.$app.$def.route('/main')
       }.bind(this))
   },
 
@@ -114,11 +113,15 @@ export default {
   /* 应用图标 */
   #icon {
     margin-top: 90px;
-    width: 134px;
-    height: 134px;
-    border-radius: 10px;
-    border: 1px solid #8d8d8d;
-    margin-bottom: 5px;
+    width: 75%;
+    height: 20%;
+    /* border-radius: 10px; */
+    /* border: 1px solid #8d8d8d; */
+    margin-bottom: 10px;
+  }
+
+  #name {
+    font-size: 50px;
   }
 
   /* 应用详情 */
@@ -138,12 +141,12 @@ export default {
   .detail-title {
     width: 160px;
     padding-left: 10px;
-    font-size: 25px;
+    font-size: 35px;
     color: #000000;
   }
 
   .detail-content {
-    font-size: 25px;
+    font-size: 33px;
     color: #8d8d8d;
     width: 100%;
   }
