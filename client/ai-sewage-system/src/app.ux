@@ -4,7 +4,6 @@
 */
 import util from './util'
 import equipmentHelper from './common/js/equipmentHelper'
-import storage from './common/js/storage.js'
 
 export default {
   equipmentHelper: equipmentHelper,

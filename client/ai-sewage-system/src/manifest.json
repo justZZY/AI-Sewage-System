@@ -40,13 +40,7 @@
       "login": {
         "component": "index"
       },
-      "equipment_list": {
-        "component": "index"
-      },
       "main": {
-        "component": "index"
-      },
-      "test": {
         "component": "index"
       }
     },
@@ -63,9 +57,6 @@
       },
       "main": {
         "titleBarText": "我的站点"
-      },
-      "test": {
-        "titleBarText": "test"
       }
     }
   }
