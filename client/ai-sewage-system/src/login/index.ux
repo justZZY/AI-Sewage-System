@@ -24,7 +24,8 @@
   </div>
 </template>
 
-<script>
+<script>  
+import router from '@system.router'
 /**
  * 默认的菜单页(可自定义)
  * name默认为manifest文件中的name字段
@@ -87,7 +88,7 @@ export default {
       { 'Authorization':  this.$app.$data.shiroToken}, 
       function(data){
         this.$app.$data.equipmentList = equipmentHelper.formatList(data)
-        this.$app.$def.route('/main')
+        router.replace({uri: '/main'})
       }.bind(this))
   },
 
