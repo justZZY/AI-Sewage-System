@@ -17,10 +17,11 @@ public class Global {
 //    // FBox客户端注册的账号
 //    public static String username = "ligaofa";
 //    public static String password = "gf229192";
+
 //    // 获取API账号请咨询对接的销售。
 //    public static String clientId = "ynsk";
 //    public static String clientSecret = "af6a37beddb28136eed65bda1f16547f";
-    public static String username = "kmzmhj";
+    public static String username = "ynzmhj";
     public static String password = "zmhj123456";
     // 获取API账号请咨询对接的销售。
     public static String clientId = "kmbq";

@@ -13,7 +13,7 @@
       <div >
         <div class="card-container">
           <div class="card-img">
-            <image src="{{site.value.pic}}" onerror="onImageError" resize-mode="stretch" style="height:200px; width:100%;"></image>
+            <image src="{{site.value.pic}}" onerror="onImageError" style="height:200px; width:100%;"></image>
           </div>
           <text>站点: {{site.value.name}}</text>
           <text>能源: {{site.value.energy}}</text>

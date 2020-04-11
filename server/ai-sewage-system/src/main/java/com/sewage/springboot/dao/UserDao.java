@@ -98,4 +98,9 @@ public interface UserDao {
 	 * 删除本角色全部权限
 	 */
 	int removeRoleAllPermission(JSONObject jsonObject);
+	
+	/**
+	 * 查询用户信息
+	 */
+	JSONObject queryUserByName(@Param("username") String username);
 }

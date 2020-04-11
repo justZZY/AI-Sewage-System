@@ -177,4 +177,10 @@
          from user
          WHERE username=#{username};
     </select>
+    
+    <select id="queryUserByName" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT username, delete_status, identity, area, phone, mail
+        FROM user u, permission p
+        WHERE u.pid = p.pid and u.username = #{username}
+    </select>
 </mapper>

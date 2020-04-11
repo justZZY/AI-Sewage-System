@@ -24,6 +24,9 @@ public class JobConstant {
 	public static final String JOB_STATUS_PROCESSED 	= "4";
 	/** 状态：处理结果被检测中心确认处理完成  */
 	public static final String JOB_STATUS_SUCCESS 		= "5";
-	/** 状态：处理结果被检测中心确认未被处理成功  */
+	/** 状态：处理结果被检测中心确认未被处理成功，中断处理  */  //2020-1-15日修改
 	public static final String JOB_STATUS_FAIL 			= "6";
+	
+	/** 状态：处理结果被检测中心确认未被处理成功，并驳回给处理者    */  //2020-1-15日新增 
+	public static final String JOB_STATUS_REJECT		= "7";
 }

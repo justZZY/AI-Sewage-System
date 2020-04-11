@@ -10,7 +10,6 @@ import javax.persistence.Id;
 /**
  * 工单类型
  * <br><br>
- * 映射数据库表 (项目根据此实体生成表)
  *
  * @author sc
  * @date 2019年9月22日
@@ -23,6 +22,9 @@ public class JobType {
     @Column(name = "id"  )
     private Integer id;
     
+    @Column(name = "father_id"  )
+    private Integer fatherId;
+    
     /** 工单问题名称 */
     @Column(name = "job_type_name" )
     private String jobTypeName;
@@ -33,15 +35,20 @@ public class JobType {
     @Column(name = "update_time" )
     private Date updateTime;
 
-    @Column(name = "is_valid" )
-    private Boolean  isValid;
-
 	public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getFatherId() {
+		return fatherId;
+	}
+
+	public void setFatherId(Integer fatherId) {
+		this.fatherId = fatherId;
 	}
 
 	public String getJobTypeName() {
@@ -67,14 +74,7 @@ public class JobType {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
-
-	public Boolean getIsValid() {
-		return isValid;
-	}
-
-	public void setIsValid(Boolean isValid) {
-		this.isValid = isValid;
-	}
+ 
     
     
 }
