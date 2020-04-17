@@ -1,0 +1,4 @@
+@prefix iot: <https://www.zm-iot-platform.com/>.
+@include <RDFS>.
+[rule0: (?equip iot:hasValue ?value) (?value iot:hasException ?exception) -> (?equip iot:hasExceptionValue ?value)]
+[rule1: (?site iot:hasEquip ?equip) (?equip iot:hasExceptionValue ?value) -> (?site iot:hasExceptionEquip ?equip)]
