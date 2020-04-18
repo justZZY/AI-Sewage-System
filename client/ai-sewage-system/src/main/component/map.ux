@@ -33,9 +33,9 @@
 
 <script>
 import prompt from '@system.prompt'
-import {siteDetail} from '../../common/js/siteDetail.js'
+import {siteDetail} from '../../Common/js/siteDetail.js'
 
-const MARKER_PATH = '/common/pic/site.png'
+const MARKER_PATH = '/Common/pic/site.png'
 const MARKER_SAMPLE = {
   id: -1,
   latitude: 0,

@@ -17,7 +17,7 @@ export const siteDetail = [
       date: '2018年05月',
       operator: '张天华',
       phone: '15906919767',
-      pic: 'http://116.55.241.28:8083/pic/site/error.png'
+      pic: 'http://43.228.77.195:8083/pic/site/error.png'
     } 
   },  
   {
@@ -35,7 +35,7 @@ export const siteDetail = [
       date: '2018年01月',
       operator: '张天华',
       phone: '15906919767',
-      pic: 'http://116.55.241.28:8083/pic/site/西家冲污水处理站.png'
+      pic: 'http://43.228.77.195:8083/pic/site/西家冲污水处理站.png'
     }
   },
   {
@@ -53,7 +53,7 @@ export const siteDetail = [
       date: '2018年01月',
       operator: '张天华',
       phone: '15906919767',
-      pic: 'http://116.55.241.28:8083/pic/site/鸡蛋村污水处理站.png'
+      pic: 'http://43.228.77.195:8083/pic/site/鸡蛋村污水处理站.png'
     }
   },
   {
@@ -71,7 +71,7 @@ export const siteDetail = [
       date: '2017年10月',
       operator: '张天华',
       phone: '15906919767',
-      pic: 'http://116.55.241.28:8083/pic/site/红塘村污水处理站.png'
+      pic: 'http://43.228.77.195:8083/pic/site/红塘村污水处理站.png'
     }
   },
   {
@@ -89,7 +89,7 @@ export const siteDetail = [
       date: '2018年03月',
       operator: '张天华',
       phone: '15906919767',
-      pic: 'http://116.55.241.28:8083/pic/site/博尚镇污水处理站.png'
+      pic: 'http://43.228.77.195:8083/pic/site/博尚镇污水处理站.png'
     }
   },
   {
@@ -107,7 +107,7 @@ export const siteDetail = [
       date: '2018年05月',
       operator: '张天华',
       phone: '15906919767',
-      pic: 'http://116.55.241.28:8083/pic/site/军赛乡污水处理站.png'
+      pic: 'http://43.228.77.195:8083/pic/site/军赛乡污水处理站.png'
     }
   },
   {
@@ -125,7 +125,7 @@ export const siteDetail = [
       date: '未完工',
       operator: '张天华',
       phone: '15906919767',
-      pic: 'http://116.55.241.28:8083/pic/site/error.png'
+      pic: 'http://43.228.77.195:8083/pic/site/error.png'
     }
   },
   {
@@ -143,7 +143,7 @@ export const siteDetail = [
       date: '2018年09月',
       operator: '张天华',
       phone: '15906919767',
-      pic: 'http://116.55.241.28:8083/pic/site/小湾镇污水处理站.png'
+      pic: 'http://43.228.77.195:8083/pic/site/小湾镇污水处理站.png'
     }
   },
   {
@@ -161,7 +161,7 @@ export const siteDetail = [
       date: '2018年10月',
       operator: '张天华',
       phone: '15906919767',
-      pic: 'http://116.55.241.28:8083/pic/site/营盘镇污水处理站.png'
+      pic: 'http://43.228.77.195:8083/pic/site/营盘镇污水处理站.png'
     }
   },
   {
@@ -179,7 +179,7 @@ export const siteDetail = [
       date: '2018年10月',
       operator: '张天华',
       phone: '15906919767',
-      pic: 'http://116.55.241.28:8083/pic/site/下咱乐污水处理站.png'
+      pic: 'http://43.228.77.195:8083/pic/site/下咱乐污水处理站.png'
     }
   },
   {
@@ -197,7 +197,7 @@ export const siteDetail = [
       date: '2018年11月',
       operator: '张天华',
       phone: '15906919767',
-      pic: 'http://116.55.241.28:8083/pic/site/柒树林污水处理站.png'
+      pic: 'http://43.228.77.195:8083/pic/site/柒树林污水处理站.png'
     }
   },
   {
@@ -215,7 +215,7 @@ export const siteDetail = [
       date: '2018年10月',
       operator: '张天华',
       phone: '15906919767',
-      pic: 'http://116.55.241.28:8083/pic/site/舍阴寨污水处理站.png'
+      pic: 'http://43.228.77.195:8083/pic/site/舍阴寨污水处理站.png'
     }
   },
   {
@@ -233,7 +233,7 @@ export const siteDetail = [
       date: '2018年10月',
       operator: '张天华',
       phone: '15906919767',
-      pic: 'http://116.55.241.28:8083/pic/site/河口村污水处理站.png'
+      pic: 'http://43.228.77.195:8083/pic/site/河口村污水处理站.png'
     }
   },
   {
@@ -251,7 +251,7 @@ export const siteDetail = [
       date: '-',
       operator: '张天华',
       phone: '15906919767',
-      pic: 'http://116.55.241.28:8083/pic/site/error.png'
+      pic: 'http://43.228.77.195:8083/pic/site/error.png'
     }
   },
   {
@@ -269,7 +269,7 @@ export const siteDetail = [
       date: '-',
       operator: '张天华',
       phone: '15906919767',
-      pic: 'http://116.55.241.28:8083/pic/site/error.png'
+      pic: 'http://43.228.77.195:8083/pic/site/error.png'
     }
   },
   {
@@ -287,7 +287,7 @@ export const siteDetail = [
       date: '2018年12月',
       operator: '张天华',
       phone: '15906919767',
-      pic: 'http://116.55.241.28:8083/pic/site/新寨子污水处理站.png'
+      pic: 'http://43.228.77.195:8083/pic/site/新寨子污水处理站.png'
     }
   },
   {
@@ -305,7 +305,7 @@ export const siteDetail = [
       date: '2017年11月',
       operator: '张天华',
       phone: '15906919767',
-      pic: 'http://116.55.241.28:8083/pic/site/大园铺污水处理站.png'
+      pic: 'http://43.228.77.195:8083/pic/site/大园铺污水处理站.png'
     }
   },
   {
@@ -323,7 +323,7 @@ export const siteDetail = [
       date: '-',
       operator: '张天华',
       phone: '15906919767',
-      pic: 'http://116.55.241.28:8083/pic/site/error.png'
+      pic: 'http://43.228.77.195:8083/pic/site/error.png'
     }
   },
   {
@@ -341,7 +341,7 @@ export const siteDetail = [
       date: '-',
       operator: 'test',
       phone: '18483691772',
-      pic: 'http://116.55.241.28:8083/pic/site/云南大学测试平台.jpg'
+      pic: 'http://43.228.77.195:8083/pic/site/云南大学测试平台.jpg'
     }
   }
 ]

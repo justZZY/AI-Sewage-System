@@ -4,7 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.ReadWrite;
-import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.*;
 import org.apache.jena.tdb.TDBFactory;
 
 import java.util.ArrayList;
@@ -155,5 +155,31 @@ public class TDBPersistence {
             dataset.end();
         }
         return model;
+    }
+
+    /**
+     * 查询Model中三元组；
+     */
+    public List<Statement> getTriplet(String modelName, String subject, String predicate, String object) {
+        List<Statement> results = new ArrayList<>();
+        Model model = null;
+        dataset.begin(ReadWrite.READ);
+        try {
+            model = dataset.getNamedModel(modelName);
+            Selector selector = new SimpleSelector(
+                    (subject != null) ? model.createResource(subject) : null,
+                    (predicate != null) ? model.createProperty(predicate) : null,
+                    (object != null) ? model.createResource(object) : null
+            );
+            StmtIterator it = model.listStatements(selector);
+            while (it.hasNext()) {
+                Statement stmt = it.next();
+                results.add(stmt);
+            }
+            dataset.commit();
+        } finally {
+            dataset.end();
+        }
+        return results;
     }
 }

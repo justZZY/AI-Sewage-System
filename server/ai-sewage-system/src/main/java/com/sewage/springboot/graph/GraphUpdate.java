@@ -9,6 +9,7 @@ public class GraphUpdate extends TimerTask {
     public void run() {
         try {
             SiteGraph siteGraph = new SiteGraph();
+            System.out.print("====Graph Update");
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 /**
@@ -96,7 +97,7 @@ public class SiteGraph {
                         if (Pattern.matches(".*测试平台.*", siteName)
                                 && equipItem.getString("grpName").equals("传感")) {
                             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss"); // 设置日期格式
-                            int number = 50;
+                            int number = new Random().nextInt(60); // 写个随机
                             Resource value = model.createResource(BASE_URI + "value/"
                                     + equipItem.getString("name") + "/" + number + "/" + df.format(new Date()));
                             equip.addProperty(hasValue, value);
@@ -179,7 +180,7 @@ public class SiteGraph {
         String url = this.API_BASE_URL + "v2/box/dmon/grouped?boxNo=" + siteNo;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(url)
-                .addHeader("Authorization", authorization)
+                .addHeader("Authorization", this.authorization)
                 .build();
         Response response = client.newCall(request).execute();
         if (response.isSuccessful()) {

@@ -85,6 +85,7 @@ function post(url, data, header, callback){
     fail: function (dresponse_dataata, code) {
       alert('服务器维护中，请稍后再试！')
       console.log('errorcode:'+code)
+      console.log(dresponse_dataata)
     }
   })
 }

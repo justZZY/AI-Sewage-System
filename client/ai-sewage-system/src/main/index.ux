@@ -1,6 +1,8 @@
 <!-- 在main文件中 我们只导入子页面组件 具体功能由子页面完成 减少耦合 -->
 <!-- 引入自定义组件 -->
 <import name="map-component" src="./component/map.ux"></import>
+<import name="site-component" src="./component/site.ux"></import>
+ 
 
 <template>
   <div class="demo-page">
@@ -19,7 +21,7 @@
           <map-component></map-component>
         </div>
         <div class="tab-content-section">
-          <text>站点状态</text>
+          <site-component></site-component>
         </div>
         <div class="tab-content-sectio">
           <text>工单信息</text>

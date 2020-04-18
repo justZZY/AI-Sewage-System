@@ -7,14 +7,24 @@ import com.google.gson.Gson;
 import com.sewage.springboot.Global;
 import com.sewage.springboot.entity.EquipJson;
 import com.sewage.springboot.entity.EquipValueJson;
+import com.sewage.springboot.graph.TDBPersistence;
 import com.sewage.springboot.logger.ConsoleLoggerFactory;
+import com.sewage.springboot.service.GraphService;
+import com.sewage.springboot.service.impl.GraphServiceImpl;
 import com.sewage.springboot.signalr.FBoxSignalRConnection;
 import okhttp3.*;
+import org.apache.jena.query.*;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Selector;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.sparql.resultset.ResultsFormat;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.IOException;
+import java.util.List;
 
 //允许外部访问
 @CrossOrigin
@@ -24,6 +34,8 @@ import java.io.IOException;
 //表示该controller类下所有的方法都公用的一级上下文根
 @RequestMapping(value = "/equip")
 public class EquipController {
+    @Autowired
+    private GraphService graphService;
     /**
      * @desc 获取fbox连接的token信息
      */
@@ -138,7 +150,7 @@ public class EquipController {
             throw new IOException("Unexpected code " + response);
         }
     }
-    /*
+    /**
      * 设置设备寄存器的值
      */
     @RequestMapping(value = "setEquipValue", method = RequestMethod.POST)
@@ -174,7 +186,40 @@ public class EquipController {
             throw new IOException("Unexpected code " + response);
         }
     }
-    /*
+
+    /**
+     * @desc 获取各个站点的异常数据
+     */
+    @RequestMapping(value = "/getExceptionSite", method = RequestMethod.GET)
+    String getExceptionSite() {
+        JSONArray jsonArray = new JSONArray();
+        // 查找异常设备
+        List<Statement> equipList = graphService.getEquipExceptionInference("sewage_iot", null,
+                "https://www.zm-iot-platform.com/hasExceptionEquip", null);
+        formatTDBData(jsonArray, equipList);
+        return jsonArray.toJSONString();
+    }
+    @RequestMapping(value = "/getGraphEquip", method = RequestMethod.POST)
+    String getGraphEquip (@RequestBody JSONObject object) {
+        String siteURI = object.getString("siteURI");
+        JSONArray jsonArray = new JSONArray();
+        List<Statement> equipList = graphService.getEquipExceptionInference("sewage_iot", siteURI,
+                "https://www.zm-iot-platform.com/hasEquip", null);
+        formatTDBData(jsonArray, equipList);
+        return jsonArray.toJSONString();
+    }
+    // 从推理中获取主谓宾构造json数组
+    private void formatTDBData(JSONArray jsonArray, List<Statement> equipList) {
+        equipList.forEach(item -> {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("subject", item.getSubject().getURI());
+            jsonObject.put("predicate", item.getPredicate().getURI());
+            jsonObject.put("object", item.getObject().toString());
+            jsonArray.add(jsonObject);
+        });
+    }
+
+    /**
      * 建立signalr实时监控
      */
     @RequestMapping(value = "/createSignalRConnect", method = RequestMethod.POST)
@@ -189,7 +234,7 @@ public class EquipController {
         signalRConnection.start();
         return "success";
     }
-    /*
+    /**
      * 关闭signalr监控
      */
     @RequestMapping(value = "/closeSignalRConnect", method = RequestMethod.POST)
