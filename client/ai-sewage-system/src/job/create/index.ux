@@ -120,7 +120,7 @@ export default {
     this.$app.$def.post(baseurl+'/job/add', this.job, {'Authorization': this.$app.$data.shiroToken,'Content-Type': 'application/json;charset=UTF-8'}, function(result){
       if(result.code==1){
         this.$app.$def.toast(result.msg)
-        this.$app.$def.goback()
+        this.$app.$def.replace('job/home')
       }else{
         this.$app.$def.alert(result.msg)
       }

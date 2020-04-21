@@ -15,7 +15,7 @@
         <!-- 列表 -->
         <list class="job_list" style="columns:1">
           <!-- 列表元素，属性type值相同时，需要确保渲染中dom结构相同 -->
-          <list-item type="item-list" class="job_item" for="item in list_unfinished" onclick="this.$app.$def.route('/job/detail',{'jobId':item.id,'statusMapper':this.statusMapper,'currentIndex':currentIndex})">
+          <list-item type="item-list" class="job_item" for="item in list_unfinished" onclick="this.$app.$def.replace('/job/detail',{'jobId':item.id,'statusMapper':this.statusMapper,'currentIndex':currentIndex})">
             <div class="job_item_title">
               <div style="width:65%">
                 <text style="color:#007467;font-size:35px;">{{item.jobTypeName}}</text>
@@ -64,7 +64,7 @@
         <!-- 列表 -->
         <list class="job_list" style="columns:1">
           <!-- 列表元素，属性type值相同时，需要确保渲染中dom结构相同 -->
-          <list-item type="item-list" class="job_item" for="item in list_finished" onclick="this.$app.$def.route('/job/detail',{'jobId':item.id,'statusMapper':this.statusMapper,'currentIndex':currentIndex})">
+          <list-item type="item-list" class="job_item" for="item in list_finished" onclick="this.$app.$def.replace('/job/detail',{'jobId':item.id,'statusMapper':this.statusMapper,'currentIndex':currentIndex})">
             <div class="job_item_title">
               <div style="width:65%">
                 <text style="color:#007467;font-size:35px;">{{item.jobTypeName}}</text>
@@ -151,6 +151,10 @@ export default {
   onInit () {
     this.$page.setTitleBar({ text: '工单中心' })
     this.updateMyJobList()
+  },
+  onBackPress() {
+    this.$app.$def.replace('job/home')
+    return true
   },
   updateMyJobList(pageIndex1=1,pageIndex2=1,pageSize=50){ 
     let url1 = baseurl + '/job/query/processing'
