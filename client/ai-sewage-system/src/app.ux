@@ -2,8 +2,8 @@
 /**
 * 应用级别的配置，供所有页面公用
 */
-import util from './common/js/util'
-import equipmentHelper from './common/js/equipmentHelper'
+import util from './Common/js/util'
+import equipmentHelper from './Common/js/equipmentHelper'
 
 export default {
   equipmentHelper: equipmentHelper,

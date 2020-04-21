@@ -25,6 +25,8 @@
 
 <script>
 import Chart from '../../Common/js/Chart.js'
+import config from './../../config'
+const baseurl = config.server.addr
 export default {
   data: {
     siteArray: [],
@@ -144,7 +146,7 @@ export default {
           this.siteArray = temp
         } else {
           // 请求设备信息
-          let url = 'http://43.228.77.195:8082/equip/getEquipMonitor'
+          let url = baseurl + '/equip/getEquipMonitor'
           let header = {
             'Content-Type': 'application/json;charset=UTF-8',
             'Authorization':  this.$app.$data.shiroToken
@@ -174,7 +176,7 @@ export default {
   },
   showEquipException () {
     // get异常
-    let url = 'http://43.228.77.195:8082/equip/getExceptionSite'
+    let url = baseurl+'/equip/getExceptionSite'
     let header = {'Authorization':  this.$app.$data.shiroToken}
     let callfunc = (equipException) => {
       console.log(equipException)

@@ -88,8 +88,10 @@ export default {
       header: header,
       method: 'GET',
       success: function (response_data) {
-        callback(JSON.parse(response_data.data))
-      },
+        let code = response_data.code
+        if(code>=200 && code<300) callback(JSON.parse(response_data.data))
+        else this.alert('很抱歉，服务异常，请稍后再试！\n错误码：'+code)
+      }.bind(this),
       fail: function (response_data, code) {
         this.alert('服务器维护中，请稍后再试！')
         console.log('errorcode:'+code)
@@ -119,8 +121,10 @@ export default {
       header: header,
       method: 'POST',
       success: function (response_data) {
-        callback(JSON.parse(response_data.data))
-      },
+        let code = response_data.code
+        if(code>=200 && code<300) callback(JSON.parse(response_data.data))
+        else this.alert('很抱歉，服务异常，请稍后再试！\n错误码：'+code)
+      }.bind(this),
       fail: function (dresponse_dataata, code) {
         this.alert('服务器维护中，请稍后再试！')
         console.log('errorcode:'+code)
@@ -128,7 +132,7 @@ export default {
       complete: function(){this.hideLoading()}.bind(this)
     })
   },
-  upload: function(url,data,header,files,calllback){
+  upload: function(url,data,header,files,callback){
     this.showLoading('  文件上传中..  ')
     request.upload({
       url: url,
@@ -136,8 +140,10 @@ export default {
       data: data,
       header: header,
       success: function(response_data) {
-        calllback(JSON.parse(response_data.data))
-      },
+        let code = response_data.code
+        if(code>=200 && code<300) callback(JSON.parse(response_data.data))
+        else this.alert('很抱歉，服务异常，请稍后再试！\n错误码：'+code)
+      }.bind(this),
       fail: function(data, code) {
         console.log(`handling fail, code = ${code}`)
         this.alert('上传失败，请稍后再试！')

@@ -2,8 +2,7 @@
 <!-- 引入自定义组件 -->
 <import name="map-component" src="./component/map.ux"></import>
 <import name="site-component" src="./component/site.ux"></import>
- 
-
+<import name="job-component" src="./../job/home/index.ux"></import>
 <template>
   <div class="demo-page">
     <!-- tabs组件 -->
@@ -12,7 +11,7 @@
       <tab-bar class="tab-bar">
         <text class="tab {{currentIndex === 0 ? 'active' : ''}}">站点地图</text>
         <text class="tab {{currentIndex === 1 ? 'active' : ''}}">站点状态</text>
-        <text class="tab {{currentIndex === 2 ? 'active' : ''}}" onclick="this.$app.$def.replace('job/home')">工单信息</text>
+        <text class="tab {{currentIndex === 2 ? 'active' : ''}}">工单信息</text>
         <text class="tab {{currentIndex === 3 ? 'active' : ''}}">我的信息</text>
       </tab-bar>
       <!-- tab-content组件 -->
@@ -24,7 +23,7 @@
           <site-component></site-component>
         </div>
         <div class="tab-content-sectio">
-          <text>工单信息</text>
+          <job-component></job-component>
         </div>
         <div class="tab-content-sectio">
           <text>我的信息</text>    

@@ -38,26 +38,27 @@
         <text class="second">{{receiver===null||receiver===''?'请选择派单目标人员':receiver}}</text>
       </div>
     </div>
-    <div class="title twoside"><a href="#">工单追踪</a><image src="./../../common/img/right.png"></image></div>
+    <div class="title twoside"><a href="#">工单追踪</a><image src="./../../Common/img/right.png"></image></div>
     <div class="button-box" if="jobDetail.status=='2'"><input class="single-button {{transfer?'bg-color1':''}}" type="button" value="{{transfer?'转派':'确认完成'}}" onclick="submit"></input></div>
     
     <popup target="phone" placement="right">
-      <text onclick="this.$app.$def.route('tel:'+jobDetail.telephone)" style="background-image: url('./../../common/img/telephone.png');width:70px"></text>
+      <text onclick="this.$app.$def.route('tel:'+jobDetail.telephone)" style="background-image: url('./../../Common/img/telephone.png');width:70px"></text>
       <text>|</text>
-      <text onclick="this.$app.$def.route('sms:'+jobDetail.telephone)" style="background-image: url('./../../common/img/sms.png');width:70px"></text>
+      <text onclick="this.$app.$def.route('sms:'+jobDetail.telephone)" style="background-image: url('./../../Common/img/sms.png');width:70px"></text>
     </popup>
   </div>
 </template>
 <script>
 import prompt from '@system.prompt' 
 import media from '@system.media'
-import util from './../../common/js/util'
+import util from './../../Common/js/util'
 import config from './../../config'
 const baseurl = config.server.addr
 export default {
   protected: {
     jobId:'',
-    statusMapper:{ }
+    statusMapper:{ },
+    currentIndex:1
   },
   private: {
     baseurl: baseurl,
@@ -85,7 +86,7 @@ export default {
     this.queryJobProcess()
   },
   onBackPress() {
-    this.$app.$def.replace('job/list')
+    this.$app.$def.replace('job/list',{'currentIndex':this.currentIndex})
     return true
   },
   /** 查询接单用户列表 */
@@ -170,7 +171,7 @@ export default {
 </script>
 
 <style>
-  @import './../../common/css/common.css';
+  @import './../../Common/css/common.css';
   
   popup text{
     padding: 20px;

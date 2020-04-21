@@ -77,7 +77,7 @@
 
 <script>
 export default {
-  private: {
+  data: {
     swiperConf: {
       index: 0,
       autoplay: true,
@@ -85,8 +85,8 @@ export default {
       indicator: true,
       loop:true,
       duration:1000,
-      previousmargin:'2%',
-      nextmargin:'2%',
+      previousmargin:'8%',
+      nextmargin:'8%',
       indicatorBottom:0
     },
   },
@@ -105,10 +105,11 @@ export default {
   .page{
     background-color: #f1f1f1;
     flex-direction: column;
+    padding: 10px;
   }
   .item-container1 {
     flex-direction: column;
-    margin: 0px;
+    margin-top: 2px;
   }
   .swiper-container {
     flex-direction: column;

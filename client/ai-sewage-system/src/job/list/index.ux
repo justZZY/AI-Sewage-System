@@ -15,7 +15,7 @@
         <!-- 列表 -->
         <list class="job_list" style="columns:1">
           <!-- 列表元素，属性type值相同时，需要确保渲染中dom结构相同 -->
-          <list-item type="item-list" class="job_item" for="item in list_unfinished" onclick="this.$app.$def.replace('/job/detail',{'jobId':item.id,'statusMapper':this.statusMapper})">
+          <list-item type="item-list" class="job_item" for="item in list_unfinished" onclick="this.$app.$def.replace('/job/detail',{'jobId':item.id,'statusMapper':this.statusMapper,'currentIndex':currentIndex})">
             <div class="job_item_title">
               <div style="width:65%">
                 <text style="color:#007467;font-size:35px;">{{item.jobTypeName}}</text>
@@ -60,11 +60,11 @@
         </div>
         <image class="icon-normal" src="./img/search_b.png"></image>
       </div>
-      <refresh if="{{list_unfinished!=null && list_unfinished.length>0}}" class="content" onrefresh="refresh" refreshing="{{isRefreshing}}" type="{{refreshType}}">
+      <refresh if="{{list_finished!=null && list_finished.length>0}}" class="content" onrefresh="refresh" refreshing="{{isRefreshing}}" type="{{refreshType}}">
         <!-- 列表 -->
         <list class="job_list" style="columns:1">
           <!-- 列表元素，属性type值相同时，需要确保渲染中dom结构相同 -->
-          <list-item type="item-list" class="job_item" for="item in list_finished" onclick="this.$app.$def.replace('/job/detail',{'jobId':item.id,'statusMapper':this.statusMapper})">
+          <list-item type="item-list" class="job_item" for="item in list_finished" onclick="this.$app.$def.replace('/job/detail',{'jobId':item.id,'statusMapper':this.statusMapper,'currentIndex':currentIndex})">
             <div class="job_item_title">
               <div style="width:65%">
                 <text style="color:#007467;font-size:35px;">{{item.jobTypeName}}</text>
@@ -112,10 +112,13 @@
 </template>
 
 <script>
-import util from './../../common/js/util'
+import util from './../../Common/js/util'
 import config from './../../config'
 const baseurl = config.server.addr
 export default {
+  protected: {
+    currentIndex: 0
+  },
   private: {
     refreshType:'auto',
     isRefreshing:false,
@@ -139,7 +142,6 @@ export default {
       '6': '处理中断',
       '7': '驳回'
     },
-    currentIndex: 0,
     list_unfinished:[],
     list_finished:[],
     pageIndex1 : 1,
