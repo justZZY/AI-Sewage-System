@@ -141,6 +141,22 @@ public class JobServiceImpl implements JobService {
 		return queryJobs(job, pageIndex, pageSize);
 	}
 
+	
+	@Override
+	public JSONObject queryJobsAllProcessed(String username, Integer pageIndex, Integer pageSize) {
+		if(pageIndex==null) pageIndex=PAGE_INDEX;
+		if(pageSize==null) pageSize=PAGE_SIZE;
+		PageHelper.startPage(pageIndex, pageSize, true);
+		Example ex = new Example(Job.class);
+		ex.and().andEqualTo("processor", username);
+		ex.and().orEqualTo("status", JobConstant.JOB_STATUS_PROCESSED)
+		.orEqualTo("status", JobConstant.JOB_STATUS_SUCCESS).orEqualTo("status", JobConstant.JOB_STATUS_FAIL);
+		ex.orderBy("updateTime").desc();
+		List<Job> list = jobMapper.selectByExample(ex);
+		PageInfo<Job> page = new PageInfo<Job>(list);
+		return CommonUtil.jsonResult(1, "查询完成！", page);
+	}
+	
 	@Override
 	public JSONObject queryJobsProcessed(String user, Integer pageIndex, Integer pageSize) {
 		Job job = new Job();
