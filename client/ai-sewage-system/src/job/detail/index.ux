@@ -85,10 +85,6 @@ export default {
     this.queryJobDetail()
     this.queryJobProcess()
   },
-  onBackPress() {
-    this.$app.$def.replace('job/list',{'currentIndex':this.currentIndex})
-    return true
-  },
   /** 查询接单用户列表 */
   queryUserList(){
     this.$app.$def.post(baseurl+'/job/user/list', null, {'Authorization': this.$app.$data.shiroToken}, function(result){
@@ -160,7 +156,7 @@ export default {
       if (result.code != 1) this.$app.$def.alert(result.msg)
       else{
         this.$app.$def.toast(result.msg)
-        this.$app.$def.replace('job/list')
+        this.$app.$def.goback()
       }
     }.bind(this))
   },
