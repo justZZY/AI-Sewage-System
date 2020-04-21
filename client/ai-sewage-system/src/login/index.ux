@@ -79,6 +79,13 @@ export default {
         this.$app.$def.toast('账号/密码错误')
         this.isClicked = false
       }
+      /**
+       *将用户信息存为全局数据
+       */
+       this.$app.$data.username = userJson.username
+       this.$app.$data.identity = userJson.identity
+       this.$app.$data.phone = userJson.phone
+       this.$app.$data.mail = userJson.mail
     }.bind(this)
     let header = {'Content-Type': 'application/json;charset=UTF-8'}
     this.$app.$def.post(url, {'data':data}, header, callback)
