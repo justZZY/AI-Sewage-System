@@ -1,0 +1,102 @@
+<template>
+    <div class="userinfo-container">
+        <!--用户头像-->
+        <image id="head" src="../../Common/img/user_image.png"></image>    
+        <div class="userinfo-wrapper">
+            <div class="form">
+                <text class="info">姓 名： {{username}}</text>
+            </div>
+            <div class="form">
+                <text class="info">身 份： {{identity}}</text>
+            </div>
+            <div class="form">
+                <text class="info">电 话： {{phone}}</text>
+            </div>
+            <div class="form-last">
+                <text class="info">邮 箱： {{mail}}</text>
+            </div>
+            
+        </div>
+
+    </div>
+</template>
+
+
+<script>
+    export default{
+        private:{
+            username:'',
+            identity:'',
+            phone:'',
+            mail:'',
+            pic:'/common/pic/user_image.png'
+    
+        },
+    
+        getdata () {
+            this.username = this.$app.$data.username
+            this.identity = this.$app.$data.identity
+            this.phone = this.$app.$data.phone
+            this.mail = this.$app.$data.mail
+        }
+              
+       }
+    
+
+
+</script>
+
+
+<style>
+    .userinfo-container {
+        flex-direction: column;
+        align-items: center;
+        width:100%;
+        height:80%;
+        margin-top: 125px;
+      }
+
+    #head {
+        
+        margin-bottom: 80px;
+        margin-left:20%;
+        width: 55%;
+        /* border-radius: 10px; */
+        /* border: 1px solid #8d8d8d; */
+        /*margin-bottom: 10px;   */
+        background-color:white
+       
+      }
+
+      .userinfo-wrapper {
+        width: 70%;
+        margin-top: 0;
+        margin-left: 35%;
+        flex-direction: column;
+        background-color:white
+      }
+
+      .info {
+        width: 100%;
+        padding-left: 10px;
+        font-size: 40px;
+        color: #42454d;
+      }
+
+      .form {
+        margin-top: 15px;
+        padding-top:15px;
+        border-top-width: 3px;
+        border-top-color: #f0f0f0;
+      }
+
+      .form-last {
+        margin-top: 15px;
+        padding-top:15px;
+        padding-bottom: 15px;
+        border-top-width: 3px;
+        border-top-color: #f0f0f0;
+        border-bottom-width: 3px;
+        border-bottom-color: #f0f0f0;
+      }
+</style>

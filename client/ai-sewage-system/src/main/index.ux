@@ -3,6 +3,7 @@
 <import name="map-component" src="./component/map.ux"></import>
 <import name="site-component" src="./component/site.ux"></import>
 <import name="job-component" src="./../job/home/index.ux"></import>
+<import name="userinfo-component" src="./component/userinfo.ux"></import>
 <template>
   <div class="demo-page">
     <!-- tabs组件 -->
@@ -26,7 +27,7 @@
           <job-component></job-component>
         </div>
         <div class="tab-content-sectio">
-          <text>我的信息</text>    
+          <userinfo-component></userinfo-component>   
         </div>
       </tab-content>
     </tabs>
