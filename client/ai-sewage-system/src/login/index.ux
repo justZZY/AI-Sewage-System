@@ -3,7 +3,7 @@
     <!-- 应用图标 -->
     <image id="icon" src="{{icon}}"></image>
     <!-- 应用名 -->
-    <text id="name">智慧水务</text>
+    <text id="name">智能物联乡村污水处理</text>
     <!-- 应用详情 -->
     <div class="detail detail-first">
       <text class="detail-title">账号：</text>
@@ -80,12 +80,12 @@ export default {
         this.isClicked = false
       }
       /**
-       *将用户信息存为全局数据
-       */
-       this.$app.$data.username = userJson.username
-       this.$app.$data.identity = userJson.identity
-       this.$app.$data.phone = userJson.phone
-       this.$app.$data.mail = userJson.mail
+       * 将用户信息存为全局数据
+      */
+      this.$app.$data.username = userJson.username
+      this.$app.$data.identity = userJson.identity
+      this.$app.$data.phone = userJson.phone
+      this.$app.$data.mail = userJson.mail
     }.bind(this)
     let header = {'Content-Type': 'application/json;charset=UTF-8'}
     this.$app.$def.post(url, {'data':data}, header, callback)
