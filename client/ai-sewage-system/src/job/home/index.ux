@@ -89,13 +89,6 @@ export default {
       nextmargin:'8%',
       indicatorBottom:0
     },
-  },
-  onInit () {
-    this.$page.setTitleBar({text: '工单中心'})
-  },
-  onBackPress () {
-    this.$app.$def.replace('main')
-    return true
   }
 }
 </script>
