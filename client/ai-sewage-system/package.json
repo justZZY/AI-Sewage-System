@@ -12,11 +12,11 @@
     "watch": "hap watch"
   },
   "devDependencies": {
+    "@types/quickapp": "git+https://github.com/vivoquickapp/quickapp-types.git",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.12.1",
     "eslint-plugin-hybrid": "0.0.5",
-    "hap-toolkit": "0.6.13",
-    "@types/quickapp": "git+https://github.com/vivoquickapp/quickapp-types.git"
+    "hap-toolkit": "0.6.13"
   },
   "dependencies": {}
 }

@@ -12,7 +12,7 @@
       <tab-bar class="tab-bar">
         <text class="tab {{currentIndex === 0 ? 'active' : ''}}">站点地图</text>
         <text class="tab {{currentIndex === 1 ? 'active' : ''}}">站点状态</text>
-        <text class="tab {{currentIndex === 2 ? 'active' : ''}}">工单信息</text>
+        <text class="tab {{currentIndex === 2 ? 'active' : ''}}" onclick="this.$app.$def.replace('job/home')">工单信息</text>
         <text class="tab {{currentIndex === 3 ? 'active' : ''}}">我的信息</text>
       </tab-bar>
       <!-- tab-content组件 -->
@@ -51,6 +51,10 @@ export default {
       backgroundColor: '#09ba07',
       textColor: '#fff'
     })
+  },
+  onBackPress() {
+    this.$app.exit()
+    return true
   },
   changeTabIndex (e) {
     this.currentIndex = e.index

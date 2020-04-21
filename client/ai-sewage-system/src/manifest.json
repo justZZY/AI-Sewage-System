@@ -20,6 +20,12 @@
     },
     {
       "name": "system.storage"
+    },
+    {
+      "name": "system.media"
+    },
+    {
+      "name": "@system.request"
     }
   ],
   "permissions": [
@@ -42,6 +48,18 @@
       },
       "main": {
         "component": "index"
+      },
+      "job/home": {
+        "component": "index"
+      },
+      "job/create": {
+        "component": "index"
+      },
+      "job/detail": {
+        "component": "index"
+      },
+      "job/list": {
+        "component": "index"
       }
     },
     "widgets": {}
@@ -57,6 +75,18 @@
       },
       "main": {
         "titleBarText": "我的站点"
+      },
+      "job/home": {
+        "titleBarText": "工单中心"
+      },
+      "job/create": {
+        "titleBarText": "工单创建"
+      },
+      "job/detail": {
+        "titleBarText": "工单处理"
+      },
+      "job/list": {
+        "titleBarText": "工单列表"
       }
     }
   }

@@ -1,0 +1,232 @@
+<template>
+  <div class="page">
+    <div class="title" if="jobDetail.status=='2'"><text>是否转派</text><switch checked="{{transfer}}" class="switch" onchange="changeSwitchStatus"></switch></div>
+    <div class="title" else><text>工单详情</text></div>
+    <div class="vertical content">
+      <div>
+        <text class="first">工单状态：</text>
+        <text>{{statusMapper[jobDetail.status]}}</text>
+      </div>
+      <div>
+        <text class="first">工单问题：</text>
+        <text>{{jobDetail.jobTypeName}}</text>
+      </div>
+      <div if="{{jobDetail.content!=''}}">
+        <text class="first">问题描述：</text>
+        <text>{{jobDetail.content}}</text>
+      </div>
+      <div>
+        <text class="first">联系人员：</text>
+        <text>{{jobDetail.creator}}</text>
+      </div>
+      <div>
+        <text class="first">联系电话：</text>
+        <text id="phone">{{jobDetail.telephone}}</text>
+      </div>
+      <div>
+        <text class="first">故障拍照：</text>
+        <swiper id="file" previousmargin="5%" nextmargin="5%" >
+          <image for="item in createProcess.file" src="{{item}}" onclick="this.$app.$def.previewImgs(item,createProcess.file)"></image>
+        </swiper>
+      </div>
+      <div>
+        <text class="first">创建时间：</text>
+        <text>{{dateFormat(jobDetail.createTime)}}</text>
+      </div>
+      <div onclick="selectReceiver" if="{{transfer && jobDetail.status=='2'}}" id="receiver">
+        <text class="first">接单人员：</text>
+        <text class="second">{{receiver===null||receiver===''?'请选择派单目标人员':receiver}}</text>
+      </div>
+    </div>
+    <div class="title twoside"><a href="#">工单追踪</a><image src="./../../common/img/right.png"></image></div>
+    <div class="button-box" if="jobDetail.status=='2'"><input class="single-button {{transfer?'bg-color1':''}}" type="button" value="{{transfer?'转派':'确认完成'}}" onclick="submit"></input></div>
+    
+    <popup target="phone" placement="right">
+      <text onclick="this.$app.$def.route('tel:'+jobDetail.telephone)" style="background-image: url('./../../common/img/telephone.png');width:70px"></text>
+      <text>|</text>
+      <text onclick="this.$app.$def.route('sms:'+jobDetail.telephone)" style="background-image: url('./../../common/img/sms.png');width:70px"></text>
+    </popup>
+  </div>
+</template>
+<script>
+import prompt from '@system.prompt' 
+import media from '@system.media'
+import util from './../../common/js/util'
+import config from './../../config'
+const baseurl = config.server.addr
+export default {
+  protected: {
+    jobId:'',
+    statusMapper:{ }
+  },
+  private: {
+    baseurl: baseurl,
+    transfer:false,
+    receiverList:[],
+    receiver:'',
+    jobDetail:{ },
+    processList: [],
+    createProcess: {}, // 创建进程
+    resultInspected:{},
+    resultProcessed:{},
+    processForm:{
+      jobId: '',
+      content: '',
+      fileList: ''
+    }//进程提交表单
+
+  },
+  onInit () {
+    this.statusMapper = JSON.parse(this.statusMapper)
+    console.log(this.statusMapper)
+    this.$page.setTitleBar({ text: '工单处理' })
+    this.queryUserList()
+    this.queryJobDetail()
+    this.queryJobProcess()
+  },
+  onBackPress() {
+    this.$app.$def.replace('job/list')
+    return true
+  },
+  /** 查询接单用户列表 */
+  queryUserList(){
+    this.$app.$def.post(baseurl+'/job/user/list', null, {'Authorization': this.$app.$data.shiroToken}, function(result){
+      if (result.code <= 0) this.$app.$def.alert(result.msg)
+      else this.receiverList = result.data
+    }.bind(this))
+  },
+  /** 查询工单信息 */
+  queryJobDetail(){
+    this.$app.$def.post(baseurl+'/job/query/one', { 'jobId': this.jobId}, {'Authorization': this.$app.$data.shiroToken}, function(result){
+      if (result.code <= 0) this.$app.$def.alert(result.msg)
+      else this.jobDetail = result.data
+    }.bind(this))
+  },
+  /** 查询进程信息 */
+  queryJobProcess(){
+    this.$app.$def.post(baseurl+'/job/jobprocess/query/list/' + this.jobId, null,{'Authorization': this.$app.$data.shiroToken}, function(result){
+      console.log(result)
+      if (result.code != 1) this.$app.$def.alert(result.msg)
+      else{
+        this.processList = result.data
+        // 更新当前具体进程
+        for (let i = 0, len = this.processList.length; i < len; i++) {
+          this.processList[i].file = JSON.parse(this.processList[i].file) // 将文件id列表转化为json，不然就字符串
+          if (this.processList[i].file !== undefined && this.processList[i].file !== null) {
+            this.processList[i].file.forEach((item,index,arr) => {
+              arr[index] = baseurl + '/file/download/' + item
+            })
+          }
+          // eslint-disable-next-line eqeqeq
+          if (this.processList[i].type == '4') {
+            this.resultProcessed = this.processList[i] // 完成进程
+            // eslint-disable-next-line eqeqeq
+          } else if (this.processList[i].type == '5' || this.processList[i].type == '6') {
+            this.resultInspected = this.processList[i] // 审核进程
+            // eslint-disable-next-line eqeqeq
+          } else if (this.processList[i].type == '1') {
+            this.createProcess = this.processList[i] // 创建程
+          }
+        }
+      }
+    }.bind(this))
+  },
+  /** 选择完成工单还是转派工单 */
+  changeSwitchStatus (e) {
+    // 清除选择的派单人
+    this.receiver = null
+    this.transfer = e.checked
+  },
+  /** 派单：选择接单人 */
+  selectReceiver () {
+    prompt.showContextMenu({
+      itemList: this.receiverList,
+      success: function (ret) {
+        this.receiver = this.receiverList[ret.index]
+        console.log(this.receiver)
+      }.bind(this)
+    })
+  },
+  submit(){
+    this.jobId = parseInt(this.jobId)
+    let url = baseurl + (this.transfer
+      ? '/job/forward'
+      : '/job/done')
+    let param = this.transfer
+      ? {'jobsIds':[this.jobId], receiverUsername: this.receiver}
+      : {'jobId': this.jobId}
+    this.$app.$def.post(url, param, {'Authorization': this.$app.$data.shiroToken,'Content-Type': 'application/json;charset=UTF-8'}, function(result){
+      if (result.code != 1) this.$app.$def.alert(result.msg)
+      else{
+        this.$app.$def.toast(result.msg)
+        this.$app.$def.replace('job/list')
+      }
+    }.bind(this))
+  },
+  dateFormat(dateString){
+    return util.dateFormat(new Date(dateString), 'yyyy-mm-dd hh:MM')
+  }
+}
+</script>
+
+<style>
+  @import './../../common/css/common.css';
+  
+  popup text{
+    padding: 20px;
+  }
+  image{
+    object-fit:contain;
+  }
+  .page{
+    flex-direction: column;
+    background-color: #eeeeee;
+  }
+  .title{
+    padding: 20px 0px 20px 50px;
+    border-bottom: 2px solid #cccccc;
+    border-top: 2px solid #cccccc;
+    background-color: #fcfcfc;
+  }
+  .title text,.title a{
+    font-size: 33px;
+    font-weight: bold;
+    color: #000000;
+  }
+  .content{
+    padding: 40px 0px 40px 90px;
+    background-color: #fcfcfc;
+  }
+  .content div{
+    padding: 20px 0px 20px 0px;
+    color: #000000;
+  }
+  .content div .first{
+    margin-right: 50px;
+  }
+  #phone{
+    color: #1c8b00;
+    border-bottom:1px solid #1c8b00;
+    padding: 0px 5px 0px 5px;
+  }
+  #file{
+    height:320px;
+    width:60%;
+    border:1px solid #dbdbdb;
+    padding: 5px;
+  }
+  #receiver .first{
+    font-weight:bold;
+    font-size:33px;
+    color:red;
+  }
+  #receiver .second{
+    border-bottom:1px solid red;
+    padding:0px 20px 0px 20px; 
+    color:red;
+  }
+  .bg-color1{
+     background-color:#04a0ac;
+  }
+
+</style>

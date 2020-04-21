@@ -1,0 +1,327 @@
+<template>
+<tabs id="tabs" class="doc-page" onchange="onChangeTabIndex" index="{{currentIndex}}">
+  <!-- 首页 -->
+  <tab-content id="tabContent">
+
+    <!-- 处理中工单 -->
+    <div class="page processing">
+      <div class="title-bar">
+        <div class="search-wrap">
+          <input class="search-input" type="text" placeholder="搜索我的工单类型、工单内容"></input>
+        </div>
+        <image class="icon-normal" src="./img/search_b.png"></image>
+      </div>
+      <refresh if="{{list_unfinished!=null && list_unfinished.length>0}}" class="content" onrefresh="refresh" refreshing="{{isRefreshing}}" type="{{refreshType}}">
+        <!-- 列表 -->
+        <list class="job_list" style="columns:1">
+          <!-- 列表元素，属性type值相同时，需要确保渲染中dom结构相同 -->
+          <list-item type="item-list" class="job_item" for="item in list_unfinished" onclick="this.$app.$def.replace('/job/detail',{'jobId':item.id,'statusMapper':this.statusMapper})">
+            <div class="job_item_title">
+              <div style="width:65%">
+                <text style="color:#007467;font-size:35px;">{{item.jobTypeName}}</text>
+              </div>
+              <div style="width:35%">
+                <image></image>
+                <text>{{dateFormat(item.updateTime)}}</text>
+              </div>
+            </div>
+            <div class="job_item_content" >
+              <div class="job_item_content_left">
+                <text>工单问题：{{item.jobTypeName}}</text>
+                <text>创建时间：{{dateFormat(item.createTime)}}</text>
+                <text>创建人：{{item.creator}}</text>
+                <text></text>
+              </div>
+              <div class="job_item_content_right">
+                <text>处理</text>
+              </div>
+            </div>
+            <!-- </div> -->
+          </list-item>
+
+          <!-- 加载更多 -->
+          <!-- 
+          <list-item type="loadMore" class="load-more" if="true" style="column-span:1">
+            <progress type="circular"></progress>
+            <text>加载更多</text>
+          </list-item> 
+          -->
+        </list>
+      </refresh>
+      <image else src='https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2836943063,515072414&fm=26&gp=0.jpg'></image>
+    </div>
+
+    <!-- 历史处理工单 -->
+    <div class="page processed">
+        <!-- 顶部搜索栏 -->
+      <div class="title-bar">
+        <div class="search-wrap">
+          <input class="search-input" type="text" placeholder="搜索我的工单类型、工单内容"></input>
+        </div>
+        <image class="icon-normal" src="./img/search_b.png"></image>
+      </div>
+      <refresh if="{{list_unfinished!=null && list_unfinished.length>0}}" class="content" onrefresh="refresh" refreshing="{{isRefreshing}}" type="{{refreshType}}">
+        <!-- 列表 -->
+        <list class="job_list" style="columns:1">
+          <!-- 列表元素，属性type值相同时，需要确保渲染中dom结构相同 -->
+          <list-item type="item-list" class="job_item" for="item in list_finished" onclick="this.$app.$def.replace('/job/detail',{'jobId':item.id,'statusMapper':this.statusMapper})">
+            <div class="job_item_title">
+              <div style="width:65%">
+                <text style="color:#007467;font-size:35px;">{{item.jobTypeName}}</text>
+              </div>
+              <div style="width:35%">
+                <image></image>
+                <text>{{dateFormat(item.updateTime)}}</text>
+              </div>
+            </div>
+            <div class="job_item_content" >
+              <div class="job_item_content_left">
+                <text>工单问题：{{item.jobTypeName}}</text>
+                <text>创建时间：{{dateFormat(item.createTime)}}</text>
+                <text>创建人：{{item.creator}}</text>
+                <text></text>
+              </div>
+              <div class="job_item_content_right">
+                <text class="color{{item.status}}" >{{statusMapper[item.status]}}</text>
+              </div>
+            </div>
+            <!-- </div> -->
+          </list-item>
+
+          <!-- 加载更多 -->
+          <!--
+           <list-item type="loadMore" class="load-more" if="true" style="column-span:1">
+            <progress type="circular"></progress>
+            <text>加载更多</text>
+          </list-item> 
+          -->
+        </list>
+      </refresh>
+      <image else src='https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2836943063,515072414&fm=26&gp=0.jpg'></image>
+    </div>
+  </tab-content>
+
+  <!-- tab-bar -->
+  <tab-bar id="tabBar">
+    <div class="tab-bar-item" for="tabBarData">
+      <image class="tab-bar-image" src="{{currentIndex === $idx ? $item.image_ : $item.image}}"></image>
+      <text class="tab-bar-text">{{$item.text}}</text>
+    </div>
+  </tab-bar>
+</tabs>
+</template>
+
+<script>
+import util from './../../common/js/util'
+import config from './../../config'
+const baseurl = config.server.addr
+export default {
+  private: {
+    refreshType:'auto',
+    isRefreshing:false,
+    tabBarData: [
+      {
+        image: './img/doc.png',
+        image_: './img/doc_.png',
+        text: '未处理'
+      },{
+        image: './img/history.png',
+        image_: './img/history_.png',
+        text: '历史'
+      }
+    ],
+    statusMapper: {
+      '1': '创建/待受理',
+      '2': '处理中',
+      '3': '被转接',
+      '4': '审核中',
+      '5': '处理成功',
+      '6': '处理中断',
+      '7': '驳回'
+    },
+    currentIndex: 0,
+    list_unfinished:[],
+    list_finished:[],
+    pageIndex1 : 1,
+    pageIndex2 : 1,
+    pageSize : 50
+  },
+  onInit () {
+    this.$page.setTitleBar({ text: '工单中心' })
+    this.updateMyJobList()
+  },
+  onBackPress() {
+    this.$app.$def.replace('job/home')
+    return true
+  },
+  updateMyJobList(pageIndex1=1,pageIndex2=1,pageSize=50){ 
+    let url1 = baseurl + '/job/query/processing'
+    let url2 = baseurl + '/job/query/allprocessed'
+    this.$app.$def.post(url1, {'pageIndex':pageIndex1,'pageSize':pageSize}, {'Authorization': this.$app.$data.shiroToken}, function(result){
+      if(result.code==1) this.list_unfinished = result.data.list
+      else this.$app.$def.alert(result.msg)
+    }.bind(this))
+    this.$app.$def.post(url2, {'pageIndex':pageIndex2,'pageSize':pageSize}, {'Authorization': this.$app.$data.shiroToken}, function(result){
+      if(result.code==1) this.list_finished = result.data.list
+      else this.$app.$def.alert(result.msg)
+    }.bind(this))
+
+  },
+  onChangeTabIndex (evt) {
+    this.currentIndex = evt.index
+    let text = evt.index===0?'未完成工单':'历史工单'
+    this.$page.setTitleBar({ text: text })
+  },
+  dateFormat(dateString){
+    return util.dateFormat(new Date(dateString),'yyyy-mm-dd hh:MM')
+  },
+  refresh (e) {
+    this.updateMyJobList()
+    const self = this
+    // 更新刷新状态（属性refreshing的值从false改为true会触发refresh组件的状态更新，反之亦然）
+    self.isRefreshing = e.refreshing
+    setTimeout(function(){
+      // 关闭刷新状态
+      self.isRefreshing = false
+    },1000)
+  },
+  selectTab () {
+    this.$app.$def.alert('点击')
+  }
+}
+</script>
+
+<style>
+  .color4 {
+    color: #c0bd0a;
+  }
+  .color5{
+    color: #78af09;
+  }
+  .color6{
+    color: #a70707;
+  }
+  .color-white {
+    color: #ffffff;
+    placeholder-color: #ffffff;
+  }
+
+  #tabs {
+    flex-direction: column;
+  }
+  #tabContent {
+    flex: 1;
+  }
+  .page {
+    flex: 1;
+    flex-direction: column;
+    background-color: #f9f9f9;
+  }
+  .title-bar {
+    flex-shrink: 0;
+    height: 250px;
+    padding: 20px 30px;
+    color: #ffffff;
+    background-image: url(./img/bg_header.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+    /* 交叉轴居中 */
+    align-items: center;
+  }
+  .icon-normal {
+    flex-shrink: 0;
+    object-fit: contain;
+    width: 50px;
+    height: 50px;
+  }
+  .search-wrap {
+    margin: 0 20px;
+    border-radius: 50px;
+    background-color: #ffffff;
+    width: 100%;
+  }
+  .search-input {
+    /* height: 50px; */
+    padding: 15px 25px;
+    font-size: 27px;
+}
+  .content {
+    flex-shrink: 0;
+    justify-content: center;
+  }
+  #tabBar {
+    height: 120px;
+    border-top-width: 1px;
+    border-top-color: #dedede;
+    background-color: #f9f9f9;
+  }
+  .tab-bar-item {
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+  }
+  .tab-bar-image {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+  }
+  .tab-bar-text {
+    font-size: 20px;
+    color: #7d7d7d;
+  }
+  .tab-bar-text:active {
+    color: #0faeff;
+  }
+  .job_list {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: space-around;
+    padding: 0px 20px;
+  }
+  .job_item {
+    width: 100%;
+    height:250px;
+    background-color:#ffffff;
+    border-radius:10px;
+    border:1px solid #dcdcdc;
+    margin-top:30px;
+    padding: 10px 15px 10px 20px;
+    width: 100%;
+    flex-direction: column;
+  }
+  .job_item_title {
+    border-bottom: 1px dashed #ccc;
+    padding: 2px 0px 10px 5px;
+    line-height: 30px;
+  }
+  .job_item_content {
+    padding-top:10px;
+    flex-direction: row;
+    height:150px
+  }
+  .job_item_content_left {
+    flex-direction: column;justify-content: space-around;width:80%;
+  }
+  .job_item_content_right {
+    width:20%;align-items: center;
+  }
+  .processing .job_item_content_right text{
+    width:80px;height:80px;border-radius:50px;background-color:#5f9ea0;color:#ffffff;padding:10px
+  }
+  .processed .job_item_content_right{
+    width:24%
+  }
+  .processed .job_item_content_right text{
+    padding:10px 15px;
+  }
+  .load-more {
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    border-color: #bbbbbb;
+    border-bottom-width: 1px;
+  }
+</style>

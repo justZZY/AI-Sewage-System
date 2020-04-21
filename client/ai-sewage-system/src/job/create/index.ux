@@ -1,0 +1,179 @@
+<template>
+  <div class="doc-page">
+    <div class="item-container">
+      <div class="item-content">
+        <picker class="picker" type="multi-text" range="{{rangeList}}" value="{{job.jobTypeName==''?'选择工单问题类型':job.jobTypeName}}" selected="{{lastSelected}}" @columnchange="updatePicker"  @change="getArea"  ></picker>
+        <image src="./../../common/img/right.png"></image>
+      </div>
+      <div class="item-container">
+        <textarea placeholder="可在此处添加更多描述..."  onchange="onValueChange">{{job.content}}</textarea>
+        <div style="flex-direction: column;">
+          <div class="box-row" for="i in [0,1,2,3,4,5,6,7,8,9,10]" if="{{job.fileList.length+1>3*i}}" >
+            <!-- <div class="box-item" for="(index,item) in job.fileList.slice(i*3,i*3+3)" style="background-image:url({{baseurl+'/file/download/'+ item}});"><image src="{./../../common/img/white-x.png}"></image></div> -->
+            <image class="box-item"  for="(index,item) in job.fileList.slice(i*3,i*3+3)" src="{{baseurl+'/file/download/'+ item}}"></image> 
+            <div class="box-item" if="{{job.fileList.slice(i*3,i*3+3).length<3}}" onclick="pickPhotos"></div>
+          </div>
+        </div>
+      </div>
+      <div class="item-container">
+        <input class="btn" type="button"  value="创建" onclick="submit" />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import media from '@system.media'
+import config from './../../config'
+const baseurl = config.server.addr
+export default {
+  private: {
+    baseurl: baseurl,
+    rangeList:[],
+    lastSelected: [0, 0],
+    jobTypeListJson: {
+      '设备故障':['风机故障','水泵故障','电子故障'],
+      '投诉建议':['设备升级建议','处理不当投诉']
+    },
+    job:{
+      jobTypeName: '',
+      content: '',
+      fileList:[],
+    }
+  },
+  onInit () {
+    this.jobTypeListJson = {}
+    this.queryJobTypeList()
+  },
+  formatRangeList(){
+    this.rangeList[0] = new Array()
+    for(let key in this.jobTypeListJson){
+      this.rangeList[0].push(key)
+    }
+    this.rangeList[1] = this.jobTypeListJson[this.rangeList[0][0]]
+    this.rangeList = Object.assign([],this.rangeList)
+    console.log(this.rangeList)
+  },
+  formatJobTypeList(originData){
+    let json = new Object()
+    for(let key in originData){
+      let list = originData[key]
+      let array = new Array()
+      list.forEach(element => {
+        array.push(element.jobTypeName)
+      })
+      json[key] = array
+    }
+    return json
+  },
+  queryJobTypeList () {
+    this.$app.$def.post(baseurl+'/job/type/queryall', null, {'Authorization': this.$app.$data.shiroToken}, function(result){
+      this.jobTypeListJson = this.formatJobTypeList(result.data)
+      this.formatRangeList()
+    }.bind(this))
+  },
+  onValueChange (e) {
+    this.job.content = e.text
+  },
+  updatePicker(arr) {
+    let a = Object.assign([], this.rangeList) 
+    if (arr.column == 0) {
+      a[1] = Object.assign([], this.jobTypeListJson[arr.newValue])
+      this.lastSelected = [parseInt(arr.newSelected), 0]
+    }
+    this.rangeList = a
+  },
+  getArea(obj) {
+    this.job.jobTypeName = obj.newValue.pop()
+  },
+  uploadFile(files){
+    let url = baseurl+'/file/singleupload'
+    let header = { 'Authorization':  this.$app.$data.shiroToken}
+    let callback = function(data){
+      this.job.fileList.push(data.data)
+      this.job.fileList = Object.assign([], this.job.fileList)
+      console.log(this.list)
+    }.bind(this)
+    this.$app.$def.upload(url,null,header,files,callback)
+  },
+  pickPhotos() {
+    // 多选图片
+    media.pickImages({
+      success: (data) => {
+        // this.list = data.uris
+        let files = Object.assign([], data.files)
+        for(let i=0;i<files.length;i++){
+          let file = new Object
+          file.filename = files[i].name
+          file.name = 'file'
+          file.uri = files[i].uri
+          this.uploadFile([file])
+        }
+      },
+      fail: function (erromsg, errocode) {
+        console.info(`### media.pickImages ### ${errocode}: ${erromsg}`)
+        this.$app.$def.toast( `${errocode}: ${erromsg}`)
+      }
+    })
+  },
+  submit(){
+    this.$app.$def.post(baseurl+'/job/add', this.job, {'Authorization': this.$app.$data.shiroToken,'Content-Type': 'application/json;charset=UTF-8'}, function(result){
+      if(result.code==1){
+        this.$app.$def.toast(result.msg)
+        this.$app.$def.replace('job/list')
+      }else{
+        this.$app.$def.alert(result.msg)
+      }
+    }.bind(this))
+  }
+ 
+}
+</script>
+
+<style>
+  @import './../../common/css/common.css';
+ .picker {
+    flex: 1;
+  }
+  .item-container {
+    flex-direction: column;
+    margin: 20px 30px 0px 30px;
+    flex: 1;
+  }
+  .item-content {
+    background-color: #ffffff;
+    border-bottom-width: 3px;
+    border-color: #e9e8e8;
+    padding: 30px 0px 50px 0px;
+  }
+  .item-content picker{
+    font-size: 33px;
+    color: #000000;
+  }
+  .item-container textarea{
+    font-size:32px;
+    height: 300px;
+  }
+  .box-row{
+    flex-direction: row;
+    flex:1;
+  }
+  .box-row .box-item{
+     width:200px;
+     height: 200px;
+     /* border: 1px solid #f3f3f3; */
+     margin-right: 10px;
+     margin-bottom: 10px;
+     /* background-position:%; */
+     background-repeat: no-repeat;
+     background-image: url('./../../common/img/camera.png');
+     flex-direction: row;
+     justify-content: flex-end;
+  }
+  .box-row .box-item image{
+    width: 25px;
+    height: 25px;
+    padding: 5px;
+    background-color: #c4c4c4;
+  }
+</style>

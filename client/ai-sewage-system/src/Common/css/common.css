@@ -23,23 +23,22 @@
   margin-right: 60px;
   margin-left: 60px;
   flex-direction: column;
-} */
+} 
 .item-content {
   flex-direction: column;
   background-color: #ffffff;
   padding: 30px;
   margin-bottom: 30px;
 }
+*/
 .btn {
-  height: 80px;
   text-align: center;
-  border-radius: 5px;
-  margin-right: 60px;
-  margin-left: 60px;
-  margin-bottom: 50px;
+  border-radius: 50px;
+  margin: 50px 60px 60px 50px;
+  padding: 20px 0px 20px 0px;
   color: #ffffff;
-  font-size: 30px;
-  background-color: #0faeff;
+  font-size: 33px;
+  background-color: #b81212;
 }
 
 .text-center {
@@ -61,7 +60,14 @@
 .m-bottom-xs {
   margin-bottom: 5px;
 }
-
 .vertical {
   flex-direction: column;
+}
+.single-button{
+  flex: 1;
+  padding: 15px 30px 15px 30px;
+  margin: 30px; 
+  border-radius: 5px;
+  background-color: #4cad61;
+  color: white;
 }

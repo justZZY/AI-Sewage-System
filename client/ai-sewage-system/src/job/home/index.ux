@@ -1,0 +1,209 @@
+<template>
+  <div class="page">
+    <div class="item-container1">
+      <div class="swiper-container">
+        <swiper class="swiper" index="{{swiperConf.index}}" autoplay="{{swiperConf.autoplay}}" interval="{{swiperConf.interval}}" indicator= "{{swiperConf.indicator}}" loop="{{swiperConf.loop}}" duration="{{swiperConf.duration}}" previousmargin="{{swiperConf.previousmargin}}" nextmargin="{{swiperConf.nextmargin}}" style="indicatorBottom: {{swiperConf.indicatorBottom}}">
+          <div class="item-1">A</div>
+          <div class="item-2">B第三方第三方s</div>
+          <div class="item-3">C第三方第三方</div>
+        </swiper>
+      </div>
+    </div>
+
+    <div class="item-container2">
+      <div class="h-content">
+        <div class="item-senio color1" onclick="this.$app.$def.route('/job/list')">
+          <div class="left">
+            <image src="./img/task.png"> </image>
+          </div>
+          <div class="right">
+            <text>工单处理</text>
+            <text>Job Query</text>
+          </div>
+        </div>
+        <div class="item-senio color2 ">
+          <div class="left">
+            <image src="./img/search-job.png"> </image>
+          </div>
+          <div class="right">
+            <text>工单检索</text>
+            <text>Job Search</text>
+          </div>
+        </div>
+      </div>
+      <div class="h-content">
+        <div class="item-senio color3">
+          <div class="left">
+             <image src="./img/count.png"> </image>
+          </div>
+          <div class="right">
+            <text>工单统计</text>
+            <text>Job Count</text>
+          </div>
+        </div>
+        <div class="item-senio color4" onclick="this.$app.$def.route('/job/create')">
+          <div class="left">
+            <image src="./img/create-task.png"> </image>
+          </div>
+          <div class="right">
+            <text>创建工单</text>
+            <text>Job Create</text>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item-container3">
+      <text class="c3-title">我的工单</text>
+      <div class="h-content">
+        <div class="item-junio"><image src="./img/my-creation.png"></image>
+            <text>我创建的</text> </div>
+        <div class="item-junio"><image src="./img/waiting.png"></image>
+            <text>待完成</text> </div>
+        <div class="item-junio"><image src="./img/finish.png"></image>
+            <text>已完成</text> </div>
+      </div>
+      <div class="h-content" style="margin-top:30px">
+         <div class="item-junio"><image src="./img/smile.png"></image>
+            <text>处理成功</text> </div>
+        <div class="item-junio"><image src="./img/frown.png"></image>
+            <text>处理失败</text> </div>
+        <div class="item-junio"><image src="./img/star.png"></image>
+            <text>我的收藏</text> </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    swiperConf: {
+      index: 0,
+      autoplay: true,
+      interval:5000,
+      indicator: true,
+      loop:true,
+      duration:1000,
+      previousmargin:'2%',
+      nextmargin:'2%',
+      indicatorBottom:0
+    },
+  },
+  onInit () {
+    this.$page.setTitleBar({text: '工单中心'})
+  },
+  onBackPress () {
+    this.$app.$def.replace('main')
+    return true
+  }
+}
+</script>
+
+<style>
+  @import './../../common/css/common.css';
+  .page{
+    background-color: #f1f1f1;
+    flex-direction: column;
+  }
+  .item-container1 {
+    flex-direction: column;
+    margin: 0px;
+  }
+  .swiper-container {
+    flex-direction: column;
+  }
+  .swiper {
+    flex-direction: column;
+    height: 350px;
+  }
+  .swiper .item-1,.swiper .item-2,.swiper .item-3 {
+    height: 350px;
+    text-align: center;
+    color: #ffffff;
+    border-left:0.5px solid #ffffff;
+    border-right:0.5px solid #ffffff;
+  }
+  .swiper .item-1{
+   background-image:url('./img/item1.jpg');
+  }
+  .swiper .item-2{
+    background-image:url('./img/item2.jpg');
+  }
+  .swiper .item-3{
+    background-image:url('./img/item3.jpg');
+  }
+  .item-container2 {
+    flex-direction: column;
+    margin: 0px;
+    margin-bottom: 10px;
+    padding: 10px 0px;
+    background-color: #ffffff;
+  }
+  .item-senio{
+    border-radius: 10px;
+    height: 170px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }
+  .item-senio .left{
+    width:45%;
+    justify-content:center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .item-senio .left image{
+    width: 50%;
+  }
+  .item-senio .right{
+    width: 55%;
+    flex-direction: column;
+    justify-content:center;
+  }
+  .item-senio .right text{
+    color: white;
+  }
+  .color1{
+    background-color:#e6c50a;
+    margin-right: 5px;
+  }
+  .color2{
+    background-color:#5fbfe6;
+    margin-left: 5px;
+  }
+  .color3{
+    background-color:#7bdb4e;
+    margin-right: 5px;
+  }
+  .color4{
+    margin-left: 5px;
+    background-color:#ce5959;
+  }
+  .item-container3{
+    background-color: #ffffff;
+    flex-direction: column;
+    padding: 20px 0px 60px 0px;
+  }
+  .c3-title{
+    font-weight: bold;
+    font-size: 37px;
+    margin: 5px 0px 25px 20px;
+    padding-left:  10px; 
+    color: #000000;
+  }
+  .item-junio{
+    flex-direction: column;
+    justify-content:center;
+    align-items: center;
+    border-left: 1px solid #dadada;
+    border-right: 1px solid #dadada;
+    width:33.33%;
+    padding: 10px;
+  }
+  .item-junio text{
+    font-size: 23px;
+  }
+  .item-junio image{
+    width: 25%;
+  }
+</style>
