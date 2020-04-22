@@ -51,7 +51,6 @@ export default {
     const ctx = canvas.getContext('2d') // 获取canvas绘图上下文
     // 初始化设备图表数值
     this.equipCanvasData = initEquipCanvasData(this.lineNames)
-    console.log(this.equipCanvasData)
     this.refreshEquipCanvasData() //更新一次数据,避免两点间连线的空值异常
     let lineChart = this.drawLineChart(ctx)
     // 启动图表定时刷新任务
@@ -157,7 +156,6 @@ export default {
             boxNo: boxNo
           }
           let callfunc = (res) => {
-            console.log(res)
             res.forEach(element => {
               // 捕捉传感器数据用于可视化
               if (element.name == '传感') {
@@ -179,8 +177,7 @@ export default {
     let url = baseurl+'/equip/getExceptionSite'
     let header = {'Authorization':  this.$app.$data.shiroToken}
     let callfunc = (equipException) => {
-      console.log(equipException)
-      let str = ''
+      let str = '存在异常设备: \n'
       for (let i = 0; i < equipException.length; i++) {
         const exception = equipException[i]
         str += exception.object

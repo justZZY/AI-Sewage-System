@@ -23,10 +23,10 @@
         <div class="tab-content-section">
           <site-component></site-component>
         </div>
-        <div class="tab-content-sectio">
+        <div class="tab-content-section">
           <job-component></job-component>
         </div>
-        <div class="tab-content-sectio">
+        <div class="tab-content-section">
           <userinfo-component></userinfo-component>   
         </div>
       </tab-content>
@@ -47,7 +47,7 @@ export default {
    */
   onInit () {
     this.$page.setTitleBar({
-      text: '智慧水务',
+      text: '智能物联乡村污水处理',
       backgroundColor: '#09ba07',
       textColor: '#fff'
     })
