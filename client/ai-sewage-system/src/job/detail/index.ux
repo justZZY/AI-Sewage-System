@@ -33,14 +33,19 @@
         <text class="first">创建时间：</text>
         <text>{{dateFormat(jobDetail.createTime)}}</text>
       </div>
-      <div onclick="selectReceiver" if="{{transfer && jobDetail.status=='2'}}" id="receiver">
+      <div onclick="selectReceiver" if="{{(transfer && jobDetail.status=='2')||(jobDetail.status=='1')}}" id="receiver">
         <text class="first">接单人员：</text>
         <text class="second">{{receiver===null||receiver===''?'请选择派单目标人员':receiver}}</text>
       </div>
     </div>
     <div class="title twoside"><a href="#">工单追踪</a><image src="./../../Common/img/right.png"></image></div>
-    <div class="button-box" if="jobDetail.status=='2'"><input class="single-button {{transfer?'bg-color1':''}}" type="button" value="{{transfer?'转派':'确认完成'}}" onclick="submit"></input></div>
-    
+    <div if="{{!isAdmin && jobDetail.status=='2'}}" class="button-box"><input class="single-button {{transfer?'bg-color1':''}}" type="button" value="{{transfer?'转派':'确认完成'}}" onclick="submit(2)"></input></div>
+    <div elif="{{isAdmin && jobDetail.status=='1'}}"  class="button-box"><input class="single-button bg-color1" type="button" value="派发" onclick="submit(1)"></input></div>
+    <div elif="{{isAdmin && jobDetail.status=='4'}}" style="flex-direction: column;">
+      <input class="single-button bg-color2" type="button" value="驳回" onclick="submit('reject')"></input>
+      <input class="single-button bg-color4" type="button" value="完成" onclick="submit(5)"></input>
+      <input class="single-button bg-color3" type="button" value="中断" onclick="submit(6)"></input>
+    </div>
     <popup target="phone" placement="right">
       <text onclick="this.$app.$def.route('tel:'+jobDetail.telephone)" style="background-image: url('./../../Common/img/telephone.png');width:70px"></text>
       <text>|</text>
@@ -61,6 +66,7 @@ export default {
     currentIndex:1
   },
   private: {
+    isAdmin: false,
     baseurl: baseurl,
     transfer:false,
     receiverList:[],
@@ -78,6 +84,9 @@ export default {
 
   },
   onInit () {
+    if(this.$app.$data.identity=='admin'){
+      this.isAdmin = true
+    }
     this.statusMapper = JSON.parse(this.statusMapper)
     console.log(this.statusMapper)
     this.$page.setTitleBar({ text: '工单处理' })
@@ -144,19 +153,29 @@ export default {
       }.bind(this)
     })
   },
-  submit(){
+  submit(type){
     this.jobId = parseInt(this.jobId)
-    let url = baseurl + (this.transfer
-      ? '/job/forward'
-      : '/job/done')
+    let url = ''
+    if(type===2){
+      url = this.transfer ? '/job/forward' : '/job/done'
+    }else{ // 有类型
+      if(type===1) url='/job/allocate'
+      else url = (type=='reject'?'/job/reject':'/job/inspect')
+    }
     let param = this.transfer
-      ? {'jobsIds':[this.jobId], receiverUsername: this.receiver}
+      ? {'jobsIds':[this.jobId], 'receiverUsername': this.receiver}
       : {'jobId': this.jobId}
-    this.$app.$def.post(url, param, {'Authorization': this.$app.$data.shiroToken,'Content-Type': 'application/json;charset=UTF-8'}, function(result){
+    if(this.isAdmin){
+      param = (this.jobDetail.status=='1'
+        ? {'jobsIds':[this.jobId], 'username': this.receiver}
+        : {'jobId': this.jobId,'type':type}
+      )
+    }
+    this.$app.$def.post(baseurl+url, param, {'Authorization': this.$app.$data.shiroToken,'Content-Type': 'application/json;charset=UTF-8'}, function(result){
       if (result.code != 1) this.$app.$def.alert(result.msg)
       else{
         this.$app.$def.toast(result.msg)
-        this.$app.$def.goback()
+        this.$app.$def.replace('job/list',{'currentIndex':this.currentIndex})
       }
     }.bind(this))
   },
@@ -225,5 +244,16 @@ export default {
   .bg-color1{
      background-color:#04a0ac;
   }
-
+  .bg-color2{
+     background-color:#0ece6e;
+     border-radius: 50px;
+  }
+  .bg-color3{
+    background-color:#a70a31; 
+    border-radius: 50px;
+  }
+  .bg-color4{
+     background-color:#227ce4;
+     border-radius: 50px;
+  }
 </style>

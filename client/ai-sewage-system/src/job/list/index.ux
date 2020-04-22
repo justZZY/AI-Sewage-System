@@ -33,7 +33,7 @@
                 <text></text>
               </div>
               <div class="job_item_content_right">
-                <text>处理</text>
+                <text>{{isAdmin?'派单':'处理'}}</text>
               </div>
             </div>
             <!-- </div> -->
@@ -82,8 +82,9 @@
                 <text></text>
               </div>
               <div class="job_item_content_right">
-                <text class="color{{item.status}}" >{{statusMapper[item.status]}}</text>
-              </div>
+                <text if="{{isAdmin}}" style="width:80px;height:80px;border-radius:50px;background-color:#c0bd0a;color:#ffffff;padding:10px">审核</text>
+                <text else class="color{{item.status}}" >{{statusMapper[item.status]}}</text>
+              </div> 
             </div>
             <!-- </div> -->
           </list-item>
@@ -120,6 +121,7 @@ export default {
     currentIndex: 0
   },
   private: {
+    isAdmin: false,
     refreshType:'auto',
     isRefreshing:false,
     tabBarData: [
@@ -150,16 +152,23 @@ export default {
   },
   onInit () {
     this.$page.setTitleBar({ text: '工单中心' })
+    if(this.$app.$data.identity=='admin'){
+      this.isAdmin = true
+    }
+    if(this.isAdmin){
+      this.tabBarData[0].text = '未分配'
+      this.tabBarData[1].text = '待审核'
+    }
     this.updateMyJobList()
   },
   updateMyJobList(pageIndex1=1,pageIndex2=1,pageSize=50){ 
-    let url1 = baseurl + '/job/query/processing'
-    let url2 = baseurl + '/job/query/allprocessed'
-    this.$app.$def.post(url1, {'pageIndex':pageIndex1,'pageSize':pageSize}, {'Authorization': this.$app.$data.shiroToken}, function(result){
+    let url1 = this.isAdmin ? '/job/query/waiting':'/job/query/processing'
+    let url2 = this.isAdmin ? '/job/query/waitingspect':'/job/query/allprocessed'
+    this.$app.$def.post(baseurl +url1, {'pageIndex':pageIndex1,'pageSize':pageSize}, {'Authorization': this.$app.$data.shiroToken}, function(result){
       if(result.code==1) this.list_unfinished = result.data.list
       else this.$app.$def.alert(result.msg)
     }.bind(this))
-    this.$app.$def.post(url2, {'pageIndex':pageIndex2,'pageSize':pageSize}, {'Authorization': this.$app.$data.shiroToken}, function(result){
+    this.$app.$def.post(baseurl +url2, {'pageIndex':pageIndex2,'pageSize':pageSize}, {'Authorization': this.$app.$data.shiroToken}, function(result){
       if(result.code==1) this.list_finished = result.data.list
       else this.$app.$def.alert(result.msg)
     }.bind(this))
@@ -167,7 +176,7 @@ export default {
   },
   onChangeTabIndex (evt) {
     this.currentIndex = evt.index
-    let text = evt.index===0?'未完成工单':'历史工单'
+    let text = this.isAdmin ? (evt.index===0?'待派发工单':'待审核工单') :(evt.index===0?'未完成工单':'历史工单')
     this.$page.setTitleBar({ text: text })
   },
   dateFormat(dateString){
@@ -185,6 +194,9 @@ export default {
   },
   selectTab () {
     this.$app.$def.alert('点击')
+  },
+  onBackPress() {
+    // this.$app.$def.goback('/main')
   }
 }
 </script>

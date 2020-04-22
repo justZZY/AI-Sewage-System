@@ -165,9 +165,11 @@ export default {
       params: paramJson
     })
   },
-  goback:function(){
+  goback:function(path){
     // const router = require('@system.router') 
-    router.back()
+    router.back({
+      path: path
+    })
   },
   /** 预览图片
    * curimg 当前打开的图片地址
