@@ -196,7 +196,8 @@ export default {
     this.$app.$def.alert('点击')
   },
   onBackPress() {
-    // this.$app.$def.goback('/main')
+    this.$app.$def.goback('/main')
+    return true
   }
 }
 </script>
