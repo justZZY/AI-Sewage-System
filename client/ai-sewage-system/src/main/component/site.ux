@@ -20,6 +20,9 @@
         <canvas id="equip-pie" @appear="drawPieChartCanvas" @disappear="clearPieCanvasTimerTask"></canvas>
       </div>
     </div>
+    <div class="control-container" for="{{element in controlArray}}">
+      <input for="{{equip in element.equipGroup}}" class="control-btn" type="button" onclick="undo" value="{{equip}}"/>
+    </div>
   </div>
 </template>
 
@@ -30,6 +33,8 @@ const baseurl = config.server.addr
 export default {
   data: {
     siteArray: [],
+    equipArray: [],
+    controlArray: [],
     equipCanvasData: {},
     lineNames: [],
     lineConfig: {},
@@ -155,10 +160,28 @@ export default {
             apiBaseUrl: 'http://fbcs101.fbox360.com/api/',
             boxNo: boxNo
           }
+          // 处理请求到的设备组数据
           let callfunc = (res) => {
+            this.equipArray = res
             res.forEach(element => {
-              // 捕捉传感器数据用于可视化
-              if (element.name == '传感') {
+              if (element.name == '远程') {
+                let temp = []
+                let cnt = 0
+                for (let i = 1; i <= element.items.length; i++) {
+                  const equip = element.items[i - 1]
+                  temp.push(equip.name)
+                  if (i % 3 == 0) {
+                    this.controlArray.push({
+                      name: 'group ' + cnt,
+                      equipGroup: temp
+                    })
+                    cnt++
+                    temp = []
+                  }
+                }
+                console.log(this.controlArray)
+              } else if (element.name == '传感') {
+                // 捕捉传感器数据用于可视化
                 let names = []
                 element.items.forEach(equip => {
                   names.push(equip.name)
@@ -189,6 +212,11 @@ export default {
   },
   refreshEquipCanvasData () {
     this.equipCanvasData = getRefreshEquipCanvasData(this.equipCanvasData)
+  },
+  // 设备控制, 在家无法测试暂时空缺
+  undo () {
+    this.$app.$def.alert('疫情期间，实验设备未开放')
+    console.log('设备控制, 在家无法测试暂时空缺')
   }
 }
 // 筛选站点列表 保存站点名称/id/连接状态
@@ -299,5 +327,14 @@ function getRefreshEquipCanvasData(oldData) {
   .canvas-container {
     align-items: center;
     flex-direction: column;
+  }
+  .control-container {
+    margin-top: 10px;
+  }
+  .control-btn {
+    width: 240px;
+    border-radius: 43px;
+    background-color: #ffd700;
+    margin-right: 5px;
   }
 </style>
