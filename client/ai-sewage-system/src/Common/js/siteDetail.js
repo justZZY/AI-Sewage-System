@@ -17,7 +17,7 @@ export const siteDetail = [
       quality: '一级B标',
       boxUid: 11335,
       date: '2018年05月',
-      operator: '张天华',
+      operator: '维护人员',
       phone: '15906919767',
       pic: baseurl+'/pic/site/error.png'
     } 
@@ -35,7 +35,7 @@ export const siteDetail = [
       quality: '一级A标',
       boxUid: 11338,
       date: '2018年01月',
-      operator: '张天华',
+      operator: '维护人员',
       phone: '15906919767',
       pic: baseurl+'/pic/site/西家冲污水处理站.png'
     }
@@ -53,7 +53,7 @@ export const siteDetail = [
       quality: '一级A标',
       boxUid: 11339,
       date: '2018年01月',
-      operator: '张天华',
+      operator: '维护人员',
       phone: '15906919767',
       pic: baseurl+'/pic/site/鸡蛋村污水处理站.png'
     }
@@ -71,7 +71,7 @@ export const siteDetail = [
       quality: '一级B标',
       boxUid: 11344,
       date: '2017年10月',
-      operator: '张天华',
+      operator: '维护人员',
       phone: '15906919767',
       pic: baseurl+'/pic/site/红塘村污水处理站.png'
     }
@@ -89,7 +89,7 @@ export const siteDetail = [
       quality: '一级A标',
       boxUid: 11348,
       date: '2018年03月',
-      operator: '张天华',
+      operator: '维护人员',
       phone: '15906919767',
       pic: baseurl+'/pic/site/博尚镇污水处理站.png'
     }
@@ -107,7 +107,7 @@ export const siteDetail = [
       quality: '一级A标',
       boxUid: 11357,
       date: '2018年05月',
-      operator: '张天华',
+      operator: '维护人员',
       phone: '15906919767',
       pic: baseurl+'/pic/site/军赛乡污水处理站.png'
     }
@@ -125,7 +125,7 @@ export const siteDetail = [
       quality: '一级A标',
       boxUid: 11379,
       date: '未完工',
-      operator: '张天华',
+      operator: '维护人员',
       phone: '15906919767',
       pic: baseurl+'/pic/site/error.png'
     }
@@ -143,7 +143,7 @@ export const siteDetail = [
       quality: '一级B标',
       boxUid: 21343,
       date: '2018年09月',
-      operator: '张天华',
+      operator: '维护人员',
       phone: '15906919767',
       pic: baseurl+'/pic/site/小湾镇污水处理站.png'
     }
@@ -161,7 +161,7 @@ export const siteDetail = [
       quality: '一级B标',
       boxUid: 21353,
       date: '2018年10月',
-      operator: '张天华',
+      operator: '维护人员',
       phone: '15906919767',
       pic: baseurl+'/pic/site/营盘镇污水处理站.png'
     }
@@ -179,7 +179,7 @@ export const siteDetail = [
       quality: '一级A标',
       boxUid: 26913,
       date: '2018年10月',
-      operator: '张天华',
+      operator: '维护人员',
       phone: '15906919767',
       pic: baseurl+'/pic/site/下咱乐污水处理站.png'
     }
@@ -197,7 +197,7 @@ export const siteDetail = [
       quality: '一级A标',
       boxUid: 29646,
       date: '2018年11月',
-      operator: '张天华',
+      operator: '维护人员',
       phone: '15906919767',
       pic: baseurl+'/pic/site/柒树林污水处理站.png'
     }
@@ -215,7 +215,7 @@ export const siteDetail = [
       quality: '一级A标',
       boxUid: 29685,
       date: '2018年10月',
-      operator: '张天华',
+      operator: '维护人员',
       phone: '15906919767',
       pic: baseurl+'/pic/site/舍阴寨污水处理站.png'
     }
@@ -233,7 +233,7 @@ export const siteDetail = [
       quality: '三类水',
       boxUid: 29692,
       date: '2018年10月',
-      operator: '张天华',
+      operator: '维护人员',
       phone: '15906919767',
       pic: baseurl+'/pic/site/河口村污水处理站.png'
     }
@@ -251,7 +251,7 @@ export const siteDetail = [
       quality: '-',
       boxUid: 31655,
       date: '-',
-      operator: '张天华',
+      operator: '维护人员',
       phone: '15906919767',
       pic: baseurl+'/pic/site/error.png'
     }
@@ -269,7 +269,7 @@ export const siteDetail = [
       quality: '-',
       boxUid: 31655,
       date: '-',
-      operator: '张天华',
+      operator: '维护人员',
       phone: '15906919767',
       pic: baseurl+'/pic/site/error.png'
     }
@@ -287,7 +287,7 @@ export const siteDetail = [
       quality: '一级A标',
       boxUid: 32426,
       date: '2018年12月',
-      operator: '张天华',
+      operator: '维护人员',
       phone: '15906919767',
       pic: baseurl+'/pic/site/新寨子污水处理站.png'
     }
@@ -305,7 +305,7 @@ export const siteDetail = [
       quality: '一级A标',
       boxUid: 32425,
       date: '2017年11月',
-      operator: '张天华',
+      operator: '维护人员',
       phone: '15906919767',
       pic: baseurl+'/pic/site/大园铺污水处理站.png'
     }
@@ -323,7 +323,7 @@ export const siteDetail = [
       quality: '-',
       boxUid: 31655,
       date: '-',
-      operator: '张天华',
+      operator: '维护人员',
       phone: '15906919767',
       pic: baseurl+'/pic/site/error.png'
     }
@@ -331,7 +331,7 @@ export const siteDetail = [
   {
     id: -55920407621876427,
     value: {
-      name: '云南大学测试平台',
+      name: '测试平台',
       energy: '太阳能微动力或者市电微动力',
       address: '-',
       efficiency: '-',
