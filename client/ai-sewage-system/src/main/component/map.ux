@@ -88,11 +88,17 @@ export default {
         cityArray[j].child.forEach(site => {
           // 避免浅拷贝指向同一个对象
           let marker = JSON.parse(JSON.stringify(MARKER_SAMPLE))
-          marker.id = id++ 
-          marker.latitude = site.latitude
-          marker.longitude = site.longitude
-          marker.callout.content = site.alias
-          markers.push(marker)
+          //匹配用户权限内的站点
+          let userArea = this.$app.$data.userArea
+          for(let i = 0;i < userArea.length - 1; i++){
+            if (site.alias == userArea[i]){
+              marker.id = id++ 
+              marker.latitude = site.latitude
+              marker.longitude = site.longitude
+              marker.callout.content = site.alias
+              markers.push(marker)
+            } 
+          }
         })
       }
     }

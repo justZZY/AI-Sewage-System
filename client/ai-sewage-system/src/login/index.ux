@@ -86,6 +86,7 @@ export default {
       this.$app.$data.identity = userJson.identity
       this.$app.$data.phone = userJson.phone
       this.$app.$data.mail = userJson.mail
+      this.$app.$data.userArea = userJson.area.split(';')  //存储的为用户具有管理权限站点的别名
     }.bind(this)
     let header = {'Content-Type': 'application/json;charset=UTF-8'}
     this.$app.$def.post(url, {'data':data}, header, callback)

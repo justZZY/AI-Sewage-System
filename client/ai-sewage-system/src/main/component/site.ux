@@ -43,7 +43,7 @@ export default {
     pieCanvasTimer: {}
   },
   onInit() {
-    this.siteArray = getSiteArray(this.$app.$data.equipmentList)
+    this.siteArray = getSiteArray(this.$app.$data.equipmentList,this.$app.$data.userArea)
   },
   clearLineCanvasTimerTask () {
     clearInterval(this.lineCanvasTimer)
@@ -220,7 +220,8 @@ export default {
   }
 }
 // 筛选站点列表 保存站点名称/id/连接状态
-function getSiteArray (array) {
+//第一个数组为所有站点，第二个登录用户具有管理权限的站点
+function getSiteArray (array,array1) {
   let ans = []
   for (let i = 0; i < array.length; i++) {
     for (let j = 0; j < array[i].child.length; j++) {
@@ -229,10 +230,20 @@ function getSiteArray (array) {
         let temp = {}
         // 屏蔽校名
         let reg = /.*测试.*/
-        temp.name = reg.test(item.alias) ? '测试平台' : item.alias  
+        //匹配用户权限内的站点
+        let userArea = array1
+        for(let i = 0;i < userArea.length - 1; i++){
+          if (item.alias == userArea[i]){
+            temp.name = reg.test(item.alias) ? '测试平台' : item.alias  
+            temp.boxNo = item.boxNo
+            temp.state = item.connectionState == 1 ? '在线' : '离线'
+            ans.push(temp)
+          } 
+        } 
+        /*temp.name = reg.test(item.alias) ? '测试平台' : item.alias  
         temp.boxNo = item.boxNo
         temp.state = item.connectionState == 1 ? '在线' : '离线'
-        ans.push(temp)
+        ans.push(temp)  */
       }
     }
   }
