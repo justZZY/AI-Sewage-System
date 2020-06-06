@@ -53,10 +53,10 @@
     }
     // }
   })
-  // 20秒后开始检测新版本
+  // 5秒后开始检测新版本
   let timeOut = window.setTimeout(() => {
     ipcRenderer.send('checkForUpdate')
-  }, 20000)
+  }, 5000)
   clearTimeout()
   // 间隔1小时检测一次
   let interval = window.setInterval(() => {

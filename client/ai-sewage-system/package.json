@@ -1,6 +1,6 @@
 {
   "name": "intelligent-water",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "author": "Yunnan University",
   "description": "云南大学·中贸环境智能水务联合实验室",
   "license": "BSD-3-Clause",
@@ -38,7 +38,7 @@
     "publish": [
       {
         "provider": "generic",
-        "url": "http://116.55.241.28:8083/update/"
+        "url": "http://43.228.77.195:8083/update/"
       }
     ],
     "dmg": {

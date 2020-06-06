@@ -59,7 +59,7 @@
             name: temp.alias,
             des: temp.box.address,
             category: i,
-            symbol: 'image://http://116.55.241.28:8083/pic/1.jpg',
+            symbol: 'image://http://43.228.77.195:8083/pic/1.jpg',
             symbolSize: size,
             draggable: 'true',
             label: {normal: {show: true}}
@@ -81,7 +81,7 @@
               nodeList.push({
                 name: equipName,
                 category: i,
-                symbol: 'image://http://116.55.241.28:8083/pic/2.jpg',
+                symbol: 'image://http://43.228.77.195:8083/pic/2.jpg',
                 symbolSize: size / 1.3,
                 draggable: true,
                 label: {normal: {show: true}}
@@ -108,7 +108,7 @@
           let authorization = 'Bearer ' + window.jsonobj['access_token']
           let apiBaseUrl = sideData['box']['cs']['apiBaseUrl']
           let boxNo = sideData['box']['boxNo']
-          this.$http.post('http://116.55.241.28:8082/equip/getEquipMonitor', {
+          this.$http.post('http://43.228.77.195:8082/equip/getEquipMonitor', {
             authorization: authorization,
             apiBaseUrl: apiBaseUrl,
             boxNo: boxNo

@@ -147,7 +147,7 @@
        * 启动websocket连接
        */
       websocket () {
-        let ws = new WebSocket('ws://116.55.241.28:8082/websocket')
+        let ws = new WebSocket('ws://43.228.77.195:8082/websocket')
         ws.onopen = () => {
           console.log('打开websocket连接')
         }
@@ -174,7 +174,7 @@
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-        this.$http.post('http://116.55.241.28:8082/equip/getEquipMonitor', {
+        this.$http.post('http://43.228.77.195:8082/equip/getEquipMonitor', {
           authorization: authorization,
           apiBaseUrl: apiBaseUrl,
           boxNo: boxNo
@@ -204,7 +204,7 @@
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-        this.$http.post('http://116.55.241.28:8082/equip/getEquipValue', {
+        this.$http.post('http://43.228.77.195:8082/equip/getEquipValue', {
           authorization: authorization,
           apiBaseUrl: apiBaseUrl,
           boxNo: boxNo,

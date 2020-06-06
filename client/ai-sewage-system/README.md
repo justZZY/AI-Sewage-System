@@ -8,7 +8,7 @@
 # install dependencies
 npm install
 
-# serve with hot reload at 116.55.241.28:9080
+# serve with hot reload at 43.228.77.195:9080
 npm run dev
 
 # build electron application for production
