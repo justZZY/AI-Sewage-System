@@ -23,6 +23,9 @@
     <div class="control-container" for="{{element in controlArray}}">
       <input for="{{equip in element.equipGroup}}" class="control-btn" type="button" onclick="undo" value="{{equip}}"/>
     </div>
+    <div class="video-container">
+      <video autoplay=false src="http://hls01open.ys7.com/openlive/5d0b898798c14aafa5cc8e7865e519e3.hd.m3u8"></video>
+    </div>
   </div>
 </template>
 
@@ -179,7 +182,6 @@ export default {
                     temp = []
                   }
                 }
-                console.log(this.controlArray)
               } else if (element.name == '传感') {
                 // 捕捉传感器数据用于可视化
                 let names = []
@@ -216,7 +218,6 @@ export default {
   // 设备控制, 在家无法测试暂时空缺
   undo () {
     this.$app.$def.alert('疫情期间，实验设备未开放')
-    console.log('设备控制, 在家无法测试暂时空缺')
   }
 }
 // 筛选站点列表 保存站点名称/id/连接状态
@@ -347,5 +348,10 @@ function getRefreshEquipCanvasData(oldData) {
     border-radius: 43px;
     background-color: #ffd700;
     margin-right: 5px;
+  }
+  .video-container {
+    margin-top: 10px;
+    margin-bottom: 100px;
+    height: 400px;
   }
 </style>

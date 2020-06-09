@@ -23,6 +23,9 @@
     },
     {
       "name": "system.media"
+    },
+    {
+      "name": "system.request"
     }
   ],
   "permissions": [
