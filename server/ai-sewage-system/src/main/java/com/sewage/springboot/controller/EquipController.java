@@ -179,9 +179,14 @@ public class EquipController {
                 .build();
         Response response = client.newCall(request).execute();
         if (response.isSuccessful()) {
+            int code = response.code();
             String res = response.body().string();
             response.body().close();
-            return res;
+            if (code == 200) {
+                return "{\"msg\": \"success\"}";
+            } else {
+                return res;
+            }
         } else {
             throw new IOException("Unexpected code " + response);
         }

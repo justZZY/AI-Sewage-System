@@ -1,0 +1,213 @@
+@ratio: 750/750; // your designWidth / 750
+// Color
+@primary-color: #2d8cf0;
+@info-color: #2db7f5;
+@success-color: #19be6b;
+@warning-color: #ff9900;
+@error-color: #ed3f14;
+@link-color: #2D8cF0;
+@link-hover-color: tint(@link-color, 20%);
+@link-active-color: shade(@link-color, 5%);
+@selected-color: fade(@primary-color, 90%);
+@tooltip-color: #fff;
+@subsidiary-color: #80848f;
+@rate-star-color: #f5a623;
+
+@title-color: #1c2438;
+@text-color: #495060;
+@text-size: 30px * @ratio;
+
+@background-color-base: #f7f7f7; // base
+
+// Border color
+@border-color-base: #dddee1; // outside
+@border-color-split: #e9eaec; // inside
+
+// Size
+@size-grid-icon: 40px * @ratio;
+@size-font-base: 30px * @ratio;
+@size-font-small: 24px * @ratio;
+
+// Button
+@btn-font-weight: normal;
+@btn-padding-base: 6px * @ratio 15px * @ratio;
+@btn-padding-large: 6px * @ratio 15px * @ratio 7px * @ratio 15px * @ratio;
+@btn-padding-small: 2px * @ratio 7px * @ratio;
+@btn-font-size: 12px * @ratio;
+@btn-font-size-large: 14px * @ratio;
+@btn-border-radius: 4px * @ratio;
+@btn-border-radius-small: 3px * @ratio;
+@btn-group-border: shade(@primary-color, 5%);
+
+@btn-disable-color: #bbbec4;
+@btn-disable-bg: @background-color-base;
+@btn-disable-border: @border-color-base;
+
+@btn-default-color: @text-color;
+@btn-default-bg: @background-color-base;
+@btn-default-border: @border-color-base;
+
+@btn-primary-color: #fff;
+@btn-primary-bg: @primary-color;
+
+@btn-ghost-color: @text-color;
+@btn-ghost-bg: transparent;
+@btn-ghost-border: @border-color-base;
+
+@btn-circle-size-large: 96px * @ratio;
+@btn-circle-size: 88px * @ratio;
+@btn-circle-size-small: 80px * @ratio;
+
+// Animation
+@animation-time: .3s;
+@transition-time: .2s;
+@ease-in-out: ease-in-out;
+
+//Switch组件
+@themeColor: #2d8cf0;
+@SwitchWidth: 100px * @ratio;
+@SwitchHeight: 48px * @ratio;
+@SwitchPadding: 4px * @ratio;
+@SwitchCircleSize: 40px * @ratio;
+@SwitchCircleTranslateX: @SwitchWidth - @SwitchCircleSize - @SwitchPadding * 2;
+@SwitchCircleColor: #FFFFFF;
+@SwitchOnColor: @themeColor; //使用全局变量,也可以自己定义.
+@SwitchOffColor: #D8D8D8;
+@SwitchDisabledOnColor: #CFF1F5;
+@SwitchDisabledOffColor: #F3F3F3;
+
+//CheckBox组件
+@checkbox-size: 46px * @ratio;
+
+// Avatar
+@avatar-bg: #ccc;
+@avatar-color: #fff;
+@avatar-size-base: 100px * @ratio;
+@avatar-size-lg: 120px * @ratio;
+@avatar-size-sm: 80px * @ratio;
+@avatar-font-size-base: 50px * @ratio;
+@avatar-font-size-lg: 60px * @ratio;
+@avatar-font-size-sm: 40px * @ratio;
+@avatar-border-radius: @border-radius-small;
+@border-radius-small: 4px * @ratio;
+
+// Animation 样式
+.hide {
+    display: none;
+}
+.show {
+    display: flex;
+}
+
+
+.opacity-hide-to-show {
+    animation-name: opacityHideToShow;
+}
+.opacity-show-to-hide {
+    animation-name: opacityShowToHide;
+}
+.translate-left-to-center {
+    animation-name: translateLeftToCenter;
+}
+.translate-center-to-left {
+    animation-name: translateCenterToLeft;
+}
+.translate-right-to-center {
+    animation-name: translateRightToCenter;
+}
+.translate-center-to-right {
+    animation-name: translateCenterToRight;
+}
+.translate-top-to-center {
+    animation-name: translateTopToCenter;
+}
+.translate-center-to-top {
+    animation-name: translateCenterToTop;
+}
+.translate-bottom-to-center {
+    animation-name: translateBottomToCenter;
+}
+.translate-center-to-bottom {
+    animation-name: translateCenterToBottom;
+}
+
+@keyframes opacityHideToShow {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+}
+@keyframes opacityShowToHide {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+}
+@keyframes translateLeftToCenter {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+@keyframes translateCenterToLeft {
+    from {
+      transform: translateX(0);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+@keyframes translateRightToCenter {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+@keyframes translateCenterToRight {
+    from {
+      transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+@keyframes translateTopToCenter {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0%);
+    }
+}
+@keyframes translateCenterToTop {
+    from {
+      transform: translateY(0);
+    }
+    to {
+        transform: translateY(-100%);
+    }
+}
+@keyframes translateBottomToCenter {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0%);
+    }
+}
+@keyframes translateCenterToBottom {
+    from {
+      transform: translateY(0);
+    }
+    to {
+        transform: translateY(100%);
+    }
+}

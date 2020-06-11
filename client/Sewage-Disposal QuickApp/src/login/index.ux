@@ -1,0 +1,190 @@
+<template>
+  <div class="demo-page">
+    <!-- 应用图标 -->
+    <image id="icon" src="{{icon}}"></image>
+    <!-- 应用名 -->
+    <text id="name">智能物联乡村污水处理</text>
+    <!-- 应用详情 -->
+    <div class="detail detail-first">
+      <text class="detail-title">账号：</text>
+      <input class="detail-content" type="text" name="username" value="{{username}}" onchange="onValueChange" placeholder="请输入用户名"></input>
+    </div>
+    <div class="detail">
+      <text class="detail-title">密码：</text>
+      <input class="detail-content" type="password" name="password" value="{{password}}" onchange="onValueChange"  placeholder="请输入密码"></input>
+    </div>
+    
+    <input type="text">sd</input>
+
+    <!-- 创建快捷方式 -->
+    <input class="btn" type="button" onclick="submit_login" value="登录" disabled="{{isClicked}}"/>
+
+    <!-- 版权信息 -->
+    <text id="footer">{{copyright}}</text>
+  </div>
+</template>
+
+<script>  
+import router from '@system.router'
+import config from './../config'
+const baseurl = config.server.addr
+/**
+ * 默认的菜单页(可自定义)
+ * name默认为manifest文件中的name字段
+ * icon默认为manifest文件中的icon字段
+ * 若需修改页面中文本，请修改ViewModel private中对应变量
+ * 注意：使用加载器测试`创建桌面快捷方式`功能时，需要进入系统设置->权限管理->开启应用加载器的`桌面快捷方式`权限，才能保存到桌面。应用上线后可自动获取`桌面快捷方式`权限
+ */
+export default {
+  protected: {
+    name: '登录',
+    icon: '/Common/pic/logo.png',
+    isClicked: false
+  },
+  private: {
+    username: 'admin',
+    password: '123456'
+  },
+  onInit () {
+    // 设置标题栏
+    this.$page.setTitleBar({ text: this.name })
+  },
+  onValueChange (event) {
+    //注： app端和web端监听到的event长的不一样，下面代码只针对app
+    let value = event.value 
+    let name = event.name
+    if(value===null || value===undefined) value = event.target.attr.value
+    if(name===null  || name===undefined)  name  = event.target.attr.name
+    if(name==='username') this.username = value
+    if(name==='password') this.password = value 
+  },
+
+  submit_login () {
+    this.isClicked = true
+    let url = baseurl + '/login/auth'
+    let data = {
+      username: this.username,
+      password: this.password
+    }
+    let callback = function(userJson){
+      if (userJson['status'] === 'success') {
+        if(userJson['deleteStatus'] === 0){
+          this.$app.$data.shiroToken = userJson.shiroToken
+          this.runFBoxAccount()
+        }else if (userJson['deleteStatus'] === 1) {
+          this.$app.$def.toast('账号被冻结')
+          this.isClicked = false
+        } 
+      } else {
+        this.$app.$def.toast('账号/密码错误')
+        this.isClicked = false
+      }
+      /**
+       * 将用户信息存为全局数据
+      */
+      this.$app.$data.username = userJson.username
+      this.$app.$data.identity = userJson.identity
+      this.$app.$data.phone = userJson.phone
+      this.$app.$data.mail = userJson.mail
+    }.bind(this)
+    let header = {'Content-Type': 'application/json;charset=UTF-8'}
+    this.$app.$def.post(url, {'data':data}, header, callback)
+  },
+
+  /**
+   * xbox获取设备数据
+   */
+  runEquipment (access_token) {
+    const equipmentHelper = this.$app.$def.equipmentHelper
+    this.$app.$def.get(
+      baseurl + '/equip/getEquipments?Authorization=' + ('Bearer '+access_token) + '&XFBoxClientId=zzy_test',
+      { 'Authorization':  this.$app.$data.shiroToken}, 
+      function(data){
+        this.$app.$data.equipmentList = equipmentHelper.formatList(data)
+        this.isClicked = false
+        router.replace({uri: '/main'})
+      }.bind(this))
+  },
+
+  /**
+  * 获取xbox token
+  */
+  runFBoxAccount () {
+    this.$app.$def.post(baseurl + '/equip/equipLogin', null, {'Authorization': this.$app.$data.shiroToken}, function(data){
+      this.$app.$data.boxToken = 'Bearer ' + data['access_token']
+      this.runEquipment(data['access_token'])
+    }.bind(this))
+  }, 
+
+
+}
+</script>
+
+<style>
+  .demo-page {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* 应用图标 */
+  #icon {
+    margin-top: 90px;
+    width: 75%;
+    height: 20%;
+    /* border-radius: 10px; */
+    /* border: 1px solid #8d8d8d; */
+    margin-bottom: 10px;
+  }
+
+  #name {
+    font-size: 50px;
+  }
+
+  /* 应用详情 */
+  .detail {
+    width: 80%;
+    height: 90px;
+    border-bottom-width: 1px;
+    border-bottom-color: #f0f0f0;
+  }
+
+  .detail-first {
+    margin-top: 80px;
+    border-top-width: 1px;
+    border-top-color: #f0f0f0;
+  }
+
+  .detail-title {
+    width: 160px;
+    padding-left: 10px;
+    font-size: 35px;
+    color: #000000;
+  }
+
+  .detail-content {
+    font-size: 33px;
+    color: #8d8d8d;
+    width: 100%;
+  }
+
+  /* 按钮 */
+  .btn {
+    width: 550px;
+    height: 86px;
+    margin-top: 75px;
+    border-radius: 43px;
+    background-color: #09ba07;
+    font-size: 30px;
+    color: #ffffff;
+  }
+
+  /* 底部版权信息 */
+  #footer {
+    width: 750px;
+    position: fixed;
+    bottom: 55px;
+    font-size: 25px;
+    color: #8d8d8d;
+    text-align: center;
+  }
+</style>
