@@ -1,0 +1,146 @@
+<template>
+        <div class="card" >
+             <text style="text-align: center;font-size: 25px;">上次更新:{{time}}</text>
+            <div class="nav">
+                <div class="nav-item-title">
+                    <text class="preview">运行状态</text>
+                    <text class="name">站点数</text>
+                    <text class="name">设备数</text>
+                </div>
+                <div class="nav-item">
+                    <image class="preview"  src="{{on}}"></image>
+                    <text class="name">{{num.site.on}}</text>
+                    <text class="name">{{num.eq.on}}</text>
+                </div>
+                <div class="nav-item">
+                    <image class="preview"  src="{{off}}"></image>
+                    <text class="name">{{num.site.off}}</text>
+                    <text class="name">{{num.eq.off}}</text>
+                </div>
+                <div class="nav-item">
+                    <image class="preview"  src="{{broken}}"></image>
+                   <text class="name">{{num.site.abnormal}}</text>
+                    <text class="name">{{num.eq.abnormal}}</text>
+                </div>
+            </div>
+            <div class="card-buttom">
+                <a href="/main?currentIndex=1">设备查看</a>
+                <text class="sep">|</text>
+                <a href="/job/create">快速建单</a>
+            </div>
+        </div>
+</template>
+
+
+<script>
+import storage from '@system.storage'
+export default {
+  private: {
+    on: 'http://m.qpic.cn/psc?/V10kls1Z3F6rZF/9vuGDcz9AP*EJeMjs9i.nlHfWyv2ZoJsXxmmHdzkYif8UXwSYhF*YY1fCfDtSL31MRii8DKAkOxF5VLXe8TvctOgrGoAh2S1zAOZugVx8MQ!/b&bo=vgC.AL4AvgARGS4!&rf=viewer_4',
+    off: 'http://m.qpic.cn/psc?/V10kls1Z3F6rZF/9vuGDcz9AP*EJeMjs9i.nvfvBx5OevSPSDRC.Jk6yPTWgdVgTpEylsS8TuwlpvdNoVYNjPttVSTjMioooC1.AwNpIhfpCkW64RuPGiD*6s0!/b&bo=vgC.AL4AvgARGS4!&rf=viewer_4',
+    broken: 'http://m.qpic.cn/psc?/V10kls1Z3F6rZF/9vuGDcz9AP*EJeMjs9i.nmlPNFDkTQx*biwpfbE9YiaL2K0jSKl*2*0U6MAZIGkM0vjis*U8dWx6PiE69Pv*qy2JAjWQLeESD*0DboffzGo!/b&bo=yADIAMgAyAARGS4!&rf=viewer_4',
+    time:'未更新',
+    num:{
+      site:{
+        on:0,
+        off:0,
+        abnormal:0
+      },
+      eq:{
+        on:0,
+        off:0,
+        abnormal:0
+      }
+    }
+  },
+  onInit() {
+    this.updateNum()
+    setInterval(this.updateNum.bind(this),30*60*1000)
+  },
+  /** 更新统计站点设备运行状态 */
+  updateNum(){
+    storage.get({
+      key:'shiroToken',
+      success: function(data) {
+        this.time = new Date().getHours()+':'+new Date().getMinutes()
+      }.bind(this),
+      fail: function(data, code) {
+        console.log(`handling fail, code = ${code}`)
+      }.bind(this)
+    })
+
+    this.num={
+      site:{
+        on:21,
+        off:5,
+        abnormal:2
+      },
+      eq:{
+        on:230,
+        off:15,
+        abnormal:15
+      }
+    }
+  }
+
+
+}
+</script>
+
+
+<style>
+
+.card {
+  /* 以设计宽度720px为例 */
+  flex-direction: column;
+  width: 100%;
+  padding: 20px;
+  /* background-color: theme.backgroundColor; theme是动态主题变量，参考卡片文档“动态主题”章节
+  border-bottom-left-radius: theme.borderBottomRadius;
+  border-bottom-right-radius: theme.borderBottomRadius; */
+}
+.nav {
+  padding-top: 10px;
+  justify-content: space-around;
+}
+.nav-item-title{
+  flex-direction: column;
+  align-items: center;
+}
+.nav-item {
+  flex-direction: column;
+  align-items: center;
+  /* width: 30%; */
+}
+.nav-item-title .preview {
+  height:50px;
+  margin-bottom: 8px;
+}
+.nav-item .preview {
+  height:50px;
+  width: 50px;
+  border-radius: 50px;
+  margin-bottom: 8px;
+  background-color: #D0D7DE;
+}
+.name{
+  margin-top: 10px;
+}
+.name{
+  height: 35px;
+  line-height: 35px;
+  font-size: 30px;
+  color: rgba(0,0,0,0.80);
+  text-align: center;
+}
+.card-buttom{
+    border-top: 1px solid #d6d3d3;
+    justify-content: space-around;
+    flex-direction:row;
+    margin-top: 20px;
+    padding-top: 25px;
+}
+.sep{
+    color: #d6d3d3;
+}
+</style>

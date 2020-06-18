@@ -65,7 +65,32 @@
         "component": "index"
       }
     },
-    "widgets": {}
+    "widgets": {
+      "card/eqmonitor": {
+        "name": "eqmonitor",
+        "description": "设备监控卡片",
+        "component": "index",
+        "path": "/card/eqmonitor",
+        "features": [
+          {
+            "name": "system.network"
+          },
+          {
+            "name": "system.storage"
+          }
+        ],
+        "minPlatformVersion": 1041,
+        "targetManufactorys": [
+          "vivo",
+          "xiaomi"
+        ],
+        "params": {
+          "title": "Equipment Monitor",
+          "height": "33.3%",
+          "enableFold": false
+        }
+      }
+    }
   },
   "display": {
     "titleBarBackgroundColor": "#09ba07",

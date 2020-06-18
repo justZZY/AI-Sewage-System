@@ -27,6 +27,8 @@
 <script>  
 import router from '@system.router'
 import config from './../config'
+import storage from '@system.storage'
+
 const baseurl = config.server.addr
 /**
  * 默认的菜单页(可自定义)
@@ -69,6 +71,9 @@ export default {
     let callback = function(userJson){
       if (userJson['status'] === 'success') {
         if(userJson['deleteStatus'] === 0){
+          storage.set({
+            key: 'shiroToken',
+            value: userJson.shiroToken})
           this.$app.$data.shiroToken = userJson.shiroToken
           this.runFBoxAccount()
         }else if (userJson['deleteStatus'] === 1) {
