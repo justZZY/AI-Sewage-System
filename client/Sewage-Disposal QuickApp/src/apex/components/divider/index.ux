@@ -1,0 +1,72 @@
+<template>
+  <stack class="apex-divider apex-class" style="height:{{height}}px">
+    <div class="apex-divider-line" style="background-color:{{lineColor}}"></div>
+    <text
+      class="apex-divider-content"
+      style="color:{{color}};font-size:{{size}}px;background-color:{{bgColor}};"
+      if="{{content !== ''}}"
+    >
+      {{ content }}
+    </text>
+    <div
+      class="apex-divider-content"
+      style="background-color:{{bgColor}};"
+      else
+    >
+      <slot></slot>
+    </div>
+  </stack>
+</template>
+
+<style lang="less">
+@import "../styles/base.less";
+
+.apex-divider {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  text {
+    text-align: center;
+    font-size: @size-font-small;
+  }
+  &-line {
+    width: 100%;
+    height: 2px * @ratio;
+    background-color: @background-color-base;
+  }
+  &-content {
+    padding: 0 10px * @ratio;
+  }
+}
+</style>
+
+<script>
+export default {
+  props: {
+    content: {
+      type: String,
+      default: ""
+    },
+    height: {
+      type: Number,
+      default: 48
+    },
+    color: {
+      type: String,
+      default: "#80848f"
+    },
+    bgColor: {
+      type: String,
+      default: "#ffffff"
+    },
+    lineColor: {
+      type: String,
+      default: "#e9eaec"
+    },
+    size: {
+      type: Number,
+      default: 24
+    }
+  }
+};
+</script>

@@ -1,0 +1,233 @@
+<template>
+  <div class="data-page">
+    <div class="item-container">
+      <text class="item-title">站点: {{name}}  编号: {{id}}</text>
+      <div class="item-content">
+        <text class="label">日期选择</text>
+        <picker type="date" value="{{date}}" onchange="getDate"></picker>
+      </div>
+    </div>
+    <div class="item-container">
+      <div>
+        <text class="item-text">PH值</text>
+      </div>
+      <div>
+        <canvas id="ph-chart" style="width: 750px; height: 400px;"></canvas>
+      </div>
+    </div>
+    <div class="item-container">
+      <div>
+        <text class="item-text">氨氮值</text>
+      </div>
+      <div>
+        <canvas id="an-chart" style="width: 750px; height: 400px;"></canvas>
+      </div>
+    </div>
+    <div class="item-container">
+      <div>
+        <text class="item-text">瞬时流量</text>
+      </div>
+      <div>
+        <canvas id="flow-chart" style="width: 750px; height: 400px;"></canvas>
+      </div>
+    </div>
+  </div>  
+</template>
+
+<script>
+import Charts from '../apex/components/charts/qacharts-min.js'
+import config from '../config'
+
+let phChartBar, anChartBar, flowChartBar
+const baseurl = config.server.addr
+
+export default {
+  private: { 
+    date: '',
+    width: 750,
+    height: 400,
+    // 感觉24小时放不下,按照3小时分8类替代
+    phY1: [],
+    phY2: [],
+    anY1: [],
+    anY2: [],
+    flowY1: [],
+    flowY2: []
+  },
+  protected: {
+    name: '',
+    id: '',
+    dataRecordArray: [],
+    size: 0
+  },
+  async onInit() {
+    const date = new Date()
+    const Y = date.getFullYear()
+    const M = date.getMonth() + 1
+    const D = date.getDate()
+    this.date = Y + '-' + M + '-' + D
+    this.dataRecordArray = JSON.parse(this.dataRecordArray)
+    this.formatBarData(this.dataRecordArray, 8)
+  },
+  async onShow() {
+    await this.initPHChart()
+    await this.initANChart()
+    await this.initFlowChart()
+  },
+  getDate (e) {
+    console.log(e)
+  },
+  /**
+   * @desc 请求某日数据并整理
+   */
+  askDayDataRecord(date) {
+    // get异常
+    let url = baseurl+'/data/getDayDataRecord?site_id=' + this.id + '&date=' + date
+    let header = {'Authorization':  this.$app.$data.shiroToken}
+    let callfunc = (dataRecordArray) => {
+      this.formatBarData(dataRecordArray, 8)
+    }
+    this.$app.$def.get(url, header, callfunc)
+  },
+  formatBarData(dataArray, num) {
+    let size = dataArray.length
+    console.log(size)
+    while(num--) {
+      let index = Math.floor(Math.random() * size)
+      let item = dataArray[index]
+      this.phY1.push(item.in_ph)
+      this.phY2.push(item.out_ph)
+      this.anY1.push(item.in_an)
+      this.anY2.push(item.out_an)
+      this.flowY1.push(item.in_flow)
+      this.flowY2.push(item.out_flow)
+    }
+  },
+  initPHChart() {
+    return new Promise((resolve, reject) => {
+      phChartBar = new Charts({
+        element: this.$element('ph-chart'),
+        type: 'bar',
+        width: this.width,
+        height: this.height,
+        yAxis: {
+          axisName: {text: 'ph'}
+        },
+        xAxis: {
+          type: 'category',
+          data: ['3', '6', '9', '12', '15', '18', '21', '24'],
+          axisName: {text: '小时'}
+        },
+        series: [
+          {
+            name: '进水ph值',
+            data: this.phY1,
+          },
+          {
+            name: '出水ph值',
+            data: this.phY2,
+          },
+        ],
+        onRenderComplete: () => {
+          console.log('ph chartBar renderComplete')
+          resolve()
+        },
+      })
+    })
+  },
+  initANChart() {
+    return new Promise((resolve, reject) => {
+      anChartBar = new Charts({
+        element: this.$element('an-chart'),
+        type: 'bar',
+        width: this.width,
+        height: this.height,
+        yAxis: {
+          axisName: {text: 'mg/L'}
+        },
+        xAxis: {
+          type: 'category',
+          data: ['3', '6', '9', '12', '15', '18', '21', '24'],
+          axisName: {text: '小时'}
+        },
+        series: [
+          {
+            name: '进水氨氮值',
+            data: this.anY1,
+          },
+          {
+            name: '出水氨氮值',
+            data: this.anY2,
+          },
+        ],
+        onRenderComplete: () => {
+          console.log('an chartBar renderComplete')
+          resolve()
+        },
+      })
+    })
+  },
+  initFlowChart() {
+    return new Promise((resolve, reject) => {
+      flowChartBar = new Charts({
+        element: this.$element('flow-chart'),
+        type: 'bar',
+        width: this.width,
+        height: this.height,
+        yAxis: {
+          axisName: {text: 'L/S'}
+        },
+        xAxis: {
+          type: 'category',
+          data: ['3', '6', '9', '12', '15', '18', '21', '24'],
+          axisName: {text: '小时'}
+        },
+        series: [
+          {
+            name: '进水流量',
+            data: this.flowY1,
+          },
+          {
+            name: '出水流量',
+            data: this.flowY2,
+          },
+        ],
+        onRenderComplete: () => {
+          console.log('flow chartBar renderComplete')
+          resolve()
+        },
+      })
+    })
+  }
+}
+</script>
+
+<style>
+  .data-page {
+    flex-direction: column;
+    align-items: center;
+  }
+  .item-container {
+    margin-top: 10px;
+    flex-direction: column;
+  }
+  .item-title {
+    padding-bottom: 15px;
+    padding-top: 5px;
+    border-bottom-width: 1px;
+    border-color: #bbbbbb;
+    color: #aaaaaa;
+  }
+  .item-content {
+    background-color: #ffffff;
+    border-bottom-width: 1px;
+    border-color: #bbbbbb;
+  }
+  .item-text {
+    width: 750px;
+    text-align: center;
+  }
+  .label {
+    padding-right: 100px;
+  }
+</style>

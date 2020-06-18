@@ -1920,21 +1920,26 @@
     <iot:hasSite>
       <rdf:Description rdf:about="https://www.zm-iot-platform.com/site/测试平台/300219050084/">
         <iot:hasExceptionEquip>
-          <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_pH值_pH/152072156003848814">
+          <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_浊度值_NTU/152072156045791856">
             <iot:hasExceptionValue>
-              <rdf:Description rdf:about="https://www.zm-iot-platform.com/value/传感_pH值_pH/0/2020-04-19_06:17:49">
+              <rdf:Description rdf:about="https://www.zm-iot-platform.com/value/传感_浊度值_NTU/23/2020-06-10_17:25:03">
                 <iot:hasException rdf:resource="https://www.zm-iot-platform.com/Exception"/>
               </rdf:Description>
             </iot:hasExceptionValue>
-            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_pH值_pH/0/2020-04-19_06:17:49"/>
+            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_浊度值_NTU/23/2020-06-10_17:25:03"/>
+          </rdf:Description>
+        </iot:hasExceptionEquip>
+        <iot:hasExceptionEquip>
+          <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_pH值_pH/152072156003848814">
+            <iot:hasExceptionValue>
+              <rdf:Description rdf:about="https://www.zm-iot-platform.com/value/传感_pH值_pH/24/2020-06-10_17:25:03">
+                <iot:hasException rdf:resource="https://www.zm-iot-platform.com/Exception"/>
+              </rdf:Description>
+            </iot:hasExceptionValue>
+            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_pH值_pH/24/2020-06-10_17:25:03"/>
           </rdf:Description>
         </iot:hasExceptionEquip>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_+P01-M1变频水泵_手自动反馈/152072156669694598"/>
-        <iot:hasEquip>
-          <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_瞬时流量_m³·h/152072156137017972">
-            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_瞬时流量_m³·h/15/2020-04-19_06:17:49"/>
-          </rdf:Description>
-        </iot:hasEquip>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/系统运行/152072155981828716"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_+P02-M1工频水泵_停止开关/152072156499825278"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_+F01-M1变频风机_手自动开关/152072156156940918"/>
@@ -1944,37 +1949,33 @@
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_+P02-M1工频水泵_自动状态/152072156753580681"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_+P02-M1工频水泵_运行反馈/152072156855292556"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_pH值_pH/152072156003848814"/>
-        <iot:hasEquip>
-          <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_溶解氧值_mg·L/152072156079346289">
-            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_溶解氧值_mg·L/19/2020-04-19_06:17:49"/>
-          </rdf:Description>
-        </iot:hasEquip>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/系统告警/152072155922059883"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_+P01-M1变频水泵_启动开关/152072156299547258"/>
         <iot:hasEquip>
           <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_水温_℃/152072156023771759">
-            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_水温_℃/59/2020-04-19_06:17:49"/>
+            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_水温_℃/18/2020-06-10_17:25:03"/>
           </rdf:Description>
         </iot:hasEquip>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_+F01-M1变频风机_手自动反馈/152072156557496961"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/频率_+P01-M1变频水泵_频率反馈/152072156979024529"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_+F01-M1变频风机_启动开关/152072156188398199"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_+P01-M1变频水泵_手自动开关/152072156257604217"/>
+        <iot:hasEquip>
+          <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_瞬时流量_m³/152072156137017972">
+            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_瞬时流量_m³/17/2020-06-10_17:25:03"/>
+          </rdf:Description>
+        </iot:hasEquip>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_+P01-M1变频水泵_故障反馈/152072156689617543"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_+P02-M1工频水泵_故障反馈/152072156835369611"/>
         <iot:hasEquip>
           <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_环境温度_℃/152072156118143603">
-            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_环境温度_℃/39/2020-04-19_06:17:49"/>
+            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_环境温度_℃/45/2020-06-10_17:25:03"/>
           </rdf:Description>
         </iot:hasEquip>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/-KM1P02接触器/152072155825590888"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/-FR1P02热继电器/152072155880116841"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/-KM1P01接触器/152072155732267621"/>
-        <iot:hasEquip>
-          <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_浊度值_NTU/152072156045791856">
-            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_浊度值_NTU/10/2020-04-19_06:17:49"/>
-          </rdf:Description>
-        </iot:hasEquip>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_浊度值_NTU/152072156045791856"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/频率_+P01-M1变频水泵_频率设定/152072156955955856"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_+P02-M1工频水泵_启动开关/152072156447396477"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/-F32微断/152072155529892444"/>
@@ -1988,6 +1989,11 @@
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_+F01-M1变频风机_停止开关/152072156209369720"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/-F1F01微断/152072155617972831"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/-FR1P01热继电器/152072155752190566"/>
+        <iot:hasEquip>
+          <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_溶解氧值_mg/152072156079346289">
+            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_溶解氧值_mg/57/2020-06-10_17:25:03"/>
+          </rdf:Description>
+        </iot:hasEquip>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_+F01-M1变频风机_运行反馈/152072156604682883"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_+F01-M1变频风机_故障反馈/152072156582662786"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/-KM1F01接触器/152072155637895776"/>
@@ -1997,7 +2003,7 @@
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_+F01-M1变频风机_自动状态/152072156520796800"/>
         <iot:hasEquip>
           <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_水箱水位_m/152072156099269234">
-            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_水箱水位_m/26/2020-04-19_06:17:49"/>
+            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_水箱水位_m/47/2020-06-10_17:25:03"/>
           </rdf:Description>
         </iot:hasEquip>
       </rdf:Description>

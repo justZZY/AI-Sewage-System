@@ -1,0 +1,96 @@
+<template>
+  <div class="apex-navbar apex-navbar-{{theme}}" style="height:{{height}}px">
+    <div class="left" onclick="clickHandlerLeft">
+      <text class="text" if="{{ leftText }}">{{ leftText }}</text>
+    </div>
+    <div class="title">
+      <block if="{{ title }}">
+        <text class="text">{{ title }}</text>
+      </block>
+      <block if="{{ !title }}">
+        <slot></slot>
+      </block>
+    </div>
+    <div class="right" onclick="clickHandlerRight">
+      <text class="text" if="{{ rightText }}">{{ rightText }}</text>
+    </div>
+  </div>
+</template>
+<style lang="less">
+@import "../styles/base.less";
+
+.apex-navbar {
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px * @ratio;
+  .text {
+    color: #ffffff;
+  }
+  .left,
+  .right,
+  .title {
+    .text {
+      font-size: @text-size;
+    }
+  }
+  &-light {
+    background-color: #ffffff;
+    .text {
+      color: @text-color;
+      font-size: @text-size;
+    }
+  }
+  &-dark {
+    background-color: @title-color;
+  }
+  &-royal {
+    background-color: @warning-color;
+  }
+  &-positive {
+    background-color: @success-color;
+  }
+  &-calm {
+    background-color: @primary-color;
+  }
+}
+</style>
+<script>
+export default {
+  props: {
+    theme: {
+      type: String,
+      default: "light" //  light、positive、calm、royal、dark
+    },
+    title: {
+      type: String,
+      default: ""
+    },
+    leftText: {
+      type: String,
+      default: ""
+    },
+    rightText: {
+      type: String,
+      default: ""
+    },
+    height: {
+      default: 100
+    },
+    bgColor: {
+      type: String,
+      default: ""
+    },
+    fixed: {
+      default: false
+    }
+  },
+
+  clickHandlerLeft() {
+    this.$emit("tap", { type: "left" });
+  },
+
+  clickHandlerRight() {
+    this.$emit("tap", { type: "right" });
+  }
+};
+</script>

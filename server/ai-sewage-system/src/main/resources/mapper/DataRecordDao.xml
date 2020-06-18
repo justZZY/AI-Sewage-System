@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sewage.springboot.dao.DataRecordDao">
+    <insert id="insertDataRecord" parameterType="com.sewage.springboot.entity.DataRecord">
+        INSERT INTO data_record_test(site_id, in_ph, in_an, in_flow, in_accflow, out_ph,
+        out_an, out_flow, out_accflow, clean_num, output_num, date)
+        VALUES (#{siteId}, #{inPh}, #{inAn}, #{inFlow}, #{inAccflow}, #{outPh},
+        #{outAn}, #{outFlow}, #{outAccflow}, #{cleanNum}, #{outputNum}, #{date})
+    </insert>
+    <select id="getDayDataRecord" resultType="com.sewage.springboot.entity.DataRecord">
+        SELECT *
+        FROM data_record_test dr
+        WHERE year(dr.date) = year(#{date}) and month(dr.date) = month(#{date})
+        and dayofmonth(dr.date) = dayofmonth(#{date}) and dr.site_id = #{site_id}
+        ORDER BY dr.date ASC
+    </select>
+    <select id="getMonthDataRecord" resultType="com.sewage.springboot.entity.DataRecord">
+        SELECT *
+        FROM data_record_test dr
+        WHERE year(dr.date) = #{year} and month(dr.date) = #{month} and dr.site_id = #{site_id}
+        ORDER BY dr.date ASC
+    </select>
+    <select id="getQuarterDataRecord" resultType="com.sewage.springboot.entity.DataRecord">
+        SELECT *
+        FROM data_record_test dr
+        WHERE year(dr.date) = #{year} and quarter(dr.date) = #{quarter} and dr.site_id = #{site_id}
+        ORDER BY dr.date ASC
+    </select>
+    <select id="getMonthYearDataRecord" resultType="com.sewage.springboot.entity.DataRecord">
+        SELECT *
+        FROM data_record_test dr
+        WHERE year(dr.date) = #{year} and dr.site_id = #{site_id}
+        ORDER BY dr.date ASC
+    </select>
+</mapper>

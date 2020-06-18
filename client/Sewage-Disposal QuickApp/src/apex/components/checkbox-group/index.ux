@@ -1,0 +1,48 @@
+<template>
+  <div id="checkbox-group" class="apex-checkbox-group">
+    <slot></slot>
+  </div>
+</template>
+
+<style lang="less">
+@import "../styles/base.less";
+
+.apex-checkbox-group {
+  flex-direction: column;
+}
+</style>
+
+<script>
+export default {
+  data() {
+    return {};
+  },
+  props: {
+    current: {
+      default: []
+    },
+    id: {
+      type: String,
+      required: true,
+      default: ""
+    }
+  },
+  onInit() {
+    this.$watch("current", "changeCurrent");
+  },
+  onReady() {
+    this.changeCurrent();
+  },
+  changeCurrent(val = this.current) {
+    const checkboxes = this.checkboxes;
+    if (checkboxes && checkboxes.length > 0) {
+      checkboxes.forEach(item => {
+        item.changeCurrent(val.includes(item.value));
+      });
+    }
+  },
+  emitEvent(params) {
+    this.$emit("change", params);
+  }
+};
+</script>

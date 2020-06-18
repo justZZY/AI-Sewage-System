@@ -1,6 +1,7 @@
 package com.sewage.springboot;
 
 import java.net.Proxy;
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,7 +19,7 @@ public class Global {
 //    public static String username = "ligaofa";
 //    public static String password = "gf229192";
 
-//    // 获取API账号请咨询对接的销售。
+    //    // 获取API账号请咨询对接的销售。
 //    public static String clientId = "ynsk";
 //    public static String clientSecret = "af6a37beddb28136eed65bda1f16547f";
     public static String username = "ynzmhj";
@@ -30,4 +31,7 @@ public class Global {
     public static String scope = "openid offline_access fbox email profile";
     public static String grant_type_login = "password";
     public static String grant_type_refresh = "refresh_token";
+
+    // 服务器启动时间 日志记录时间
+    public static final Date createDate = new Date(2020, 6, 8, 0, 0, 0);
 }

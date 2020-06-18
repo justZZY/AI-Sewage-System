@@ -1,11 +1,11 @@
 package com.sewage.springboot;
 
 import com.sewage.springboot.graph.GraphUpdate;
+import com.sewage.springboot.timer.task.WriteRecordTask;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -24,5 +24,7 @@ public class AiSewageSystemApplication extends SpringBootServletInitializer {
 		// 半小时做一次图谱数据监测
 		Timer timer = new Timer();
 		timer.schedule(new GraphUpdate(), 0, 1800 * 1000);
+		// 5min记录一次数据
+		timer.schedule(new WriteRecordTask(), 0, 3600 * 1000);
 	}
 }
