@@ -115,6 +115,12 @@ public class JobController {
 		return jobService.queryJobsProcessing(UserInfoUtils.getUserInfo().getUsername(),pageIndex,pageSize);
 	}
 	
+	/** 查询自己已处理的工单（待审核、成功、失败） */
+	@RequestMapping("/query/allprocessed")
+	public JSONObject queryJobsAllProcessed(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
+		return jobService.queryJobsAllProcessed(UserInfoUtils.getUserInfo().getUsername(),pageIndex,pageSize);
+	}
+	
 	/** 查询自己已处理的工单 （未确认）*/
 	@RequestMapping("/query/processed")
 	public JSONObject queryJobsProcessed(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {

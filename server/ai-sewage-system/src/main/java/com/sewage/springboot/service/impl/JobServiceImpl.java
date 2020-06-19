@@ -141,6 +141,22 @@ public class JobServiceImpl implements JobService {
 		return queryJobs(job, pageIndex, pageSize);
 	}
 
+	
+	@Override
+	public JSONObject queryJobsAllProcessed(String username, Integer pageIndex, Integer pageSize) {
+		if(pageIndex==null) pageIndex=PAGE_INDEX;
+		if(pageSize==null) pageSize=PAGE_SIZE;
+		PageHelper.startPage(pageIndex, pageSize, true);
+		Example ex = new Example(Job.class);
+		ex.and().andEqualTo("processor", username);
+		ex.and().orEqualTo("status", JobConstant.JOB_STATUS_PROCESSED)
+		.orEqualTo("status", JobConstant.JOB_STATUS_SUCCESS).orEqualTo("status", JobConstant.JOB_STATUS_FAIL);
+		ex.orderBy("updateTime").desc();
+		List<Job> list = jobMapper.selectByExample(ex);
+		PageInfo<Job> page = new PageInfo<Job>(list);
+		return CommonUtil.jsonResult(1, "查询完成！", page);
+	}
+	
 	@Override
 	public JSONObject queryJobsProcessed(String user, Integer pageIndex, Integer pageSize) {
 		Job job = new Job();
@@ -234,6 +250,11 @@ public class JobServiceImpl implements JobService {
 		if(!UserInfoUtils.getUserInfo().getIdentity().equals("admin"))
 			throw new BussinessException(-1, "权限不足");
 		if(jobsIds==null || jobsIds.isEmpty())  throw new BussinessException(-1, "选择工单无效！");
+		// 查询接收人是否存在
+		JSONObject queryUser = userDao.queryUserByName(user);
+		if(queryUser==null) throw  new BussinessException(-1, "用户["+user+"]不存在！"); 
+		if(!queryUser.getString("identity").equals("user") || !queryUser.getString("delete_status").equals("0")) throw  new BussinessException(-1, "只可以转发给正常普通用户！"); 
+		
 		Job job = new Job();
 		// 添加工单处理人，更新工单状态
 		job.setProcessor(user);
@@ -385,7 +406,6 @@ public class JobServiceImpl implements JobService {
 		Integer jobId = json.getInteger("jobId");
 		String file = json.getString("fileList");
 		String content = json.getString("content");
-		String type = json.getString("type");
 		if(jobId==null) throw new BussinessException(-1, "操作失败，原因：工单无效");
 		/* 1.更新工单状态，添加审核人
 		 */

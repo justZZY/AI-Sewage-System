@@ -30,6 +30,12 @@ public interface JobService {
 	 */
 	public JSONObject queryJobsProcessing(String user,Integer pageIndex, Integer pageSize);
 	
+	/** 查询用户所有已处理的工单（确认处理后的，包含待审核和成功、失败的） 
+	 * @param pageIndex 查询当前页，默认为{@link JobService#PAGE_INDEX}
+	 * @param pageSize 数据条数，默认{@link JobService#PAGE_SIZE}
+	 */
+	public JSONObject queryJobsAllProcessed(String username, Integer pageIndex, Integer pageSize);
+
 	/** 查询用户处理完成的工单（待审核确认） 
 	 * @param pageIndex 查询当前页，默认为{@link JobService#PAGE_INDEX}
 	 * @param pageSize 数据条数，默认{@link JobService#PAGE_SIZE}

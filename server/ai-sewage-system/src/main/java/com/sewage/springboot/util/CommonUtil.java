@@ -2,57 +2,55 @@ package com.sewage.springboot.util;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.sewage.springboot.Global;
 import com.sewage.springboot.util.constants.Constants;
 import com.sewage.springboot.util.constants.ErrorEnum;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
 
 /**
-
- * @author: hxy
-
+ * @author: zzy
  * @description: 本后台接口系统常用的json工具类
-
- * @date: 2017/10/24 10:12
-
  */
 
 public class CommonUtil {
 
 
-	/**
-	 * 返回json串
-	 * 格式：
-	 * <br>{
-	 * <br>	"code": code, // 状态码
-	 * <br> "msg": msg,   // 提示信息
-	 * <br> "data": data  //数据
-	 * <br>}
-	 * 
-	 * @author：sc
-	 * @data： 2019年9月21日
-	 */
-	 public static JSONObject jsonResult(Object code, String msg, Object data) {
-		JSONObject json = new JSONObject();
-		json.put("code", code);
-		json.put("msg", msg);
-		json.put("data", data);
-        return json;
-	 }
-	 public static JSONObject jsonResult(Object code, String msg) {
-        return jsonResult(code, msg, null);
-	 }
-	 public static JSONObject jsonResult(Object code) {
-        return jsonResult(code, null, null);
-	 }
-	 
     /**
+     * 返回json串
+     * 格式：
+     * <br>{
+     * <br>	"code": code, // 状态码
+     * <br> "msg": msg,   // 提示信息
+     * <br> "data": data  //数据
+     * <br>}
+     *
+     * @author：sc
+     * @data： 2019年9月21日
+     */
+    public static JSONObject jsonResult(Object code, String msg, Object data) {
+        JSONObject json = new JSONObject();
+        json.put("code", code);
+        json.put("msg", msg);
+        json.put("data", data);
+        return json;
+    }
 
+    public static JSONObject jsonResult(Object code, String msg) {
+        return jsonResult(code, msg, null);
+    }
+
+    public static JSONObject jsonResult(Object code) {
+        return jsonResult(code, null, null);
+    }
+
+    /**
      * 返回一个info为空对象的成功消息的json
-
      */
 
     public static JSONObject successJson() {
@@ -62,11 +60,8 @@ public class CommonUtil {
     }
 
 
-
     /**
-
      * 返回一个返回码为100的json
-
      */
 
     public static JSONObject successJson(Object info) {
@@ -84,11 +79,8 @@ public class CommonUtil {
     }
 
 
-
     /**
-
      * 返回错误信息JSON
-
      */
 
     public static JSONObject errorJson(ErrorEnum errorEnum) {
@@ -106,19 +98,12 @@ public class CommonUtil {
     }
 
 
-
     /**
-
      * 查询分页结果后的封装工具方法
-
      *
-
      * @param requestJson 请求参数json,此json在之前调用fillPageParam 方法时,已经将pageRow放入
-
      * @param list        查询分页对象list
-
      * @param totalCount  查询出记录的总条数
-
      */
 
     public static JSONObject successPage(final JSONObject requestJson, List<JSONObject> list, int totalCount) {
@@ -144,15 +129,10 @@ public class CommonUtil {
     }
 
 
-
     /**
-
      * 查询分页结果后的封装工具方法
-
      *
-
      * @param list 查询分页对象list
-
      */
 
     public static JSONObject successPage(List<JSONObject> list) {
@@ -170,17 +150,11 @@ public class CommonUtil {
     }
 
 
-
     /**
-
      * 获取总页数
-
      *
-
      * @param pageRow   每页行数
-
      * @param itemCount 结果的总条数
-
      */
 
     private static int getPageCounts(int pageRow, int itemCount) {
@@ -200,11 +174,8 @@ public class CommonUtil {
     }
 
 
-
     /**
-
      * 将request参数值转为json
-
      */
 
     public static JSONObject request2Json(HttpServletRequest request) {
@@ -246,13 +217,10 @@ public class CommonUtil {
     }
 
 
-
     /**
-
      * 将request转JSON
-
+     * <p>
      * 并且验证非空字段
-
      */
 
     public static JSONObject convert2JsonAndCheckRequiredColumns(HttpServletRequest request, String requiredColumns) {
@@ -266,13 +234,9 @@ public class CommonUtil {
     }
 
 
-
     /**
-
      * 验证是否含有全部必填字段
-
      *
-
      * @param requiredColumns 必填的参数字段名称 逗号隔开 比如"userId,name,telephone"
 
      */
@@ -318,17 +282,11 @@ public class CommonUtil {
 //    }
 
 
-
     /**
-
      * 在分页查询之前,为查询条件里加上分页参数
-
      *
-
      * @param paramObject    查询条件json
-
      * @param defaultPageRow 默认的每页条数,即前端不传pageRow参数时的每页条数
-
      */
 
     private static void fillPageParam(final JSONObject paramObject, int defaultPageRow) {
@@ -354,13 +312,10 @@ public class CommonUtil {
     }
 
 
-
     /**
-
      * 分页查询之前的处理参数
-
+     * <p>
      * 没有传pageRow参数时,默认每页10条.
-
      */
 
     public static void fillPageParam(final JSONObject paramObject) {
@@ -368,5 +323,4 @@ public class CommonUtil {
         fillPageParam(paramObject, 10);
 
     }
-
 }
