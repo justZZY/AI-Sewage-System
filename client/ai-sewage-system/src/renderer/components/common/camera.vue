@@ -126,7 +126,7 @@
         let param = new FormData() // 创建form对象
         param.append('file', convertBase64UrlToBlob(image_code), 'job_problem' + new Date().getTime() + '_' + Math.floor((Math.random() * 10) + 1)) // 通过append向form对象添加数据
         this.httpRequest(
-          'http://43.228.77.195:8082/file/singleupload', null, param,
+          'http://127.0.0.1:8082/file/singleupload', null, param,
           function (code, msg, data) {
             if (code >= 1 && data !== null && data !== undefined) {
               this.sendDataToParent(data)

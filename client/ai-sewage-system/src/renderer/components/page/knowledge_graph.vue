@@ -108,7 +108,7 @@
           let authorization = 'Bearer ' + window.jsonobj['access_token']
           let apiBaseUrl = sideData['box']['cs']['apiBaseUrl']
           let boxNo = sideData['box']['boxNo']
-          this.$http.post('http://43.228.77.195:8082/equip/getEquipMonitor', {
+          this.$http.post('http://127.0.0.1:8082/equip/getEquipMonitor', {
             authorization: authorization,
             apiBaseUrl: apiBaseUrl,
             boxNo: boxNo

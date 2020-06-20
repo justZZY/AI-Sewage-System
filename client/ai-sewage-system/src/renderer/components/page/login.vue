@@ -42,7 +42,7 @@
         this.$refs.loginForm.validate(valid => {
           if (valid) {
             this.loading = true
-            this.$http.post('http://43.228.77.195:8082/login/auth', {
+            this.$http.post('http://127.0.0.1:8082/login/auth', {
               'data': this.loginForm
             }).then(data => {
               let userJson = JSON.parse(JSON.stringify(data))['data']
@@ -71,7 +71,7 @@
         })
       },
       runFBoxAccount () {
-        this.$http.post('http://43.228.77.195:8082/equip/equipLogin', null, {
+        this.$http.post('http://127.0.0.1:8082/equip/equipLogin', null, {
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
@@ -86,7 +86,7 @@
         })
       },
       runEquipment () {
-        this.$http.get('http://43.228.77.195:8082/equip/getEquipments', {
+        this.$http.get('http://127.0.0.1:8082/equip/getEquipments', {
           params: {
             Authorization: 'Bearer ' + window.jsonobj['access_token'],
             XFBoxClientId: 'zzy_test'
