@@ -9,7 +9,7 @@
           <el-input type="textarea" v-model="jobAddForm.content" :autosize="{ minRows: 5, maxRows: 20}" ></el-input>
         </el-form-item>
         <el-form-item label="上传附件" prop="fileList" style="width: fit-content" >
-          <el-upload action="http://127.0.0.1:8082/file/singleupload"
+          <el-upload action="http://43.228.77.195:8082/file/singleupload"
                      list-type="picture-card"
                      :file-list="jobAddForm.fileList"
                      :multiple="true"
@@ -33,7 +33,7 @@
           <div>
             <ul class="el-upload-list el-upload-list--picture-card">
               <li tabindex="0" class="el-upload-list__item is-success" v-for="item in photoList" :key="item">
-                <img :src="'http://127.0.0.1:8082/file/download/' + item" alt="" class="el-upload-list__item-thumbnail"><a class="el-upload-list__item-name">
+                <img :src="'http://43.228.77.195:8082/file/download/' + item" alt="" class="el-upload-list__item-thumbnail"><a class="el-upload-list__item-name">
                 <i class="el-icon-document"></i>
               </a>
                 <label class="el-upload-list__item-status-label">
@@ -43,7 +43,7 @@
                 <i class="el-icon-close-tip"></i>
                 <span class="el-upload-list__item-actions">
                     <span class="el-upload-list__item-preview">
-                      <i class="el-icon-zoom-in" @click="pictureCardPreview('http://127.0.0.1:8082/file//download/' + item)"></i>
+                      <i class="el-icon-zoom-in" @click="pictureCardPreview('http://43.228.77.195:8082/file//download/' + item)"></i>
                     </span>
                     <span class="el-upload-list__item-delete">
                       <i class="el-icon-delete" @click="deleteFromPhotoList(item)"></i>
@@ -152,7 +152,7 @@
             if (this.jobAddForm.fileList !== null && this.jobAddForm.fileList !== undefined) {
               this.jobAddForm.fileList = this.jobAddForm.fileList.concat(this.photoList) // 注意提交的是jobAddForm.fileList (注意concat方法不修改原数组，只返回新数组)
             }
-            this.$http.post('http://127.0.0.1:8082/job/add', this.jobAddForm,
+            this.$http.post('http://43.228.77.195:8082/job/add', this.jobAddForm,
               {
                 headers: {
                   'Authorization': this.$store.state.ShiroToken.token
@@ -182,7 +182,7 @@
         })
       },
       queryJobTypeList () {
-        this.$http.post('http://127.0.0.1:8082/job/type/queryall', null, {
+        this.$http.post('http://43.228.77.195:8082/job/type/queryall', null, {
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }

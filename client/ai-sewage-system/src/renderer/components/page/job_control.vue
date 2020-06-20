@@ -160,7 +160,7 @@
                   <template>
                     <el-carousel :interval="4000" type="card" height="200px">
                       <el-carousel-item v-for="item in createProcess.file" :key="item" >
-                        <img :src="'http://127.0.0.1:8082/file/download/'+item" preview="1" preview-text=" " style="width:100%">
+                        <img :src="'http://43.228.77.195:8082/file/download/'+item" preview="1" preview-text=" " style="width:100%">
                       </el-carousel-item>
                     </el-carousel>
                   </template>
@@ -195,7 +195,7 @@
                   <template>
                     <el-carousel :interval="4000" type="card" height="200px">
                       <el-carousel-item v-for="item in resultProcessed.file" :key="item" >
-                        <img :src="'http://127.0.0.1:8082/file/download/'+item" preview="2.1" preview-text=" " style="width:100%">
+                        <img :src="'http://43.228.77.195:8082/file/download/'+item" preview="2.1" preview-text=" " style="width:100%">
                       </el-carousel-item>
                     </el-carousel>
                   </template>
@@ -215,7 +215,7 @@
                   <template>
                     <el-carousel :interval="4000" type="card" height="200px">
                       <el-carousel-item v-for="item in resultInspected.file" :key="item" >
-                        <img :src="'http://127.0.0.1:8082/file/download/'+item" preview="2.2" preview-text=" " style="width:100%">
+                        <img :src="'http://43.228.77.195:8082/file/download/'+item" preview="2.2" preview-text=" " style="width:100%">
                       </el-carousel-item>
                     </el-carousel>
                   </template>
@@ -239,7 +239,7 @@
                 </el-form-item>
 
                  <el-form-item label="上传附件" prop="fileList"  align="left">
-                  <el-upload action="http://127.0.0.1:8082/file/singleupload"
+                  <el-upload action="http://43.228.77.195:8082/file/singleupload"
                             list-type="picture-card"
                             :multiple="true"
                             :show-file-list="true"
@@ -262,7 +262,7 @@
                   <div>
                     <ul class="el-upload-list el-upload-list--picture-card">
                       <li tabindex="0" class="el-upload-list__item is-success" v-for="item in photoList" :key="item">
-                        <img :src="'http://127.0.0.1:8082/file/download/' + item" alt="" class="el-upload-list__item-thumbnail"><a class="el-upload-list__item-name">
+                        <img :src="'http://43.228.77.195:8082/file/download/' + item" alt="" class="el-upload-list__item-thumbnail"><a class="el-upload-list__item-name">
                         <i class="el-icon-document"></i>
                       </a>
                         <label class="el-upload-list__item-status-label">
@@ -272,7 +272,7 @@
                         <i class="el-icon-close-tip"></i>
                         <span class="el-upload-list__item-actions">
                     <span class="el-upload-list__item-preview">
-                      <i class="el-icon-zoom-in" @click="pictureCardPreview('http://127.0.0.1:8082/file/download/' + item)"></i>
+                      <i class="el-icon-zoom-in" @click="pictureCardPreview('http://43.228.77.195:8082/file/download/' + item)"></i>
                     </span>
                     <span class="el-upload-list__item-delete">
                       <i class="el-icon-delete" @click="deleteFromPhotoList(item)"></i>
@@ -300,7 +300,7 @@
                   <el-input type="textarea" v-model="processForm.content" :autosize="{ minRows: 5, maxRows: 20}" resize="false" ></el-input>
                 </el-form-item>
                 <el-form-item label="上传附件" prop="fileList"  align="left">
-                  <el-upload action="http://127.0.0.1:8082/file/singleupload"
+                  <el-upload action="http://43.228.77.195:8082/file/singleupload"
                             list-type="picture-card"
                             :multiple="true"
                             :show-file-list="true"
@@ -323,7 +323,7 @@
                   <div>
                     <ul class="el-upload-list el-upload-list--picture-card">
                       <li tabindex="0" class="el-upload-list__item is-success" v-for="item in photoList" :key="item">
-                        <img :src="'http://127.0.0.1:8082/file/download/' + item" alt="" class="el-upload-list__item-thumbnail"><a class="el-upload-list__item-name">
+                        <img :src="'http://43.228.77.195:8082/file/download/' + item" alt="" class="el-upload-list__item-thumbnail"><a class="el-upload-list__item-name">
                         <i class="el-icon-document"></i>
                       </a>
                         <label class="el-upload-list__item-status-label">
@@ -333,7 +333,7 @@
                         <i class="el-icon-close-tip"></i>
                         <span class="el-upload-list__item-actions">
                     <span class="el-upload-list__item-preview">
-                      <i class="el-icon-zoom-in" @click="pictureCardPreview('http://127.0.0.1:8082/file/download/' + item)"></i>
+                      <i class="el-icon-zoom-in" @click="pictureCardPreview('http://43.228.77.195:8082/file/download/' + item)"></i>
                     </span>
                     <span class="el-upload-list__item-delete">
                       <i class="el-icon-delete" @click="deleteFromPhotoList(item)"></i>
@@ -427,7 +427,7 @@
     },
     methods: {
       queryLoginUser () {
-        this.$http.post('http://127.0.0.1:8082/job/user/curlogin', null, {
+        this.$http.post('http://43.228.77.195:8082/job/user/curlogin', null, {
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
@@ -451,7 +451,7 @@
       },
       queryMenuJobsCount () {
         for (let i = 0, len = this.jobMenu.length; i < len; i++) {
-          this.$http('http://127.0.0.1:8082/job/query/count', {
+          this.$http('http://43.228.77.195:8082/job/query/count', {
             params: {type: this.jobMenu[i].reqUrl},
             headers: {
               'Authorization': this.$store.state.ShiroToken.token
@@ -526,7 +526,7 @@
         }
         this.tablelodingshadow = true
         this.$http({
-          url: 'http://127.0.0.1:8082/job/query/' + this.queryJobType,
+          url: 'http://43.228.77.195:8082/job/query/' + this.queryJobType,
           params: {
             pageIndex: this.currentPage,
             pageSize: this.pageSize,
@@ -552,7 +552,7 @@
       },
       queryJobTypeList () {
         this.jobTypeLoading = true
-        this.$http.post('http://127.0.0.1:8082/job/type/queryall', null, {
+        this.$http.post('http://43.228.77.195:8082/job/type/queryall', null, {
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
@@ -572,7 +572,7 @@
       queryJobProcessList (jobId) {
         this.tablelodingshadow = true
         this.$http({
-          url: 'http://127.0.0.1:8082/job/jobprocess/query/list/' + jobId,
+          url: 'http://43.228.77.195:8082/job/jobprocess/query/list/' + jobId,
           method: 'post',
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
@@ -613,7 +613,7 @@
           background: 'rgba(0, 0, 0, 0.7)'
         })
         this.$http({
-          url: 'http://127.0.0.1:8082/job/query/one',
+          url: 'http://43.228.77.195:8082/job/query/one',
           method: 'post',
           params: {
             'jobId': jobId
@@ -658,7 +658,7 @@
           this.processForm.fileList = this.processForm.fileList.concat(this.photoList) // 注意提交的是processForm.fileList (注意concat方法不修改原数组，只返回新数组)
         }
         this.$http({
-          url: 'http://127.0.0.1:8082/job/' + processUrlMapping[type],
+          url: 'http://43.228.77.195:8082/job/' + processUrlMapping[type],
           method: 'post',
           data: this.processForm,
           headers: {
@@ -691,7 +691,7 @@
           background: 'rgba(0, 0, 0, 0.7)'
         })
         this.$http({
-          url: 'http://127.0.0.1:8082/job/grab',
+          url: 'http://43.228.77.195:8082/job/grab',
           data: {
             jobsIds: this.selectJobsIds
           },
@@ -711,7 +711,7 @@
       },
       queryUserList () {
         this.userListLoading = true
-        this.$http.post('http://127.0.0.1:8082/job/user/list', null, {
+        this.$http.post('http://43.228.77.195:8082/job/user/list', null, {
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
@@ -738,7 +738,7 @@
               background: 'rgba(0, 0, 0, 0.7)'
             })
             this.$http({
-              url: 'http://127.0.0.1:8082/job/forward',
+              url: 'http://43.228.77.195:8082/job/forward',
               data: {
                 jobsIds: this.selectJobsIds,
                 receiverUsername: this.forwardForm.username,
@@ -780,7 +780,7 @@
               allocateJobsIds = this.selectJobsIds
             }
             this.$http({
-              url: 'http://127.0.0.1:8082/job/allocate',
+              url: 'http://43.228.77.195:8082/job/allocate',
               data: {
                 jobsIds: allocateJobsIds,
                 username: this.allocateForm.username,
@@ -814,7 +814,7 @@
           background: 'rgba(0, 0, 0, 0.7)'
         })
         this.$http({
-          url: 'http://127.0.0.1:8082/job/query/search',
+          url: 'http://43.228.77.195:8082/job/query/search',
           data: this.formsearch,
           params: {
             pageIndex: this.currentPage,
