@@ -23,7 +23,7 @@ public class AiSewageSystemApplication extends SpringBootServletInitializer {
 		SpringApplication.run(AiSewageSystemApplication.class, args);
 		// 半小时做一次图谱数据监测
 		Timer timer = new Timer();
-		timer.schedule(new GraphUpdate(), 0, 1800 * 1000);
+//		timer.schedule(new GraphUpdate(), 0, 1800 * 1000);
 		// 1小时记录一次数据
 		timer.schedule(new WriteRecordTask(), 0, 3600 * 1000);
 	}
