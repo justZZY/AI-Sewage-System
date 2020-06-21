@@ -58,6 +58,9 @@
                   <el-button v-if="equip.maSwitch === true || equip.runFeedback === '停止'" type="primary" disabled plain @click="stopEquipBtn(equip)">停止</el-button>
                 </div>
                 <div class="desc">
+                  <span>故障反馈: </span><span style="color: green" v-if="equip.errorFeedback === '正常'">{{equip.errorFeedback}}</span><span style="color: red" v-if="equip.errorFeedback !== '正常'">{{equip.errorFeedback}}</span>
+                </div>
+                <div class="desc">
                   <span>启动时间: </span>
                   <el-time-picker style="width: 120px" v-model="equip.openTime" :editable="false" :clearable="false"
                                   format="HH:mm" value-format="HH:mm" :picker-options="{format: 'HH:mm'}"
@@ -123,7 +126,7 @@
 </template>
 
 <script>
-  import {equipName} from '../../js/site_detail'
+  // import {equipName} from '../../js/site_detail'
   export default {
     name: 'remote_control',
     data () {
@@ -610,7 +613,8 @@
       // 1.14 新增设备筛选逻辑
       let thirdArray = []
       for (let i = 0; i < secondMergeArray.length; i++) {
-        if (equipName.indexOf(secondMergeArray[i].name) > -1) {
+        if (secondMergeArray[i].name !== '急停' && secondMergeArray[i].name !== '液位' &&
+          secondMergeArray[i].name !== '机柜') {
           thirdArray.push(secondMergeArray[i])
         }
       }
