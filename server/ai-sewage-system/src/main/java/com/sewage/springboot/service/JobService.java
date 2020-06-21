@@ -35,6 +35,12 @@ public interface JobService {
 	 * @param pageSize 数据条数，默认{@link JobService#PAGE_SIZE}
 	 */
 	public JSONObject queryJobsAllProcessed(String username, Integer pageIndex, Integer pageSize);
+	
+	/** 查询用户所有历史处理的工单（包含成功、失败的，不包含待审核的） 
+	 * @param pageIndex 查询当前页，默认为{@link JobService#PAGE_INDEX}
+	 * @param pageSize 数据条数，默认{@link JobService#PAGE_SIZE}
+	 */
+	public JSONObject queryJobsfinished(String user, Integer pageIndex, Integer pageSize);
 
 	/** 查询用户处理完成的工单（待审核确认） 
 	 * @param pageIndex 查询当前页，默认为{@link JobService#PAGE_INDEX}
@@ -83,9 +89,6 @@ public interface JobService {
 	/** 创建一个工单 */
 	public JSONObject createJob(JSONObject form);
 	
-	public JSONObject deleteJob(int jobId);
-	
-	public JSONObject updateJob(Job job);
 
 	/** 查询所有工单列表  */
 	public JSONObject selectJobList(Integer pageIndex, Integer pageSize);
@@ -141,6 +144,8 @@ public interface JobService {
 	 * 审核-驳回工单，处理者接着处理 
 	 */
 	public JSONObject reject(String inspector, JSONObject json);
+
+	
 
 	
 

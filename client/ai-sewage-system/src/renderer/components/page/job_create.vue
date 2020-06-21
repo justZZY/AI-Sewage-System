@@ -5,10 +5,48 @@
         <el-form-item label="问题分类" prop="jobTypeName" required>
           <el-button  :type="jobAddForm.jobTypeName==''?'':'primary'" plain @click="jobTypeSelectVisible=true" >{{jobAddForm.jobTypeName==''?'请选择问题类型':jobAddForm.jobTypeName}}</el-button>
         </el-form-item>
-        <el-form-item label="内容" prop="content"  >
-          <el-input type="textarea" v-model="jobAddForm.content" :autosize="{ minRows: 5, maxRows: 20}" ></el-input>
+        <el-form-item label="问题描述" prop="content"  >
+          <el-input type="textarea" v-model="jobAddForm.content" :autosize="{ minRows: 5, maxRows: 20}" placeholder="具体描述问题/故障.."></el-input>
         </el-form-item>
-        <el-form-item label="上传附件" prop="fileList" style="width: fit-content" >
+        <el-form-item label="故障站点" prop="site" required>
+          <el-cascader v-model="jobAddForm.site" :options="sitesOptions" :props="sitesOptionsprops" @change="selectSite" :show-all-levels="false" size="medium"></el-cascader>
+        </el-form-item>
+        <el-form-item label="站点地址" prop="siteAddr"  >
+          <el-input  v-model="jobAddForm.siteAddr" size="medium"></el-input>
+        </el-form-item>
+        <el-form-item label="严重程度"  prop="severity">
+          <el-radio-group v-model="jobAddForm.severity" size="medium">
+            <el-radio border label="一般"></el-radio>
+            <el-radio border label="严重"></el-radio>
+            <el-radio border label="非常严重"></el-radio>
+
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="工单优先级"  prop="priority">
+          <el-radio-group v-model="jobAddForm.priority" size="medium">
+            <el-radio border label="一般"></el-radio>
+            <el-radio border label="紧急"></el-radio>
+            <el-radio border label="非常紧急"></el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="期望解决时间"  prop="expectedTime">
+          <el-radio-group v-model="jobAddForm.expectedTime" size="medium">
+            <el-radio v-for="(value,key) in [2,12,48]" :key="key" border :label="value" >{{value}}小时内</el-radio>
+          </el-radio-group>
+          <el-autocomplete
+            size="medium"
+            class="inline-input"
+            v-model="jobAddForm.expectedTime"
+            :fetch-suggestions="querySearch"
+            @select="handleSelect"
+            placeholder="小时"
+            label="小时"
+            :clearable="true"
+            style="width:120px;margin-left:40px"
+          ></el-autocomplete>
+        </el-form-item>
+  
+        <el-form-item label="相关附件" prop="fileList" style="width: fit-content" >
           <el-upload action="http://43.228.77.195:8082/file/singleupload"
                      list-type="picture-card"
                      :file-list="jobAddForm.fileList"
@@ -77,10 +115,8 @@
           </el-radio-group>
         </el-tab-pane>
 
-        <el-tab-pane label="其他">
-          <el-radio-group v-model="jobAddForm.jobTypeName">
-            <el-radio  label="自定义描述" border></el-radio>
-          </el-radio-group>
+        <el-tab-pane label="自定义描述">
+          <el-input  v-model="jobAddForm.jobTypeName"  placeholder="自定义问题类别" :clearable="true"></el-input>
         </el-tab-pane>
       </el-tabs>
       <span slot="footer" class="dialog-footer">
@@ -96,6 +132,7 @@
 
 <script>
   import camera from './../common/camera' // 引入组件
+  import {siteDetail} from '../../js/site_detail'
   export default {
     name: 'job_create',
     components: { camera },
@@ -105,16 +142,25 @@
     data () {
       return {
         jobTypeListJson: { },
+        sitesOptions: this.$store.state.Treedata.treedata,
+        sitesOptionsprops: {value: 'label'},
         jobTypeSelectVisible: false,
         photoList: [],
         jobAddForm: {
           jobTypeName: '',
           content: '',
-          fileList: []
+          fileList: [],
+          expectedTime: 48,
+          severity: '一般',
+          priority: '一般',
+          site: ''
         },
         rules: {
           jobTypeName: [
             {required: true, message: '请选择问题类型', trigger: ['blur', 'change']}
+          ],
+          site: [
+            {required: true, message: '请选择故障站点', trigger: ['blur', 'change']}
           ]
         },
         // 上传图片
@@ -124,21 +170,6 @@
     },
 
     methods: {
-      initParams: function () {
-        this.jobTypeListJson = { }
-        this.jobTypeSelectVisible = false
-        this.photoList = []
-        this.jobAddForm = {
-          jobTypeName: '',
-          content: '',
-          fileList: [],
-          email: '',
-          telephone: ''
-        }
-        // 上传图片
-        this.dialogImageUrl = ''
-        this.dialogVisible = false
-      },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -174,7 +205,7 @@
               this.jobAddForm.fileList = temp
               console.log(error)
               loading.close()
-            })
+            }.bind(this))
           } else {
             console.log('error submit!!')
             return false
@@ -247,6 +278,29 @@
       receiveDataFromCamera (photoObj) {
         this.photoList.splice(this.photoList.length, 1, photoObj)
         console.log(this.photoList)
+      },
+      // 2020.6.15 自定义时间
+      querySearch (queryString, cb) {
+        const times = [
+          // {value: '半小时内', hours: 0.5},
+          {value: '6小时内', hours: 6},
+          {value: '24小时内', hours: 24},
+          {value: '36小时内', hours: 36},
+          {value: '3天内', hours: 3 * 24},
+          {value: '15天内', hours: 15 * 24},
+          {value: '30天内', hours: 30 * 24},
+          {value: '60天内', hours: 60 * 24}
+        ]
+        // 调用 callback 返回建议列表的数据
+        cb(times)
+      },
+      handleSelect (item) {
+        this.jobAddForm.expectedTime = item.hours
+      },
+      // 选择站点
+      selectSite (item) {
+        console.log(item)
+        console.log(this.jobAddForm.site)
       }
     }
   }

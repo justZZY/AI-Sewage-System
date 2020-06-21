@@ -2,37 +2,57 @@
   <el-container>
     <el-header>
       <el-row :gutter="20">
-        <el-col :span="5"><div class="grid-content bg-purple">工单管理({{currentUser.identity}})</div></el-col>
-        <el-col :span="19"><div class="grid-content bg-purple" >
-            <el-form :inline="true" :model="formSearch" size="small" class="demo-form-inline">
-              <el-form-item label="问题类型">
-                <el-cascader
-                    :show-all-levels="false"
-                    v-model="formSearch.jobType"
-                    :options="jobTypeOptions"
-                    :loading="jobTypeLoading">
-                </el-cascader>
-
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="selectMenu('search')">查询</el-button>
-                <router-link to="job_create"><el-button type="primary" icon="el-icon-plus">新建工单</el-button></router-link>
-            </el-form-item>
-            </el-form>
+        <el-col :span="12">
+          <div class="grid-content bg-purple" v-if="currentUser.identity=='admin'">
+            自动派单
+            <el-switch
+              v-model="jobSwitch"
+              @change="setJobJobSwitch()"
+              active-color="#13ce66"
+              inactive-color="#ff4949">
+            </el-switch>
+            <i class="el-icon-s-tools setting" @click="queryJobConfig();drawer=true"></i>
+          </div>
+          <div class="grid-content bg-purple" v-else>
+            工单管理
           </div>
         </el-col>
+        <el-col :span="12">
+          <div class="grid-content bg-purple" >
+              <el-form :inline="true" :model="formSearch" size="small" class="demo-form-inline">
+                <el-form-item label="问题类型">
+                  <el-cascader
+                      :show-all-levels="false"
+                      v-model="formSearch.jobType"
+                      :options="jobTypeOptions"
+                      :loading="jobTypeLoading">
+                  </el-cascader>
+
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="selectMenu('search')">查询</el-button>
+                  <router-link to="job_create"><el-button type="primary" icon="el-icon-plus">新建工单</el-button></router-link>
+              </el-form-item>
+              </el-form>
+            </div>
+        </el-col>
+        
       </el-row>
     </el-header>
     <el-container>
-      <el-aside width="auto">
-        <el-menu default-active="-1">
+      <el-aside width="auto" style="overflow-x: hidden;text-align:center;padding-top:15px">
+        <el-menu default-active="-1" >
             <el-menu-item  v-for="(item,index) in jobMenu"
                          :index="index.toString()"
                           @click="selectMenu(item.reqUrl)"
                           v-bind:key="index"
                           v-if="(currentUser.identity!='admin' && item.reqUrl!='waitingspect' && item.reqUrl!='waiting' && item.reqUrl!='all') || (currentUser.identity=='admin' && (item.reqUrl=='waitingspect' || item.reqUrl=='waiting' || item.reqUrl=='all'))">
-              <!--              <i class="el-icon-menu"></i>-->
-              <span slot="title">{{item.title}}<el-badge class="mark" :hidden="item.num==null||item.num==''||item.num<1" :value="item.num" :max='99'/> </span>
+              <!--              -->
+              <el-row type="flex" class="row-bg" justify="space-between">
+                <el-col :span="1"><i :class="item.icon" style="font-size:25px" ></i></el-col>
+                <el-col :span="15"><span >{{item.title}}<el-badge class="mark" :hidden="item.num==null||item.num==''||item.num<1" :value="item.num" :max='99'/></span></el-col>
+                <el-col :span="1"><i class="el-icon-arrow-right" style="font-size:14px"></i></el-col>
+              </el-row>
             </el-menu-item>
         </el-menu>
       </el-aside>
@@ -150,11 +170,32 @@
           <el-collapse v-model="collapseOpened" style="width: 90%;margin-top: 10em" >
             <el-collapse-item title="工单详情" name="1">
               <el-form :model="jobDetail" ref="jobDetailForm" label-width="100px" disabled class="jobDetail">
-                <el-form-item label="问题分类" prop="jobTypeName" >
+                <el-form-item label="问题类别" prop="jobTypeName" >
                   <el-input v-model="jobDetail.jobTypeName"></el-input>
                 </el-form-item>
-                <el-form-item label="内容" prop="content" >
+                <el-form-item label="问题描述" prop="content" >
                   <el-input type="textarea" v-model="jobDetail.content" :autosize="{ minRows: 5, maxRows: 20}" resize="false" ></el-input>
+                </el-form-item>
+                <el-form-item label="故障站点" prop="site" >
+                  <el-input  v-model="jobDetail.site" size="medium"></el-input>
+                </el-form-item>
+                <el-form-item label="站点地址" prop="siteAddr"  >
+                  <el-input  v-model="jobDetail.siteAddr" size="medium"></el-input>
+                </el-form-item>
+                <el-form-item label="严重程度"  prop="severity" v-if="jobDetail.severity"  >
+                  <el-radio-group v-model="jobDetail.severity" size="medium">
+                    <el-radio border :label="jobDetail.severity"></el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                <el-form-item label="工单优先级"  prop="priority" v-if="jobDetail.priority"  >
+                  <el-radio-group v-model="jobDetail.priority" size="medium">
+                    <el-radio border :label="jobDetail.priority"></el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                <el-form-item label="期望解决时间"  prop="expectedTime" v-if="jobDetail.expectedTime"  >
+                  <el-radio-group v-model="jobDetail.expectedTime" size="medium">
+                    <el-radio border :label="jobDetail.expectedTime" >{{jobDetail.expectedTime}}小时内</el-radio>
+                  </el-radio-group>
                 </el-form-item>
                 <el-form-item label="附件" prop="file">
                   <template>
@@ -227,6 +268,7 @@
               <el-form :model="processForm" rel="processForm" label-width="100px" >
                 <el-form-item align="left">
                   <el-button type="primary" @click="allocateFormVisible=true" >派单</el-button>
+                  <el-button type="info" @click="submitForm(6)" >中断</el-button>
                   <el-button @click="returnToPageList">返回</el-button>
                 </el-form-item>
               </el-form>
@@ -409,6 +451,44 @@
       </div>
     </el-dialog>
 
+    <el-drawer 
+      v-if="currentUser.identity=='admin'"
+      style="text-align:center"
+      title="设置自动派单定时开关"
+      :visible.sync="drawer"
+      direction="btt">
+      <div class="demo-drawer__content">
+        <el-form label-width = "150px" inline = "true">
+          <el-form-item label="开启时间" >
+            <el-time-select
+              placeholder="开启时间"
+              v-model="selectTimes.startTime"
+              :picker-options="{
+                start: '00:00',
+                step: '01:00',
+                end: '23:59'
+              }">
+            </el-time-select>
+          </el-form-item>
+          <el-form-item label="关闭时间" >
+            <el-time-select
+              placeholder="关闭时间"
+              v-model="selectTimes.endTime"
+              :picker-options="{
+                start: '00:00',
+                step: '01:00',
+                end: '23:59',
+              }">
+            </el-time-select>
+          </el-form-item>
+        </el-form>
+        <div class="demo-drawer__footer">
+          <el-button @click="selectTimes.endTime='';selectTimes.startTime=''">清除</el-button>
+          <el-button type="primary" @click="setJobSchedule">确 定</el-button>
+        </div>
+      </div>
+    </el-drawer>
+
     <camera v-on:listenToChildEvent="receiveDataFromCamera" ref="camera"></camera>
 
   </el-container>
@@ -437,6 +517,9 @@
           if (result.code == 1) {
             this.currentUser = result.data
             console.log(this.currentUser.identity)
+            if (this.currentUser.identity === 'admin') {
+              this.queryJobConfig()
+            }
           } else {
             this.$alert('登录失效，请重新登录', '提示', { callback: action => {
               location.href = '/'
@@ -956,13 +1039,13 @@
         }
       },
       // 通用请求方法
-      httpRequest: function (url, params, form, callback) {
-        const loading = this.$loading({
+      httpRequest: function (url, params, form, callback, showloading = false) {
+        const loading = showloading ? this.$loading({
           lock: true,
           text: 'Loading',
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
-        })
+        }) : null
         this.$http({
           url: url,
           params: params,
@@ -979,14 +1062,86 @@
           } else {
             callback(code, msg, data)
           }
-          loading.close()
+          if (showloading) {
+            loading.close()
+          }
         }).catch(function (error) { // 请求失败处理
           this.$alert('服务器异常，请稍后再试', '提示')
           console.log(error)
-          loading.close()
+          if (showloading) {
+            loading.close()
+          }
         }.bind(this))
+      },
+      // 查询已设置的自动派单开关时间
+      queryJobConfig () {
+        let url = 'http://43.228.77.195:8082/job/conf/query'
+        let form = ['ontime', 'offtime', 'jobSwitch']
+        let callback = function (code, msg, data) {
+          if (code > 0) {
+            this.selectTimes.startTime = data.ontime
+            this.selectTimes.endTime = data.offtime
+            this.jobSwitch = data.jobSwitch === 'true'
+          } else if (code === 0) {
+            this.selectTimes.startTime = ''
+            this.selectTimes.endTime = ''
+          } else {
+            this.$alert(msg, '警告')
+          }
+        }.bind(this)
+        this.httpRequest(url, null, form, callback)
+      },
+      // 设置自动派单开关定时时间
+      setJobSchedule () {
+        let url = 'http://43.228.77.195:8082/job/conf/update'
+        let form = {
+          ontime: this.selectTimes.startTime,
+          offtime: this.selectTimes.endTime
+        }
+        let callback = function (code, msg, data) {
+          if (code > 0) {
+            this.selectTimes.startTime = form.ontime
+            this.selectTimes.endTime = form.offtime
+            this.drawer = false
+          }
+          this.$message({
+            type: 'success',
+            message: msg
+          })
+        }.bind(this)
+        this.httpRequest(url, null, form, callback)
+      },
+      // 开启/关闭自动派单开关
+      setJobJobSwitch () {
+        this.$confirm('确认' + (!this.jobSwitch ? '关闭' : '开启') + '自动派单(不会影响到定时开关计划)？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let url = 'http://43.228.77.195:8082/job/conf/update'
+          let form = {
+            jobSwitch: this.jobSwitch.toString()
+          }
+          let callback = function (code, msg, data) {
+            if (code > 0) {
+              this.jobSwitch = form.jobSwitch === 'true' // 因为返回的是字符串
+            }
+            this.$message({
+              type: 'success',
+              message: msg
+            })
+          }.bind(this)
+          this.httpRequest(url, null, form, callback)
+        }).catch(() => {
+          this.jobSwitch = !this.jobSwitch
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          })
+        })
       }
     },
+
     data () {
       return {
         currentUser: {
@@ -1015,19 +1170,20 @@
         photoList: [], // 拍照图片列表(数据库的图片id)
         // 工单左菜单栏
         jobMenu: [
-          {title: '未指派工单', reqUrl: 'waiting', num: 0},
-          {title: '待审核工单', reqUrl: 'waitingspect', num: 0},
-          {title: '所有工单', reqUrl: 'all', num: 0},
-          {title: '我创建的工单', reqUrl: 'create', num: 0},
-          {title: '我的未完成的工单', reqUrl: 'processing', num: 0},
-          {title: '我的待审核的工单', reqUrl: 'processed', num: 0},
-          {title: '我的处理成功的工单', reqUrl: 'success', num: 0},
-          {title: '我的处理中断的工单', reqUrl: 'fail', num: 0}
+          {title: '所有工单', reqUrl: 'all', num: 0, icon: 'el-icon-date'},
+          {title: '未指派工单', reqUrl: 'waiting', num: 0, icon: 'el-icon-user'},
+          {title: '未审核工单', reqUrl: 'waitingspect', num: 0, icon: 'el-icon-time'},
+          {title: '我创建的工单', reqUrl: 'create', num: 0, icon: 'el-icon-folder-add'},
+          {title: '未完成的工单', reqUrl: 'processing', num: 0, icon: 'el-icon-edit-outline'},
+          {title: '待审核的工单', reqUrl: 'processed', num: 0, icon: 'el-icon-document-remove'},
+          {title: '历史处理的工单', reqUrl: 'finished', num: 0, icon: 'el-icon-time'},
+          {title: '处理成功的工单', reqUrl: 'success', num: 0, icon: 'el-icon-circle-check'},
+          {title: '处理中断的工单', reqUrl: 'fail', num: 0, icon: 'el-icon-circle-close'}
         ],
         queryJobType: null, // 当前选中的左菜单栏
         // 状态编码转换名称
         statusMapper: {
-          '1': '创建/待受理',
+          '1': '创建/待确认',
           '2': '处理中',
           '3': '被转接',
           '4': '审核中',
@@ -1064,8 +1220,14 @@
           username: [
             {required: true, message: '请选择工单接收人', trigger: ['blur', 'change']}
           ]
-        }
-
+        },
+        // 自动派单设置
+        drawer: false,
+        selectTimes: {
+          startTime: '',
+          endTime: ''
+        },
+        jobSwitch: true
       }
     }
 
@@ -1073,6 +1235,7 @@
 </script>
 
 <style scoped>
+
   .el-header{
     background-color: #F4F4F4;
     border-bottom: #ded8d8 1px solid;
@@ -1106,10 +1269,18 @@
   ul.file-list > li {
     line-height: 2em;
   }
-
-
-</style>
-<style>
-  .el-table .status_column{
+  .setting{
+    font-size: 22px;
+    vertical-align: middle;
+    color: #00b077;
+    cursor: pointer;
   }
+  .jobDetail{
+    text-align: left;
+  }
+  .jobDetail .el-form-item *{
+    text-align: left;
+    color: #444444;
+  }
+
 </style>

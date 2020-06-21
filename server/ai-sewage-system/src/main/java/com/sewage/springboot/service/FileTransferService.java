@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSONObject;
+import com.sewage.springboot.handle.exception.response.BussinessException;
 
 /**
  * 文件上传/下载
@@ -32,7 +33,17 @@ public interface FileTransferService {
 	
 	public ResponseEntity<FileSystemResource> getFileResponseEntity(Integer FileId) throws UnsupportedEncodingException;
 
+	/**
+	 * 将文件状态修改为有效
+	 * @param fileList
+	 * @throws  BussinessException 更新失败
+	 */
 	void updateFileStatus(Integer fileId);
-
+	
+	/**
+	 * 将文件状态修改为有效
+	 * @param fileList
+	 * @throws  BussinessException 更新失败
+	 */
 	void updateFileStatus(List<Integer> fileList);
 }

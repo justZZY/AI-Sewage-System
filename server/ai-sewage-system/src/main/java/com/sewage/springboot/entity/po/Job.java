@@ -55,6 +55,22 @@ public class Job {
 	    private Date updateTime;
 	    
 	    
+	    // 2020/06/15添加
+	    @Column(name = "site")
+	    private String site;
+	    
+	    @Column(name = "site_addr")
+	    private String siteAddr;
+	    
+	    @Column(name = "expected_time")
+	    private Integer expectedTime;
+	    
+	    @Column(name = "severity")
+	    private String severity;
+	    
+	    @Column(name = "priority")
+	    private String priority;
+	    
 	    public Job() {
 	    	super();
 	    }
@@ -73,7 +89,29 @@ public class Job {
 			this.createTime = createTime;
 			this.updateTime = updateTime;
 		}
-		 
+		
+		public Job(Integer id, String jobTypeName, String content, String telephone, String email, String creator,
+				String processor, String inspector, String status, Date createTime, Date updateTime, String site,String siteAddr,
+				Integer expectedTime, String severity,String priority) {
+			super();
+			this.id = id;
+			this.jobTypeName = jobTypeName;
+			this.content = content;
+			this.telephone = telephone;
+			this.email = email;
+			this.creator = creator;
+			this.processor = processor;
+			this.inspector = inspector;
+			this.status = status;
+			this.createTime = createTime;
+			this.updateTime = updateTime;
+			
+			this.site = site;
+			this.siteAddr = siteAddr;
+			this.expectedTime = expectedTime;
+			this.severity = severity;
+			this.priority = priority;
+		}
 
 		public Integer getId() {
 			return id;
@@ -162,6 +200,36 @@ public class Job {
 		public void setUpdateTime(Date updateTime) {
 			this.updateTime = updateTime;
 		}
+		public String getSite() {
+			return site;
+		}
+		public void setSite(String site) {
+			this.site = site;
+		}
+		public String getSiteAddr() {
+			return siteAddr;
+		}
+		public void setSiteAddr(String siteAddr) {
+			this.siteAddr = siteAddr;
+		}
+		public Integer getExpectedTime() {
+			return expectedTime;
+		}
+		public void setExpectedTime(Integer expectedTime) {
+			this.expectedTime = expectedTime;
+		}
+		public String getSeverity() {
+			return severity;
+		}
+		public void setSeverity(String severity) {
+			this.severity = severity;
+		}
+		public String getPriority() {
+			return priority;
+		}
+		public void setPriority(String priority) {
+			this.priority = priority;
+		}
 	    
-
+		
 }

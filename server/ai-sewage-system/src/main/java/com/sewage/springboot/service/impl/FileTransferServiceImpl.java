@@ -118,7 +118,7 @@ public class FileTransferServiceImpl implements FileTransferService{
 	}
 	
 	@Override
-	public void updateFileStatus(Integer fileId) {
+	public void updateFileStatus(Integer fileId) throws BussinessException {
 		if(fileId==null) return ;
 		com.sewage.springboot.entity.po.File entity = new com.sewage.springboot.entity.po.File();
 		entity.setId(fileId);
@@ -129,7 +129,7 @@ public class FileTransferServiceImpl implements FileTransferService{
 	}
 
 	@Override
-	public void updateFileStatus(List<Integer> fileList) {
+	public void updateFileStatus(List<Integer> fileList) throws BussinessException{
 		if(fileList==null || fileList.isEmpty()) return ;
 		com.sewage.springboot.entity.po.File entity = new com.sewage.springboot.entity.po.File();
 		entity.setStatus("1");

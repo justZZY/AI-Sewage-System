@@ -3,9 +3,8 @@
  */
 package com.sewage.springboot.controller;
 
-import java.util.Arrays;
-import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.sewage.springboot.entity.UserSessionInfo;
+import com.sewage.springboot.service.JobConfigService;
 import com.sewage.springboot.service.JobService;
 import com.sewage.springboot.service.JobTypeService;
 import com.sewage.springboot.util.CommonUtil;
@@ -35,6 +35,7 @@ public class JobController {
 		
 	@Autowired JobService jobService;
 	@Autowired JobTypeService jobTypeService; 
+	@Autowired JobConfigService jobConfigService;
 	
 	/** 当前登录用户创建工单 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
@@ -43,6 +44,7 @@ public class JobController {
 	}
 	
 	/** 派单 */
+	@RequiresPermissions("admin")
 	@RequestMapping(value = "/allocate")
 	public JSONObject allocateOrder(@RequestBody JSONObject json) {
 		return jobService.allocate(json);
@@ -63,12 +65,14 @@ public class JobController {
 	
 	/** 审核工单 */
 	@RequestMapping(value = "/inspect")
+	@RequiresPermissions("admin")
 	public JSONObject inspectJob(@RequestBody JSONObject json) {
 		return jobService.inspect(UserInfoUtils.getUserInfo().getUsername(), json);
 	}
 	
 	/** 驳回工单 */
 	@RequestMapping(value = "/reject")
+	@RequiresPermissions("admin")
 	public JSONObject rejectJob(@RequestBody JSONObject json) {
 		return jobService.reject(UserInfoUtils.getUserInfo().getUsername(), json);
 	}
@@ -82,6 +86,7 @@ public class JobController {
 	/**
 	 * 查询所有工单
 	 */
+	@RequiresPermissions("admin")
 	@RequestMapping("/query/all")
 	public JSONObject queryAllJobs( @RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
 		return jobService.queryAllJobs(pageIndex,pageSize);
@@ -90,6 +95,7 @@ public class JobController {
 	/**
 	 * 查询所有待分配（待处理）的工单
 	 */
+	@RequiresPermissions("admin")
 	@RequestMapping("/query/waiting")
 	public JSONObject queryJobsWaitingHandle( @RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
 		return jobService.queryAllJobsWaitingForHandle(pageIndex,pageSize);
@@ -98,6 +104,7 @@ public class JobController {
 	/**
 	 * 查询所有待审核的工单
 	 */
+	@RequiresPermissions("admin")
 	@RequestMapping("/query/waitingspect")
 	public JSONObject queryJobsWaitingInspect( @RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
 		return jobService.queryAllJobsWaitingForCheck(pageIndex,pageSize);
@@ -121,7 +128,13 @@ public class JobController {
 		return jobService.queryJobsAllProcessed(UserInfoUtils.getUserInfo().getUsername(),pageIndex,pageSize);
 	}
 	
-	/** 查询自己已处理的工单 （未确认）*/
+	/** 查询自己历史处理的工单（成功、失败，不包含未审核的） */
+	@RequestMapping("/query/finished")
+	public JSONObject queryJobsFinished(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
+		return jobService.queryJobsfinished(UserInfoUtils.getUserInfo().getUsername(),pageIndex,pageSize);
+	}
+	
+	/** 查询自己已处理的工单 （未确认,待审核）*/
 	@RequestMapping("/query/processed")
 	public JSONObject queryJobsProcessed(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
 		return jobService.queryJobsProcessed(UserInfoUtils.getUserInfo().getUsername(),pageIndex,pageSize);
@@ -190,5 +203,17 @@ public class JobController {
 		return jobService.queryUserListAvailableForReceivingJob();
 	}
 	
+	/*------------------------------ 工单设置 ------------------------------*/
+	@RequiresPermissions("admin")
+	@RequestMapping(method = RequestMethod.POST, value = "/conf/query")
+	public JSONObject queryJobConfig(@RequestBody String[] names) {
+		return jobConfigService.queryConfig(names);
+	}
+	
+	@RequiresPermissions("admin")
+	@RequestMapping(method = RequestMethod.POST, value = "/conf/update")
+	public JSONObject setJobConfig(@RequestBody JSONObject json) {
+		return jobConfigService.setConfigs(json);
+	}
 	
 }	
