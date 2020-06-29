@@ -86,8 +86,16 @@ public interface JobService {
 	
 	public JSONObject queryAllJobs(Integer pageIndex, Integer pageSize);
 	
-	/** 创建一个工单 */
+	/** 人工提交创建工单 */
 	public JSONObject createJob(JSONObject form);
+	
+	/** 工单创建接口(提供给警报调用，默认人创建人：System)
+	 * @param siteID 站点ID 
+	 * @param alarmName 警报名称  
+	 * @param alarmMsg 报警信息
+	 * @return 成功/失败
+	 *  */
+	public void CreateAlarmJob(String siteID, String alarmName, String alarmMsg);
 	
 
 	/** 查询所有工单列表  */
@@ -95,6 +103,13 @@ public interface JobService {
 	
 	/** 管理员派单 */
 	public JSONObject allocate(JSONObject json);
+	
+	/** 系统自动派单
+	 * <br><br>
+	 * 检查自动派单开关是否开启-->扫描待分派工单-->派发
+	 *  */
+	public void autoAllocate();
+	
 	
 	/**
 	 *  转发工单
@@ -144,6 +159,14 @@ public interface JobService {
 	 * 审核-驳回工单，处理者接着处理 
 	 */
 	public JSONObject reject(String inspector, JSONObject json);
+
+	/**
+	 * 查询所有站点列表
+	 * @return
+	 */
+	JSONObject querySiteList();
+
+
 
 	
 

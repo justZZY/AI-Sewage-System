@@ -7,9 +7,12 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sewage.springboot.Global;
+import com.sewage.springboot.been.SpringContextHolder;
 import com.sewage.springboot.entity.BoxStateChanged;
 import com.sewage.springboot.logger.Logger;
 import com.sewage.springboot.logger.LoggerFactory;
+import com.sewage.springboot.service.JobService;
+import com.sewage.springboot.service.impl.JobServiceImpl;
 import com.sewage.springboot.websoket.WebSocket;
 import okhttp3.*;
 
@@ -18,6 +21,10 @@ import java.net.Proxy;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.LongAdder;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.context.ApplicationContext;
 
 public class FBoxSignalRConnection extends SignalRConnectionBase {
     private final Gson gson;
@@ -30,6 +37,13 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
     private Proxy proxy;
     private LongAdder dmonItemCounter = new LongAdder();
     private String token;
+    
+    private static JobService jobService;
+    
+    @PostConstruct
+    void initSpringBean(){
+    	jobService = SpringContextHolder.getBean(JobServiceImpl.class); 
+    }
 
     public FBoxSignalRConnection(String hubUrl, String token, String signalrClientId, Proxy proxy, LoggerFactory loggerFactory) {
         super(hubUrl, token, signalrClientId, proxy, loggerFactory);
@@ -112,6 +126,18 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
                     System.out.println("\t" + jsonElement);
                     WebSocket.sendAll(jsonElement.toString());
                 }
+                
+                /** 报警工单 */
+                String boxUid = jsonElements[2].getAsString();
+                JsonArray itemsValues = jsonElements[1].getAsJsonArray();
+                JsonObject firstAlarmItem = itemsValues.get(0).getAsJsonObject();
+                String id = firstAlarmItem.get("id").getAsString();			// 监控点条目的unique_id
+                String value = firstAlarmItem.get("value").getAsString();	// 监控点条目值
+                String name = firstAlarmItem.get("name").getAsString();		// 报警条目编码
+                String msg = firstAlarmItem.get("msg").getAsString();		// 报警条目信息
+                String status = firstAlarmItem.get("status").getAsString(); // 条目状态 ,如果条目正常，则无此属性
+                jobService.CreateAlarmJob(boxUid, name, msg);
+                
                 //打印报警条目的值集合
                 System.out.printf("%d",jsonElements[1].getAsLong());
                 //打印boxUid

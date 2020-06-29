@@ -1,6 +1,8 @@
 package com.sewage.springboot.dao;
 
 import com.alibaba.fastjson.JSONObject;
+import com.sewage.springboot.entity.User;
+
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -103,4 +105,9 @@ public interface UserDao {
 	 * 查询用户信息
 	 */
 	JSONObject queryUserByName(@Param("username") String username);
+	
+	/**
+	 * 查询用户信息
+	 */
+	JSONObject queryUserByPhone(@Param("phone") String username);
 }

@@ -3,19 +3,25 @@
  */
 package com.sewage.springboot.service.impl;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sewage.springboot.dao.SiteDetailDao;
 import com.sewage.springboot.dao.UserDao;
+import com.sewage.springboot.entity.User;
 import com.sewage.springboot.entity.UserSessionInfo;
 import com.sewage.springboot.entity.constant.JobConstant;
 import com.sewage.springboot.entity.po.File;
@@ -29,8 +35,11 @@ import com.sewage.springboot.mapper.impl.JobTypeMapper;
 import com.sewage.springboot.service.FileTransferService;
 import com.sewage.springboot.service.JobService;
 import com.sewage.springboot.util.CommonUtil;
+import com.sewage.springboot.util.StringTools;
 import com.sewage.springboot.util.UserInfoUtils;
+import com.sewage.springboot.util.base.TimeUtil;
 import com.sewage.springboot.util.constants.Constants;
+import com.sewage.springboot.util.message.SmsSender;
 
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
@@ -53,16 +62,23 @@ public class JobServiceImpl implements JobService {
 	@Autowired FileMapper fileMapper;
 	@Autowired FileTransferService fileTransferService;
 	@Autowired JobConfigServiceImpl jobConfigServiceImpl;
+	@Autowired SiteDetailDao siteDetailDao;
+	
 
 	@Override
 	public JSONObject createJob(JSONObject form) {
 		if(form==null || form.getString("jobTypeName")==null)  throw new BussinessException(-1, "参数异常！");
+		String siteID = form.getString("siteID");
+		
+		JSONObject site = siteDetailDao.getSiteDetailById(siteID);
+		String processor = site.getString("operator"); // 运维人员
 		Job job = new Job();
 		UserSessionInfo loginUser = UserInfoUtils.getUserInfo();
 		job.setContent(form.getString("content"));
 		job.setCreator(loginUser.getUsername());
-		job.setEmail(loginUser.getMail());
+		job.setProcessor(processor);
 		job.setTelephone(loginUser.getPhone());
+		job.setEmail(loginUser.getMail());
 		job.setJobTypeName(form.getString("jobTypeName"));
 		job.setStatus(JobConstant.JOB_STATUS_CREATE);
 		job.setCreateTime(new Date());
@@ -93,7 +109,61 @@ public class JobServiceImpl implements JobService {
 		
 		return CommonUtil.jsonResult(1, "创建成功！");
 	}
+	
+	@Override
+	public void CreateAlarmJob(String siteID, String alarmName, String alarmMsg) {
+		try {
+			if(alarmName==null||alarmName.trim().isEmpty())  alarmName="故障报警";
+			String creator = "System";
+			JSONObject jobConfig = jobConfigServiceImpl.queryConfig().getJSONObject("data");
+			int expectedTime = jobConfig.getInteger("expected_time")==null?48:jobConfig.getInteger("expected_time").intValue();
+			String severity = StringTools.isEmpty(jobConfig.getString("severity"))?"严重":jobConfig.getString("severity");
+			String priority = StringTools.isEmpty(jobConfig.getString("priority"))?"紧急":jobConfig.getString("priority");
+			JSONObject siteInfo = siteDetailDao.getSiteDetailById(siteID);
+			String siteName = siteInfo.getString("name");
+			String siteAddr = siteInfo.getString("address");
+			String processor = siteInfo.getString("operator"); // 运维人员
+			// 创建工单
+			Job job = new Job();
+			job.setJobTypeName(alarmName);
+			job.setContent(alarmMsg);
+			job.setCreator(creator);
+			job.setProcessor(processor);
+//			job.setTelephone(phone);
+			job.setStatus(JobConstant.JOB_STATUS_CREATE);
+			job.setSite(siteName);
+			job.setSiteAddr(siteAddr);
+			job.setExpectedTime(expectedTime);
+			job.setSeverity(severity);
+			job.setPriority(priority);
+			job.setCreateTime(new Date());
+			job.setUpdateTime(new Date());
+			int i = jobMapper.insertSelective(job);
+			// 创建创建进程
+			JobProcess jobProcess= new JobProcess(
+					null, 
+					job.getId(), 
+					creator, 
+					alarmMsg, 
+					null, 
+					JobConstant.JOB_STATUS_CREATE, 
+					new Date(), 
+					new Date());
+			int j = jobProcessMapper.insertSelective(jobProcess);
+			
+			if(i<=0 || j<=0) {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); // 手动回滚
+			}
+			
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); // 手动回滚
+			e.printStackTrace();
+		}
+		
+		
 
+	}
+	
 
 	
 	/**
@@ -277,14 +347,59 @@ public class JobServiceImpl implements JobService {
 		int j = jobProcessMapper.insertList(recordList);
 		if(i<1 || i!=j || i!=jobsIds.size()) 
 			throw new BussinessException(0, "派单失败！");
+		SmsSender.sendSmsMsg(job.getTelephone()+",18171656008", "您有新工单啦，请及时处理。问题优先级："+job.getPriority());
 		return CommonUtil.jsonResult(1, "派单成功！", i);
 	}
 	
+	@Override
 	public void autoAllocate() {
-		String jobSwitch = jobConfigServiceImpl.queryConfig("").getString("jobSwitch");
+		/** 1.更新开关状态 */
+		JSONObject config = jobConfigServiceImpl.queryConfig().getJSONObject("data");
+		String ontime = config.getString("ontime");
+		String offtime = config.getString("offtime");
+		boolean jobSwitch = config.getBooleanValue("jobSwitch");
+		if(StringTools.isNotEmpty(ontime) && StringTools.isNotEmpty(offtime)) {
+			if(TimeUtil.isTimeRange(ontime, offtime)) { //在开启时间段内
+				if(!jobSwitch) {
+					jobConfigServiceImpl.setConfig("jobSwitch", "true");
+					jobSwitch = true;
+				}
+			}else {
+				if(jobSwitch) {
+					jobConfigServiceImpl.setConfig("jobSwitch", "false");
+					jobSwitch = true;
+				}
+			}
+		}
 		
-
+		/** 2.根据开关状态派单 */
+		if(jobSwitch) {
+			Example example = new Example(Job.class);
+			example.and().andEqualTo("status", JobConstant.JOB_STATUS_CREATE).andIsNotNull("processor").andNotEqualTo("processor", "");
+			List<Job> list = jobMapper.selectByExample(example);
+			for(Job job:list) {
+				job.setStatus(JobConstant.JOB_STATUS_PROCESSING);
+				job.setUpdateTime(new Date());
+				int i = jobMapper.updateByPrimaryKey(job);
+				// 添加进程
+				JobProcess jobProcess = new JobProcess(
+						null,
+						job.getId(),
+						job.getProcessor(),
+						"系统派单",
+						null,
+						JobConstant.JOB_STATUS_PROCESSING,
+						new Date(),
+						new Date());
+				int j = jobProcessMapper.insert(jobProcess);
+				if(i!=1 || j!=1)
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); // 手动回滚
+				else
+					SmsSender.sendSmsMsg(job.getTelephone()+",18171656008", "您有新工单啦，请及时处理。问题优先级："+job.getPriority()+"。");
+			}
+		}
 	}
+
 
 	@Override
 	public JSONObject forwardJobs(String owner,JSONObject json) {
@@ -504,7 +619,11 @@ public class JobServiceImpl implements JobService {
 	}
 
 
-//	-----------------------------------------------------------------------------------
-	
+//	---------------------------------------站点查询--------------------------------------------
+	@Override
+	public JSONObject querySiteList() {
+		JSONArray a = siteDetailDao.readSiteDetailJsonFile();
+		return CommonUtil.jsonResult(1, "查询成功", a);
+	}
 	
 }

@@ -19,8 +19,10 @@ import com.sewage.springboot.entity.UserSessionInfo;
 import com.sewage.springboot.service.JobConfigService;
 import com.sewage.springboot.service.JobService;
 import com.sewage.springboot.service.JobTypeService;
+import com.sewage.springboot.service.impl.JobServiceImpl;
 import com.sewage.springboot.util.CommonUtil;
 import com.sewage.springboot.util.UserInfoUtils;
+import com.sewage.springboot.dao.SiteDetailDao;
 
 /**
  * 
@@ -36,6 +38,7 @@ public class JobController {
 	@Autowired JobService jobService;
 	@Autowired JobTypeService jobTypeService; 
 	@Autowired JobConfigService jobConfigService;
+	
 	
 	/** 当前登录用户创建工单 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
@@ -214,6 +217,12 @@ public class JobController {
 	@RequestMapping(method = RequestMethod.POST, value = "/conf/update")
 	public JSONObject setJobConfig(@RequestBody JSONObject json) {
 		return jobConfigService.setConfigs(json);
+	}
+	
+	/*------------------------------ 站点相关 ------------------------------*/
+	@RequestMapping(method = RequestMethod.POST, value = "/site/list")
+	public JSONObject getSiteList() {
+		return jobService.querySiteList();
 	}
 	
 }	
