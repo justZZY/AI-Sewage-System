@@ -347,7 +347,7 @@ public class JobServiceImpl implements JobService {
 		int j = jobProcessMapper.insertList(recordList);
 		if(i<1 || i!=j || i!=jobsIds.size()) 
 			throw new BussinessException(0, "派单失败！");
-		SmsSender.sendSmsMsg(job.getTelephone()+",18171656008", "您有新工单啦，请及时处理。问题优先级："+job.getPriority());
+		SmsSender.sendSmsMsg(queryUser.getString("phone")+",18171656008", "您有新工单啦，请及时登录平台处理。问题优先级："+job.getPriority());
 		return CommonUtil.jsonResult(1, "派单成功！", i);
 	}
 	
@@ -394,8 +394,10 @@ public class JobServiceImpl implements JobService {
 				int j = jobProcessMapper.insert(jobProcess);
 				if(i!=1 || j!=1)
 					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); // 手动回滚
-				else
-					SmsSender.sendSmsMsg(job.getTelephone()+",18171656008", "您有新工单啦，请及时处理。问题优先级："+job.getPriority()+"。");
+				else {
+					JSONObject queryUser = userDao.queryUserByName(job.getProcessor());
+					SmsSender.sendSmsMsg(queryUser.getString("phone")+",18171656008", "您有新工单啦，请及时登录平台处理。问题优先级："+job.getPriority()+"。");
+				}
 			}
 		}
 	}

@@ -5,11 +5,11 @@
              class="card-box login-form">
       <h3 class="title">智慧水务</h3>
       <el-form-item prop="username">
-        <el-input v-model="loginForm.username" placeholder="请输入用户名" autoComplete="on"/>
+        <el-input v-model="loginForm.username" placeholder="请输入用户名" autoComplete="on" clearable="true"/>
       </el-form-item>
       <el-form-item prop="password">
         <el-input v-model="loginForm.password" type="password" placeholder="请输入密码"
-                  show-password autoComplete="on"></el-input>
+                  show-password autoComplete="on" clearable="true"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">

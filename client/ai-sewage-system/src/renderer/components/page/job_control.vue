@@ -1173,6 +1173,8 @@
           let callback = function (code, msg, data) {
             if (code > 0) {
               this.jobConfigForm.jobSwitch = (form.jobSwitch === 'true') // 因为返回的是字符串
+            } else {
+              this.jobConfigForm.jobSwitch = !this.jobConfigForm.jobSwitch
             }
             this.$message({
               type: 'success',
@@ -1335,7 +1337,7 @@
 </style>
 
 <style>
-  .el-input.is-disabled .el-input__inner, .el-radio__input.is-disabled+span.el-radio__label {
+  .el-input.is-disabled .el-input__inner, .el-radio__input.is-disabled+span.el-radio__label, .el-textarea.is-disabled .el-textarea__inner {
     color: black;
   }
 </style>
