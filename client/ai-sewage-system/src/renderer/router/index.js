@@ -31,6 +31,36 @@ export default new Router({
           component: require('@/components/page/skip/site_skip').default
         },
         {
+          path: '/site_info',
+          name: 'site_info',
+          component: require('@/components/page/site_info').default
+        },
+        {
+          path: '/info_skip',
+          name: 'info_skip',
+          component: require('@/components/page/skip/info_skip').default
+        },
+        {
+          path: '/site_realtime_data',
+          name: 'site_realtime_data',
+          component: require('@/components/page/site_realtime_data').default
+        },
+        {
+          path: '/realtime_data_skip',
+          name: 'realtime_data_skip',
+          component: require('@/components/page/skip/realtime_data_skip').default
+        },
+        {
+          path: '/site_history_data',
+          name: 'site_history_data',
+          component: require('@/components/page/site_history_data').default
+        },
+        {
+          path: '/history_data_skip',
+          name: 'history_data_skip',
+          component: require('@/components/page/skip/history_data_skip').default
+        },
+        {
           path: '/remote_control',
           name: 'remote_control',
           component: require('@/components/page/remote_control').default

@@ -14,11 +14,28 @@
           <i class="el-icon-map-location"></i>
           站点地图
         </el-menu-item>
-        <el-menu-item index="/site_watch">
-          <!-- 加入view图标 -->
-          <i class="el-icon-view"></i>
-          站点监控
+<!--        <el-menu-item index="/site_watch">-->
+<!--        <el-submenu index="1">-->
+<!--          <template slot="title">-->
+<!--            <i class="el-icon-view"></i>-->
+<!--            <span>站点监控</span>-->
+<!--          </template>-->
+        <el-menu-item index="/site_info">
+          <i class="el-icon-info"></i>
+          <span>站点信息</span>
         </el-menu-item>
+        <el-menu-item index="/site_realtime_data">
+          <i class="el-icon-data-line"></i>
+          <span>实时数据</span>
+        </el-menu-item>
+        <el-menu-item index="/site_history_data">
+          <i class="el-icon-s-data"></i>
+          <span>历史数据</span>
+        </el-menu-item>
+<!--          &lt;!&ndash; 加入view图标 &ndash;&gt;-->
+<!--          <i class="el-icon-view"></i>-->
+<!--          站点监控-->
+<!--        </el-submenu>-->
         <el-menu-item index="/remote_control" v-if="checkIdentity()">
           <!-- 加入promotion图标 -->
           <i class="el-icon-s-promotion"></i>

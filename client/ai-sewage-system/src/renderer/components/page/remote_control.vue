@@ -76,12 +76,12 @@
                 </div>
                 <div class="desc">
                   <span>运行时间: </span>
-                  <el-input placeholder="运行时间" style="width: 80px" v-model="equip.runTime" prefix-icon="el-icon-timer" :disabled="true"/>
+                  <el-input placeholder="运行时间" style="width: 80px" v-model="equip.runTime" prefix-icon="el-icon-timer"/>
                   <el-button type="primary" plain @click="minChange(equip, 'run')">修改</el-button>
                 </div>
                 <div class="desc">
                   <span>停止时间: </span>
-                  <el-input placeholder="运行时间" style="width: 80px" v-model="equip.stopTime" prefix-icon="el-icon-timer" :disabled="true"/>
+                  <el-input placeholder="运行时间" style="width: 80px" v-model="equip.stopTime" prefix-icon="el-icon-timer"/>
                   <el-button type="primary" plain @click="minChange(equip, 'stop')">修改</el-button>
                 </div>
               </el-card>
@@ -322,7 +322,7 @@
         let index = this.$store.state.Treedata.chooseData
         let stationName = window.equipmentobjarray[index]['alias']
         // 在fbox设备中,只有学院实训台启停开关是分开的
-        let key = (stationName === '云南大学测试平台' ? '启动开关' : '启停开关')
+        let key = (stationName === '测试平台' ? '启动开关' : '启停开关')
         let name = scope['name']
         let keyName = formatName(key, name)
         let type = 0
@@ -345,12 +345,12 @@
         let index = this.$store.state.Treedata.chooseData
         let stationName = window.equipmentobjarray[index]['alias']
         // 在fbox设备中,只有学院实训台启停开关是分开的
-        let key = (stationName === '云南大学测试平台' ? '停止开关' : '启停开关')
+        let key = (stationName === '测试平台' ? '停止开关' : '启停开关')
         let name = scope['name']
         let keyName = formatName(key, name)
         let type = 0
         // 在fbox设备中,只有学院实训台启停开关是分开的,其他设备的停止是置0
-        let value = (stationName === '云南大学测试平台' ? 1 : 0)
+        let value = (stationName === '测试平台' ? 1 : 0)
         this.$confirm('此操作将关闭设备' + name + ', 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
