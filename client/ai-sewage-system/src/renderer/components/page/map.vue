@@ -111,6 +111,7 @@
     const equipmentobjarray = window.equipmentobjarray
     let equipmentposarray = []
     for (let i = 0; i < equipmentobjarray.length; i++) {
+      let boxUid = equipmentobjarray[i]['boxUid']
       let name = equipmentobjarray[i]['alias']
       let address = equipmentobjarray[i]['box']['address']
       let longitude = equipmentobjarray[i]['box']['longitude']
@@ -118,6 +119,7 @@
       let net = equipmentobjarray[i]['box']['net']
       let connectionState = equipmentobjarray[i]['box']['connectionState']
       let posobj = {
+        'boxUid': boxUid,
         'name': name,
         'address': address,
         'net': net,
@@ -137,6 +139,7 @@
   async function getTreeData (posarray, BMap) {
     let treedataarray = []
     for (let i = 0; i < posarray.length; i++) {
+      let boxUid = posarray[i]['boxUid']
       let name = posarray[i]['name']
       let net = posarray[i]['net']
       let longitude = posarray[i]['pos']['longitude']
@@ -144,7 +147,7 @@
       let connect = posarray[i]['connectionState']
       let matchaddr = await callbackAddrArray(longitude, latitude, BMap)
       console.log('province: ' + matchaddr[0] + 'city: ' + matchaddr[1])
-      treedataarray = insertMatchAddr(treedataarray, matchaddr, name, net, connect)
+      treedataarray = insertMatchAddr(treedataarray, matchaddr, name, net, connect, boxUid)
     }
     // 将站点排序, 连接正常的站点优先排序
     treedataarray = sortTree(treedataarray)
@@ -155,7 +158,7 @@
    * @desc 正常情况 matchaddr经过解析后应该长度为2代表省/市
            其他情况下可以视为错误地址
   */
-  function insertMatchAddr (treedataarray, matchaddr, name, net, connect) {
+  function insertMatchAddr (treedataarray, matchaddr, name, net, connect, boxUid) {
     let province = matchaddr[0]
     let city = matchaddr[1]
     // 标记是否已经在循环时执行过插入
@@ -170,7 +173,7 @@
         provinceflag = true // 存在同省
         for (let j = 0; j < treedataarray[i]['children'].length; j++) {
           if (treedataarray[i]['children'][j]['label'] === city) {
-            treedataarray[i]['children'][j]['children'].push({label: name, netClass: netclass, connectClass: connectClass})
+            treedataarray[i]['children'][j]['children'].push({label: name, netClass: netclass, connectClass: connectClass, boxUid: boxUid})
             cityflag = true // 存在同市
           }
         }
@@ -179,11 +182,11 @@
     }
     // 表示新的省市
     if (!provinceflag && !cityflag) {
-      treedataarray.push({label: province, children: [{label: city, children: [{label: name, netClass: netclass, connectClass: connectClass}]}]})
+      treedataarray.push({label: province, children: [{label: city, children: [{label: name, netClass: netclass, connectClass: connectClass, boxUid: boxUid}]}]})
     }
     // 表示已经存在省但不存在市
     if (provinceflag && !cityflag) {
-      treedataarray[provinceindex]['children'].push({label: city, children: [{label: name, netClass: netclass, connectClass: connectClass}]})
+      treedataarray[provinceindex]['children'].push({label: city, children: [{label: name, netClass: netclass, connectClass: connectClass, boxUid: boxUid}]})
     }
     return treedataarray
   }

@@ -19,7 +19,6 @@
             <el-radio border label="一般"></el-radio>
             <el-radio border label="严重"></el-radio>
             <el-radio border label="非常严重"></el-radio>
-
           </el-radio-group>
         </el-form-item>
         <el-form-item label="工单优先级"  prop="priority">
@@ -138,12 +137,14 @@
     components: { camera },
     created () {
       this.queryJobTypeList()
+      this.querySitesMap2()
     },
     data () {
       return {
         jobTypeListJson: { },
+        sitesMap: {},
         sitesOptions: this.$store.state.Treedata.treedata,
-        sitesOptionsprops: {value: 'label'},
+        sitesOptionsprops: {value: 'boxUid'},
         jobTypeSelectVisible: false,
         photoList: [],
         jobAddForm: {
@@ -153,7 +154,8 @@
           expectedTime: 48,
           severity: '一般',
           priority: '一般',
-          site: ''
+          site: '',
+          siteID: ''
         },
         rules: {
           jobTypeName: [
@@ -179,11 +181,10 @@
               spinner: 'el-icon-loading',
               background: 'rgba(0, 0, 0, 0.7)'
             })
-            let temp = this.jobAddForm.fileList
-            if (this.jobAddForm.fileList !== null && this.jobAddForm.fileList !== undefined) {
-              this.jobAddForm.fileList = this.jobAddForm.fileList.concat(this.photoList) // 注意提交的是jobAddForm.fileList (注意concat方法不修改原数组，只返回新数组)
-            }
-            this.$http.post('http://43.228.77.195:8082/job/add', this.jobAddForm,
+            let form = JSON.parse(JSON.stringify(this.jobAddForm))
+            form.fileList = this.jobAddForm.fileList.concat(this.photoList) // 注意提交的是jobAddForm.fileList (注意concat方法不修改原数组，只返回新数组)
+            form.site = this.sitesMap[String(this.jobAddForm.site[2])].name
+            this.$http.post('http://43.228.77.195:8082/job/add', form,
               {
                 headers: {
                   'Authorization': this.$store.state.ShiroToken.token
@@ -202,7 +203,6 @@
               })
             }.bind(this)).catch(function (error) {
               this.$alert('服务器异常，请稍后再试！', '提示')
-              this.jobAddForm.fileList = temp
               console.log(error)
               loading.close()
             }.bind(this))
@@ -226,6 +226,37 @@
           console.log(error)
           this.jobTypeListJson = null
         }.bind(this))
+      },
+      /** 根据服务器配置文件 */
+      querySitesMap1 () {
+        this.$http.post('http://43.228.77.195:8082/job/site/list', null, {
+          headers: {
+            'Authorization': this.$store.state.ShiroToken.token
+          }
+        }).then(response => { // 这是从本地请求的数据接口，
+          let result = response.data
+          let sites = result.data
+          for (let i = 0; i < sites.length; i++) {
+            let siteJson = sites[i]
+            this.sitesMap[String(siteJson.id)] = siteJson
+          }
+        }).catch(function (error) { // 请求失败处理
+          this.$alert('服务器异常，请稍后再试！', '提示')
+          console.log(error)
+          this.sitesMap = null
+          this.sitesOptions = null
+        }.bind(this))
+      },
+      /** 根据设备控制模块的缓存 */
+      querySitesMap2 () {
+        const equipmentobjarray = window.equipmentobjarray
+        for (let i = 0; i < equipmentobjarray.length; i++) {
+          let equipmentObj = equipmentobjarray[i]
+          let site = {}
+          site.name = equipmentObj.alias
+          site.address = equipmentObj.box.address
+          this.sitesMap[String(equipmentObj.boxUid)] = site
+        }
       },
       handleBeforeUpload (file) {
         console.log(file)
@@ -299,6 +330,16 @@
       },
       // 选择站点
       selectSite (item) {
+        let siteID = item[2]
+        let site = this.sitesMap[String(siteID)]
+        if (siteID === undefined || site === undefined) {
+          this.jobAddForm.site = null
+          this.jobAddForm.siteAddr = null
+          this.jobAddForm.siteID = null
+        } else {
+          this.jobAddForm.siteAddr = site.address
+          this.jobAddForm.siteID = siteID
+        }
         console.log(item)
         console.log(this.jobAddForm.site)
       }

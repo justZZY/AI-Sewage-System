@@ -183,4 +183,11 @@
         FROM user u, permission p
         WHERE u.pid = p.pid and u.username = #{username}
     </select>
+    
+    <select id="queryUserByPhone" parameterType="java.lang.String" resultType="com.alibaba.fastjson.JSONObject">
+        select username, delete_status, identity, area, phone, mail 
+        from user u inner join permission p 
+        on u.pid = p.pid 
+		where u.phone = #{phone}
+    </select>
 </mapper>

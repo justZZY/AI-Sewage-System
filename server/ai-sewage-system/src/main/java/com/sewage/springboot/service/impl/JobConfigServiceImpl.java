@@ -32,9 +32,8 @@ public class JobConfigServiceImpl implements JobConfigService {
 			c.orEqualTo("name", name);
 		}
 		List<JobConfig> list = jobConfigMapper.selectByExample(ex);
-		JSONObject data = null;
+		JSONObject data = new JSONObject();
 		if(list!=null && !list.isEmpty()) {
-			data = new JSONObject();
 			for(JobConfig conf:list) {
 				data.put(conf.getName(), conf.getValue());
 			}

@@ -6,7 +6,7 @@
           <div class="grid-content bg-purple" v-if="currentUser.identity=='admin'">
             自动派单
             <el-switch
-              v-model="jobSwitch"
+              v-model="jobConfigForm.jobSwitch"
               @change="setJobJobSwitch()"
               active-color="#13ce66"
               inactive-color="#ff4949">
@@ -144,6 +144,7 @@
             </div></el-col>
             <el-col :span="12"><div class="grid-content bg-purple">
               <div class="block pag" style="text-align: right" v-show="selectJobsIds.length>0">
+                <!-- 多选派单 -->
                 <el-button type="primary" icon="el-icon-plus" v-show="queryJobType=='waiting'" @click="allocateFormVisible=true">派单</el-button>
                 <el-button type="primary" icon="el-icon-s-promotion" v-show="queryJobType=='processing'" @click="forwardFormVisible=true">转发</el-button>
               </div>
@@ -160,16 +161,16 @@
                       :description="new Date(process['createTime']).toLocaleString()"
                       :key="i">
             </el-step>
-            <el-step title="创建" :icon="switchJobTypeIcon(1)" v-if="processList[processList.length-1].type<1"  status="wait" description=""></el-step>
-            <el-step title="受理" :icon="switchJobTypeIcon(2)" v-if="processList[processList.length-1].type<2"  status="wait" description=""></el-step>
-            <el-step title="审核" :icon="switchJobTypeIcon(4)" v-if="processList[processList.length-1].type<4" status="wait" description=""></el-step>
-            <el-step title="完成" :icon="switchJobTypeIcon(5)" v-if="processList[processList.length-1].type<=4" status="wait" description=""></el-step>
+            <el-step title="创建" :icon="switchJobTypeIcon(1)" v-if="Number(processList[processList.length-1].type)<1"  status="wait" description=""></el-step>
+            <el-step title="受理" :icon="switchJobTypeIcon(2)" v-if="Number(processList[processList.length-1].type)<2"  status="wait" description=""></el-step>
+            <el-step title="审核" :icon="switchJobTypeIcon(4)" v-if="Number(processList[processList.length-1].type)<4"  status="wait" description=""></el-step>
+            <el-step title="完成" :icon="switchJobTypeIcon(5)" v-if="Number(processList[processList.length-1].type)<=4" status="wait" description=""></el-step>
 
           </el-steps>
 
           <el-collapse v-model="collapseOpened" style="width: 90%;margin-top: 10em" >
             <el-collapse-item title="工单详情" name="1">
-              <el-form :model="jobDetail" ref="jobDetailForm" label-width="100px" disabled class="jobDetail">
+              <el-form :model="jobDetail" ref="jobDetailForm" label-width="100px" class="jobDetail" disabled>
                 <el-form-item label="问题类别" prop="jobTypeName" >
                   <el-input v-model="jobDetail.jobTypeName"></el-input>
                 </el-form-item>
@@ -182,20 +183,29 @@
                 <el-form-item label="站点地址" prop="siteAddr"  >
                   <el-input  v-model="jobDetail.siteAddr" size="medium"></el-input>
                 </el-form-item>
-                <el-form-item label="严重程度"  prop="severity" v-if="jobDetail.severity"  >
+                <el-form-item label="严重程度"  prop="severity">
                   <el-radio-group v-model="jobDetail.severity" size="medium">
-                    <el-radio border :label="jobDetail.severity"></el-radio>
+                    <el-radio border label="一般"></el-radio>
+                    <el-radio border label="严重"></el-radio>
+                    <el-radio border label="非常严重"></el-radio>
                   </el-radio-group>
                 </el-form-item>
-                <el-form-item label="工单优先级"  prop="priority" v-if="jobDetail.priority"  >
+                <el-form-item label="工单优先级"  prop="priority">
                   <el-radio-group v-model="jobDetail.priority" size="medium">
-                    <el-radio border :label="jobDetail.priority"></el-radio>
+                    <el-radio border label="一般"></el-radio>
+                    <el-radio border label="紧急"></el-radio>
+                    <el-radio border label="非常紧急"></el-radio>
                   </el-radio-group>
                 </el-form-item>
-                <el-form-item label="期望解决时间"  prop="expectedTime" v-if="jobDetail.expectedTime"  >
-                  <el-radio-group v-model="jobDetail.expectedTime" size="medium">
-                    <el-radio border :label="jobDetail.expectedTime" >{{jobDetail.expectedTime}}小时内</el-radio>
-                  </el-radio-group>
+                <el-form-item label="期望解决时间"  prop="expectedTime">
+                  <el-select v-model="jobDetail.expectedTime" placeholder="请选择" size="medium">
+                    <el-option
+                      v-for="item in [2, 6, 12, 24, 36, 48, 12*5, 12*6, 12*7, 12*30]"
+                      :key="item"
+                      :label="item+'小时内'"
+                      :value="item">
+                    </el-option>
+                  </el-select>
                 </el-form-item>
                 <el-form-item label="附件" prop="file">
                   <template>
@@ -224,7 +234,7 @@
               </el-form>
             </el-collapse-item>
 
-            <el-collapse-item title="处理结果" name="2.1" v-if="jobDetail.status>=4">
+            <el-collapse-item title="处理结果" name="2.1" v-if="jobDetail.status>=4 && resultProcessed!={} && resultProcessed!=null && resultProcessed!=undefined">
               <el-form :model="resultProcessed"  label-width="100px" disabled  >
                 <el-form-item label="处理人" prop="username" >
                   <el-input v-model="resultProcessed.username"></el-input>
@@ -244,7 +254,7 @@
               </el-form>
             </el-collapse-item>
 
-            <el-collapse-item title="审核结果" name="2.2" v-if="jobDetail.status>4">
+            <el-collapse-item title="审核结果" name="2.2" v-if="jobDetail.status>4 && resultInspected!={} && resultInspected!=null && resultInspected!=undefined">
               <el-form :model="resultInspected"  label-width="100px" disabled  >
                 <el-form-item label="审核人" prop="username" >
                   <el-input v-model="resultInspected.username"></el-input>
@@ -267,7 +277,7 @@
             <el-collapse-item title="派单" name="3" v-if="jobDetail.status==1 && currentUser.identity=='admin'" >
               <el-form :model="processForm" rel="processForm" label-width="100px" >
                 <el-form-item align="left">
-                  <el-button type="primary" @click="allocateFormVisible=true" >派单</el-button>
+                  <el-button type="primary" @click="allocateFormVisible=true;allocateForm.username=jobDetail.processor" >派单</el-button>
                   <el-button type="info" @click="submitForm(6)" >中断</el-button>
                   <el-button @click="returnToPageList">返回</el-button>
                 </el-form-item>
@@ -433,7 +443,7 @@
           <el-input v-model="allocateForm.remark" type="textarea"   :autosize="{ minRows: 5, maxRows: 20}" ></el-input>
         </el-form-item>
         <el-form-item label="选择维护人" label-width="100px" prop="username" required>
-          <el-select v-model="allocateForm.username" placeholder="请选择维护人" :loading="userListLoading">
+          <el-select v-model="allocateForm.username"  placeholder="请选择维护人" :loading="userListLoading">
             <el-option
                 v-for="username in userList"
                 :key="username"
@@ -454,15 +464,15 @@
     <el-drawer 
       v-if="currentUser.identity=='admin'"
       style="text-align:center"
-      title="设置自动派单定时开关"
+      title="自动派单设置"
       :visible.sync="drawer"
       direction="btt">
       <div class="demo-drawer__content">
-        <el-form label-width = "150px" inline = "true">
-          <el-form-item label="开启时间" >
+        <el-form label-width = "150px" inline = "true" :model="jobConfigForm" :rules="rules" ref="jobConfigForm">
+          <el-form-item label="开始时间" >
             <el-time-select
-              placeholder="开启时间"
-              v-model="selectTimes.startTime"
+              placeholder="开始时间"
+              v-model="jobConfigForm.startTime"
               :picker-options="{
                 start: '00:00',
                 step: '01:00',
@@ -470,10 +480,10 @@
               }">
             </el-time-select>
           </el-form-item>
-          <el-form-item label="关闭时间" >
+          <el-form-item label="结束时间" >
             <el-time-select
-              placeholder="关闭时间"
-              v-model="selectTimes.endTime"
+              placeholder="结束时间"
+              v-model="jobConfigForm.endTime"
               :picker-options="{
                 start: '00:00',
                 step: '01:00',
@@ -481,12 +491,34 @@
               }">
             </el-time-select>
           </el-form-item>
+          <br>
+          <el-form-item label="默认严重程度" required="true" prop="severity">
+            <el-select v-model="jobConfigForm.severity" clearable placeholder="选择默认严重程度">
+              <el-option
+                v-for="(item, index) in ['一般', '严重', '非常严重']"
+                :key="index"
+                :label="item"
+                :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="默认优先级" required="true" prop="priority">
+            <el-select v-model="jobConfigForm.priority" clearable placeholder="选择默认工单优先级">
+              <el-option
+                v-for="(item, index) in ['一般', '紧急', '非常紧急']"
+                :key="index"
+                :label="item"
+                :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
         </el-form>
         <div class="demo-drawer__footer">
-          <el-button @click="selectTimes.endTime='';selectTimes.startTime=''">清除</el-button>
+          <el-button @click="jobConfigForm.endTime='';jobConfigForm.startTime=''">清除</el-button>
           <el-button type="primary" @click="setJobSchedule">确 定</el-button>
         </div>
       </div>
+      
     </el-drawer>
 
     <camera v-on:listenToChildEvent="receiveDataFromCamera" ref="camera"></camera>
@@ -516,7 +548,7 @@
           // eslint-disable-next-line eqeqeq
           if (result.code == 1) {
             this.currentUser = result.data
-            console.log(this.currentUser.identity)
+            // console.log(this.currentUser.identity)
             if (this.currentUser.identity === 'admin') {
               this.queryJobConfig()
             }
@@ -578,18 +610,18 @@
         this.updateJobDetail(jobId) // 更新当前的工单详情
         this.page = 'detail' // 显示详情页
 
-        console.log(row)
+        // console.log(row)
       },
       // 初始页currentPage、初始每页数据数pagesize和数据data
       handleSizeChange: function (size) {
         this.pageSize = size
         this.showList()
-        console.log(this.pageSize) // 每页下拉显示数据
+        // console.log(this.pageSize) // 每页下拉显示数据
       },
       handleCurrentChange: function (currentPage) {
         this.currentPage = currentPage
         this.showList()
-        console.log(this.currentPage) // 点击第几页
+        // console.log(this.currentPage) // 点击第几页
       },
       selectMenu: function (menu) {
         this.queryJobType = menu
@@ -654,6 +686,10 @@
       },
       queryJobProcessList (jobId) {
         this.tablelodingshadow = true
+        this.processList = []
+        this.createProcess = {} // 创建进程
+        this.resultProcessed = {} // 处理结果（进程已完成的数据）
+        this.resultInspected = {} // 审核结果
         this.$http({
           url: 'http://43.228.77.195:8082/job/jobprocess/query/list/' + jobId,
           method: 'post',
@@ -711,11 +747,14 @@
           let msg = result.msg
           this.jobDetail = {}
           if (code <= 0) this.$alert(msg, '提示')
-          else this.jobDetail = result.data
+          else {
+            this.jobDetail = result.data
+            this.allocateForm.username = this.jobDetail.processor
+          }
         }).catch(function (error) { // 请求失败处理
           this.$alert('服务器异常，请稍后再试！', '提示')
           console.log(error)
-          this.jobDetail = null
+          this.jobDetail = {}
           loading.close()
         })
       },
@@ -734,16 +773,17 @@
           '6': 'inspect',
           '7': 'reject'
         }
-        this.processForm.jobId = this.jobDetail.id
-        this.processForm.type = type
-        let temp = this.processForm.fileList
-        if (this.processForm.fileList !== null && this.processForm.fileList !== undefined) {
-          this.processForm.fileList = this.processForm.fileList.concat(this.photoList) // 注意提交的是processForm.fileList (注意concat方法不修改原数组，只返回新数组)
+        let form = JSON.parse(JSON.stringify(this.processForm))
+        form.jobId = this.jobDetail.id
+        form.type = type
+        if (this.processForm.fileList === undefined) {
+          this.processForm.fileList = []
         }
+        form.fileList = this.processForm.fileList.concat(this.photoList) // 注意提交的是processForm.fileList (注意concat方法不修改原数组，只返回新数组)
         this.$http({
           url: 'http://43.228.77.195:8082/job/' + processUrlMapping[type],
           method: 'post',
-          data: this.processForm,
+          data: form,
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
@@ -762,7 +802,6 @@
         }).catch(function (error) { // 请求失败处理
           this.$alert('服务器异常，请稍后再试！', '提示')
           console.log(error)
-          this.processForm.fileList = temp
           loading.close()
         })
       },
@@ -933,7 +972,7 @@
       },
       // 确认工单完成上传附件
       handleBeforeUpload (file) {
-        console.log(file)
+        // console.log(file)
         if (file.size > 5452595) {
           this.$message.error('文件大小不能超过5M')
           return false
@@ -944,7 +983,7 @@
         }
       },
       handleRemove (file, fileList) {
-        console.log(file, fileList)
+        // console.log(file, fileList)
         this.processForm.fileList = this.processForm.fileList.filter(function (item) {
           return item !== file.response.data
         })
@@ -1006,7 +1045,7 @@
       // 摄像头拍照回调方法
       receiveDataFromCamera (photoObj) {
         this.photoList.splice(this.photoList.length, 1, photoObj)
-        console.log(this.photoList)
+        // console.log(this.photoList)
       },
       cellClass ({row, column, rowIndex, columnIndex}) {
         // eslint-disable-next-line eqeqeq
@@ -1076,55 +1115,66 @@
       // 查询已设置的自动派单开关时间
       queryJobConfig () {
         let url = 'http://43.228.77.195:8082/job/conf/query'
-        let form = ['ontime', 'offtime', 'jobSwitch']
+        let form = ['ontime', 'offtime', 'jobSwitch', 'priority', 'severity']
         let callback = function (code, msg, data) {
           if (code > 0) {
-            this.selectTimes.startTime = data.ontime
-            this.selectTimes.endTime = data.offtime
-            this.jobSwitch = data.jobSwitch === 'true'
+            this.jobConfigForm.startTime = data.ontime
+            this.jobConfigForm.endTime = data.offtime
+            this.jobConfigForm.priority = data.priority
+            this.jobConfigForm.severity = data.severity
+            this.jobConfigForm.jobSwitch = (data.jobSwitch === 'true')
           } else if (code === 0) {
-            this.selectTimes.startTime = ''
-            this.selectTimes.endTime = ''
+            this.jobConfigForm.startTime = ''
+            this.jobConfigForm.endTime = ''
+            this.jobConfigForm.priority = null
+            this.jobConfigForm.severity = null
+            this.jobConfigForm.jobSwitch = false
           } else {
             this.$alert(msg, '警告')
           }
         }.bind(this)
         this.httpRequest(url, null, form, callback)
       },
-      // 设置自动派单开关定时时间
+      // 修改自动派单配置
       setJobSchedule () {
-        let url = 'http://43.228.77.195:8082/job/conf/update'
-        let form = {
-          ontime: this.selectTimes.startTime,
-          offtime: this.selectTimes.endTime
-        }
-        let callback = function (code, msg, data) {
-          if (code > 0) {
-            this.selectTimes.startTime = form.ontime
-            this.selectTimes.endTime = form.offtime
-            this.drawer = false
+        this.$refs['jobConfigForm'].validate((valid) => {
+          if (valid) {
+            let url = 'http://43.228.77.195:8082/job/conf/update'
+            let form = {
+              ontime: this.jobConfigForm.startTime,
+              offtime: this.jobConfigForm.endTime,
+              priority: this.jobConfigForm.priority,
+              severity: this.jobConfigForm.severity
+            }
+            let callback = function (code, msg, data) {
+              if (code > 0) {
+                this.drawer = false
+              }
+              this.$message({
+                type: 'success',
+                message: msg
+              })
+            }.bind(this)
+            this.httpRequest(url, null, form, callback)
           }
-          this.$message({
-            type: 'success',
-            message: msg
-          })
-        }.bind(this)
-        this.httpRequest(url, null, form, callback)
+        })
       },
       // 开启/关闭自动派单开关
       setJobJobSwitch () {
-        this.$confirm('确认' + (!this.jobSwitch ? '关闭' : '开启') + '自动派单(不会影响到定时开关计划)？', '提示', {
+        this.$confirm('确认' + (!this.jobConfigForm.jobSwitch ? '关闭' : '开启') + '自动派单？（如需人工控制，请清除自动派单时间段）', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           let url = 'http://43.228.77.195:8082/job/conf/update'
           let form = {
-            jobSwitch: this.jobSwitch.toString()
+            jobSwitch: this.jobConfigForm.jobSwitch.toString()
           }
           let callback = function (code, msg, data) {
             if (code > 0) {
-              this.jobSwitch = form.jobSwitch === 'true' // 因为返回的是字符串
+              this.jobConfigForm.jobSwitch = (form.jobSwitch === 'true') // 因为返回的是字符串
+            } else {
+              this.jobConfigForm.jobSwitch = !this.jobConfigForm.jobSwitch
             }
             this.$message({
               type: 'success',
@@ -1133,7 +1183,7 @@
           }.bind(this)
           this.httpRequest(url, null, form, callback)
         }).catch(() => {
-          this.jobSwitch = !this.jobSwitch
+          this.jobConfigForm.jobSwitch = !this.jobConfigForm.jobSwitch
           this.$message({
             type: 'info',
             message: '已取消'
@@ -1183,7 +1233,7 @@
         queryJobType: null, // 当前选中的左菜单栏
         // 状态编码转换名称
         statusMapper: {
-          '1': '创建/待确认',
+          '1': '待确认/分派',
           '2': '处理中',
           '3': '被转接',
           '4': '审核中',
@@ -1223,11 +1273,13 @@
         },
         // 自动派单设置
         drawer: false,
-        selectTimes: {
+        jobConfigForm: {
           startTime: '',
-          endTime: ''
-        },
-        jobSwitch: true
+          endTime: '',
+          jobSwitch: true,
+          priority: '',
+          severity: ''
+        }
       }
     }
 
@@ -1280,7 +1332,12 @@
   }
   .jobDetail .el-form-item *{
     text-align: left;
-    color: #444444;
   }
 
+</style>
+
+<style>
+  .el-input.is-disabled .el-input__inner, .el-radio__input.is-disabled+span.el-radio__label, .el-textarea.is-disabled .el-textarea__inner {
+    color: black;
+  }
 </style>
