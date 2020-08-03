@@ -1,6 +1,6 @@
 {
   "name": "intelligent-water",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "author": "Yunnan University",
   "description": "云南大学·中贸环境智能水务联合实验室",
   "license": "BSD-3-Clause",
@@ -27,7 +27,7 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "智能水务",
+    "productName": "云南中贸智慧水务云服务平台",
     "appId": "com.sewage.app",
     "directories": {
       "output": "build"

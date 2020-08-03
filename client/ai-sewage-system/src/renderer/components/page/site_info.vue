@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 站点详情 -->
-    <el-row :gutter="20">
+    <el-row>
       <el-col :span="24">
         <el-card shadow="always">
           <div slot="header">
@@ -12,30 +12,28 @@
             <el-row :gutter="10">
               <el-col :span="24">
                 <el-carousel :interval="4000" type="card" height="300px">
-                  <el-carousel-item v-for="item in siteForm.uploadImgIDArray" :key="item" >
+                  <el-carousel-item v-for="item in siteForm.uploadImgIDArray" :key="item">
                     <img :src="'http://43.228.77.195:8082/file/download/'+item" style="width:100%">
                   </el-carousel-item>
                 </el-carousel>
               </el-col>
             </el-row>
-            <el-row type="flex" justify="center">
-              <el-col :span="18">
-                <el-table :data="table" style="width: 100%" :show-header="false">
-                  <el-table-column prop="name1" width="100"/>
-                  <el-table-column prop="value1" width="180">
-                    <template scope="scope">
-                      <span style="color: blue">{{scope.row.value1}}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column prop="name2" width="100"/>
-                  <el-table-column prop="value2" width="180">
-                    <template scope="scope">
-                      <span style="color: blue">{{scope.row.value2}}</span>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </el-col>
-            </el-row>
+            <div style="width: 560px; margin: 0 auto">
+              <el-table :data="table" style="width: 100%" :show-header="false">
+                <el-table-column prop="name1" width="100"/>
+                <el-table-column prop="value1" width="180">
+                  <template scope="scope">
+                    <span style="color: blue">{{scope.row.value1}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="name2" width="100"/>
+                <el-table-column prop="value2" width="180">
+                  <template scope="scope">
+                    <span style="color: blue">{{scope.row.value2}}</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
           </div>
         </el-card>
       </el-col>

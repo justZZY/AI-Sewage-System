@@ -1,18 +1,17 @@
 <template>
   <el-row>
-    <el-col :span="7">
+    <el-col :span="5">
       <img :src="imgurl">
     </el-col>
-    <el-col :span="14">
+    <el-col :span="16">
       <el-menu :router="true" :default-active="$route.path" class="el-menu" mode="horizontal" @select="handleSelect"
                background-color="black"
                text-color="#fff"
                active-text-color="#ffd04b">
 
         <el-menu-item index="/map">
-          <!-- 加入map图标 -->
           <i class="el-icon-map-location"></i>
-          站点地图
+          <span slot="title">站点地图</span>
         </el-menu-item>
 <!--        <el-menu-item index="/site_watch">-->
 <!--        <el-submenu index="1">-->
@@ -22,43 +21,44 @@
 <!--          </template>-->
         <el-menu-item index="/site_info">
           <i class="el-icon-info"></i>
-          <span>站点信息</span>
+          <span slot="title">站点信息</span>
         </el-menu-item>
-        <el-menu-item index="/site_realtime_data">
-          <i class="el-icon-data-line"></i>
-          <span>实时数据</span>
-        </el-menu-item>
-        <el-menu-item index="/site_history_data">
-          <i class="el-icon-s-data"></i>
-          <span>历史数据</span>
-        </el-menu-item>
-<!--          &lt;!&ndash; 加入view图标 &ndash;&gt;-->
-<!--          <i class="el-icon-view"></i>-->
-<!--          站点监控-->
-<!--        </el-submenu>-->
         <el-menu-item index="/remote_control" v-if="checkIdentity()">
           <!-- 加入promotion图标 -->
           <i class="el-icon-s-promotion"></i>
-          远程控制
+          <span slot="title">站点控制</span>
         </el-menu-item>
-<!--        <el-menu-item index="/time_control" v-if="checkIdentity()">-->
-<!--          &lt;!&ndash; 加入promotion图标 &ndash;&gt;-->
-<!--          <i class="el-icon-time"></i>-->
-<!--          定时控制-->
-<!--        </el-menu-item>-->
-        <el-menu-item index="/knowledge_graph">
+        <el-menu-item index="/site_realtime_data">
+          <i class="el-icon-data-line"></i>
+          <span slot="title">参数信息</span>
+        </el-menu-item>
+        <el-menu-item index="/site_history_data">
+          <i class="el-icon-s-data"></i>
+          <span slot="title">数据统计分析</span>
+        </el-menu-item>
+        <el-menu-item index="/404">
           <!-- 加入map图标 -->
-          <i class="el-icon-coin"></i>
-          站点图谱
+          <i class="el-icon-video-camera"></i>
+          <span slot="title">站点监控</span>
         </el-menu-item>
+        <el-menu-item index="/404">
+          <!-- 加入map图标 -->
+          <i class="el-icon-bell"></i>
+          <span slot="title">故障报警</span>
+        </el-menu-item>
+<!--        <el-menu-item index="/knowledge_graph">-->
+<!--          &lt;!&ndash; 加入map图标 &ndash;&gt;-->
+<!--          <i class="el-icon-coin"></i>-->
+<!--          <span slot="title">站点图谱</span>-->
+<!--        </el-menu-item>-->
         <el-menu-item index="/job_control">
           <i class="el-icon-document"></i>
-          工单管理
+          <span slot="title">运维管理</span>
         </el-menu-item>
         <el-menu-item index="/user_manage" v-if="checkIdentity()">
           <!-- 加入custom图标 -->
           <i class="el-icon-s-custom"></i>
-          用户管理
+          <span slot="title">用户管理</span>
         </el-menu-item>
       </el-menu>
     </el-col>
@@ -78,7 +78,7 @@
     name: 'vHeader',
     data () {
       return {
-        imgurl: require('@/assets/logo.png'),
+        imgurl: require('@/assets/logo3.png'),
         userName: '当前用户: ' + this.$store.state.ShiroToken.username
       }
     },
