@@ -46,11 +46,10 @@
           <i class="el-icon-bell"></i>
           <span slot="title">故障报警</span>
         </el-menu-item>
-<!--        <el-menu-item index="/knowledge_graph">-->
-<!--          &lt;!&ndash; 加入map图标 &ndash;&gt;-->
-<!--          <i class="el-icon-coin"></i>-->
-<!--          <span slot="title">站点图谱</span>-->
-<!--        </el-menu-item>-->
+        <el-menu-item index="/knowledge_graph">
+          <i class="el-icon-coin"></i>
+          <span slot="title">站点图谱</span>
+        </el-menu-item>
         <el-menu-item index="/job_control">
           <i class="el-icon-document"></i>
           <span slot="title">运维管理</span>
