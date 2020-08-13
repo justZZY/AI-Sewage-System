@@ -56,42 +56,44 @@
           console.log(error)
         })
       },
-      /**
-       * @desc 建立实时监控连接
-       */
-      createSignalRConnect () {
-        let index = this.$store.state.Treedata.chooseData
-        let signalrUrl = window.equipmentobjarray[index]['box']['cs']['signalrUrl']
-        let token = window.jsonobj['access_token']
-        this.$http.post('http://43.228.77.195:8082/equip/createSignalRConnect', {
-          url: signalrUrl,
-          token: token
-        }, {
-          headers: {
-            'Authorization': this.$store.state.ShiroToken.token
-          }
-        }).then(response => {
-          console.log(response)
-        }).catch(error => {
-          console.log(error)
-        })
-      },
-      closeSignalRConnect () {
-        this.$http.post('http://43.228.77.195:8082/equip/closeSignalRConnect', null, {
-          headers: {
-            'Authorization': this.$store.state.ShiroToken.token
-          }
-        }).then(res => {
-          console.log(res)
-        }).catch(res => {
-          console.log(res)
-        })
-      },
+      // 2020.08.12 取消本地SignalR 功能移至服务器
+      // /**
+      //  * @desc 建立实时监控连接
+      //  */
+      // createSignalRConnect () {
+      //   let index = this.$store.state.Treedata.chooseData
+      //   let signalrUrl = window.equipmentobjarray[index]['box']['cs']['signalrUrl']
+      //   let token = window.jsonobj['access_token']
+      //   this.$http.post('http://43.228.77.195:8082/equip/createSignalRConnect', {
+      //     url: signalrUrl,
+      //     token: token
+      //   }, {
+      //     headers: {
+      //       'Authorization': this.$store.state.ShiroToken.token
+      //     }
+      //   }).then(response => {
+      //     console.log(response)
+      //   }).catch(error => {
+      //     console.log(error)
+      //   })
+      // },
+      // closeSignalRConnect () {
+      //   this.$http.post('http://43.228.77.195:8082/equip/closeSignalRConnect', null, {
+      //     headers: {
+      //       'Authorization': this.$store.state.ShiroToken.token
+      //     }
+      //   }).then(res => {
+      //     console.log(res)
+      //   }).catch(res => {
+      //     console.log(res)
+      //   })
+      // },
       /**
        * @desc 退出程序时清理数据的方法_(:з」∠)_
        */
       clearData () {
-        this.closeSignalRConnect()
+        // 2020.08.12 废弃 SignalR移动到服务器实现
+        // this.closeSignalRConnect()
         this.$store.commit('TREEDATA_CLEAR')
         this.$store.commit('SHIRO_TOKEN_CLEAR')
       },
@@ -109,8 +111,9 @@
       clearInterval(this.tokenTimer)
       this.tokenTimer = null
       this.setTokenTimer()
-      // 启动实时数据连接
-      this.createSignalRConnect()
+      // 2020.08.12 废弃 移动到服务器实现
+      // // 启动实时数据连接
+      // this.createSignalRConnect()
     },
     mounted () {
       window.addEventListener('beforeunload', () => this.clearData())

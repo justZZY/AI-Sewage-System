@@ -51,14 +51,14 @@ export default new Router({
           component: require('@/components/page/skip/realtime_data_skip').default
         },
         {
-          path: '/site_history_data',
-          name: 'site_history_data',
-          component: require('@/components/page/site_history_data').default
+          path: '/site_data',
+          name: 'site_data',
+          component: require('@/components/page/site_data').default
         },
         {
-          path: '/history_data_skip',
-          name: 'history_data_skip',
-          component: require('@/components/page/skip/history_data_skip').default
+          path: '/data_skip',
+          name: 'data_skip',
+          component: require('@/components/page/skip/data_skip').default
         },
         {
           path: '/remote_control',

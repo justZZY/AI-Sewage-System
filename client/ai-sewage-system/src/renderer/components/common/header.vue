@@ -32,19 +32,14 @@
           <i class="el-icon-data-line"></i>
           <span slot="title">参数信息</span>
         </el-menu-item>
-        <el-menu-item index="/site_history_data">
+        <el-menu-item index="/site_data">
           <i class="el-icon-s-data"></i>
-          <span slot="title">数据统计分析</span>
+          <span slot="title">数据统计</span>
         </el-menu-item>
         <el-menu-item index="/404">
           <!-- 加入map图标 -->
           <i class="el-icon-video-camera"></i>
           <span slot="title">站点监控</span>
-        </el-menu-item>
-        <el-menu-item index="/404">
-          <!-- 加入map图标 -->
-          <i class="el-icon-bell"></i>
-          <span slot="title">故障报警</span>
         </el-menu-item>
 <!--        <el-menu-item index="/knowledge_graph">-->
 <!--          &lt;!&ndash; 加入map图标 &ndash;&gt;-->

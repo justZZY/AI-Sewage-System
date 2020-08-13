@@ -4,11 +4,11 @@
 
 <script>
   export default {
-    name: 'history_data_skip',
+    name: 'data_skip',
     data () {
       this.$router.replace({
-        path: '@/components/page/site_history_data',
-        name: 'site_history_data'
+        path: '@/components/page/site_data',
+        name: 'site_data'
       })
     }
   }

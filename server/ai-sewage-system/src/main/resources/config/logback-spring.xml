@@ -27,15 +27,6 @@
         </encoder>
     </appender>
 
-    <!-- 自定义包 -->
-<!--    <logger name="cn.nodesoft" additivity="flase" level="${logLevel}">-->
-<!--        <appender-ref ref="STDOUT"/>-->
-<!--        <appender-ref ref="logFile" />-->
-<!--    </logger>-->
-
-<!--    <logger name="org.springframework.scheduling">-->
-<!--        <level value="info" />-->
-<!--    </logger>-->
     <root level="WARN">
         <!-- 控制台输出 -->
         <appender-ref ref="STDOUT" />

@@ -7,6 +7,8 @@ import com.github.signalr4j.client.hubs.HubProxy;
 import com.github.signalr4j.client.transport.ServerSentEventsTransport;
 import com.sewage.springboot.logger.LoggerFactory;
 import com.sewage.springboot.logger.Logger;
+
+import java.io.IOException;
 import java.net.Proxy;
 import java.util.Date;
 import java.util.concurrent.Semaphore;
@@ -23,7 +25,8 @@ public abstract class SignalRConnectionBase {
     private String hubUrl;
     private String signalrClientId;
     private Proxy proxy;
-    private String accessToken;
+    private TokenManager tokenManager;
+    private String accessToken; // 记录当前token信息
     private boolean shouldGetNewToken;
     private int retryCount;
     private long lastConnectedTime = 0;
@@ -31,11 +34,15 @@ public abstract class SignalRConnectionBase {
     private boolean monitorStarted;
     private boolean quitFlag = false;
 
-    public SignalRConnectionBase(String hubUrl, String token, String signalrClientId, Proxy proxy, LoggerFactory loggerFactory) {
+    public SignalRConnectionBase(String hubUrl, String signalrClientId, TokenManager tokenManager, Proxy proxy, LoggerFactory loggerFactory) {
         this.hubUrl = hubUrl;
-        this.accessToken = token;
         this.signalrClientId = signalrClientId;
         this.proxy = proxy;
+        // tokenManager 用于token信息重连
+        // 优化服务器signalr连接方式
+        // 用于数据重连
+        // 2020.08.12
+        this.tokenManager = tokenManager;
         this.loggerFactory = loggerFactory;
         this.logger = loggerFactory.createLogger("SignalRConnectionBase");
         this.sseLogger = new SignalRLoggerWrapper(this.loggerFactory.createLogger("ServerSentEventsTransport"));
@@ -98,12 +105,31 @@ public abstract class SignalRConnectionBase {
         this.logger.logInformation("Connected. hubconn=" + this.hubConnection.getUrl());
     }
 
+    private void UpdateToken() throws LoginFailedException, InterruptedException {
+        int retryCount2 = 0;
+        for (; ; ) {
+            try {
+                this.accessToken = this.tokenManager.getOrUpdateToken(this.accessToken);
+                break;
+            } catch (LoginFailedException e) {
+                throw e;
+            } catch (IOException e) {
+                logger.logError("Get token failed. " + e.toString());
+                int waitTime2 = retryCount2++ * 1000;
+                if (waitTime2 > 300000) {
+                    waitTime2 = 5000;
+                }
+                Thread.sleep(waitTime2);
+            }
+        }
+    }
+
     private void SignalRConnectWorker() throws InterruptedException {
         //signalr重连代码
         for (; ; ) {
             do {
                 if (this.hubConnection != null)
-                    this.logger.logTrace("Current connection state is " + this.hubConnection.getState());
+                    this.logger.logInformation("Current connection state is " + this.hubConnection.getState());
                 this.connectEvent.acquire();
             }
             while (this.hubConnection != null && this.hubConnection.getState() == ConnectionState.Connected);
@@ -111,6 +137,8 @@ public abstract class SignalRConnectionBase {
                 break;
             }
             try {
+                //刷新token
+                UpdateToken();
                 if (this.hubConnection != null)
                     this.UnhookEvents();
                 if (this.hubProxy != null) {

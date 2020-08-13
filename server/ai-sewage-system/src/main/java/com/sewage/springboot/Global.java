@@ -1,5 +1,7 @@
 package com.sewage.springboot;
 
+import com.sewage.springboot.signalr.ServerCaller;
+
 import java.net.Proxy;
 import java.util.Date;
 import java.util.UUID;
@@ -9,19 +11,21 @@ import java.util.concurrent.Executors;
 public class Global {
     // 线程池
     public static ExecutorService threadPool = Executors.newCachedThreadPool();
+    public static ServerCaller commServer;
+    public static ServerCaller appServer;
+    public static ServerCaller hdataServer;
 
     // 以下服务器地址是繁易公有云，私有云请根据实际情况修改
     public static final String idServerUrl = "https://account.flexem.com/core/";
+    public static String appServerApiUrl = "http://fbox360.com/api/client/";
+    public static final String commServerApiUrl = "http://fbcs101.fbox360.com/api/";
+    public static final String commServerSignalRUrl = "http://fbcs101.fbox360.com/push";
+    public static String hdataServerApiUrl = "http://fbhs1.fbox360.com/api/";
     public static final String signalRUrl = "http://fbcs101.fbox360.com/push";
     public static String signalrClientId = UUID.randomUUID().toString();
     public static Proxy proxy = null;
-//    // FBox客户端注册的账号
-//    public static String username = "ligaofa";
-//    public static String password = "gf229192";
 
-    //    // 获取API账号请咨询对接的销售。
-//    public static String clientId = "ynsk";
-//    public static String clientSecret = "af6a37beddb28136eed65bda1f16547f";
+    // FlexManager
     public static String username = "ynzmhj";
     public static String password = "zmhj123456";
     // 获取API账号请咨询对接的销售。

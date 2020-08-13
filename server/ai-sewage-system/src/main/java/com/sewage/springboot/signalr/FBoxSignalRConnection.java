@@ -14,7 +14,6 @@ import com.sewage.springboot.logger.LoggerFactory;
 import com.sewage.springboot.service.JobService;
 import com.sewage.springboot.service.impl.JobServiceImpl;
 import com.sewage.springboot.websoket.WebSocket;
-import okhttp3.*;
 
 import java.io.IOException;
 import java.net.Proxy;
@@ -24,16 +23,16 @@ import java.util.concurrent.atomic.LongAdder;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.context.ApplicationContext;
 
+/**
+ * @desc 服务器实时推送函数, 适应本项目服务器连接方法
+ * @Author zzy
+ */
 public class FBoxSignalRConnection extends SignalRConnectionBase {
     private final Gson gson;
     private final Logger logger;
     private ConcurrentHashMap<Long, LongAdder> dmonIds = new ConcurrentHashMap<>();
     private LongAdder dmonMsgCounter = new LongAdder();
-    private long lastDmonItemCount;
-    private long lastDmonMsgCount;
-    private long lastReportTime;
     private Proxy proxy;
     private LongAdder dmonItemCounter = new LongAdder();
     private String token;
@@ -45,32 +44,11 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
     	jobService = SpringContextHolder.getBean(JobServiceImpl.class); 
     }
 
-    public FBoxSignalRConnection(String hubUrl, String token, String signalrClientId, Proxy proxy, LoggerFactory loggerFactory) {
-        super(hubUrl, token, signalrClientId, proxy, loggerFactory);
+    public FBoxSignalRConnection(String hubUrl, String signalrClientId, TokenManager tokenManager, Proxy proxy, LoggerFactory loggerFactory) {
+        super(hubUrl, signalrClientId, tokenManager, proxy, loggerFactory);
         this.logger = loggerFactory.createLogger("FBoxSignalRConnection");
         this.proxy = proxy;
-        this.token = token;
         gson = new GsonBuilder().create();
-//        // 暂时不需要统计实时条目
-//        new Thread(() -> {
-//            //统计条目数线程
-//            for (; ; ) {
-//                try {
-//                    Thread.sleep(5000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                long currentTime = System.nanoTime();
-//                long currentMsgCount = this.dmonMsgCounter.longValue();
-//                long currentItemCount = this.dmonItemCounter.longValue();
-//                long msgRate = (currentMsgCount - this.lastDmonMsgCount) * 1000000000 / (currentTime - this.lastReportTime);
-//                long itemRate = (currentItemCount - this.lastDmonItemCount) * 1000000000 / (currentTime - this.lastReportTime);
-//                this.logger.logInformation(String.format("Dmon id count: %d, item rate: %d, message rate: %d", this.dmonIds.size(), itemRate, msgRate));
-//                this.lastReportTime = currentTime;
-//                this.lastDmonMsgCount = currentMsgCount;
-//                this.lastDmonItemCount = currentItemCount;
-//            }
-//        }).start();
     }
 
     @Override
@@ -102,7 +80,7 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
                     JsonObject item = jsonElement.getAsJsonObject();
                     this.dmonIds.computeIfAbsent(item.get("id").getAsLong(), aLong -> new LongAdder()).increment();
                     this.dmonItemCounter.increment();
-                    //收到的推送数据
+                    // 收到的推送数据
                     String name = item.get("name").getAsString();
                     String value = item.get("value").getAsString();
                     long time = item.get("t").getAsLong();
@@ -164,7 +142,7 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
         // signalr盒子状态变更事件
         hubProxy.subscribe("boxConnStateChanged").addReceivedHandler(jsonElements -> {
             Global.threadPool.submit(() -> {
-                System.out.println("Box state changed.");
+                this.logger.logInformation("Box state changed.");
                 if (jsonElements.length <= 0)
                     return;
                 BoxStateChanged[] stateChanges = gson.fromJson(jsonElements[0], BoxStateChanged[].class);
@@ -173,37 +151,19 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
                     // stateChange.id 是盒子列表中BoxReg对象下的box.id，可以根据这个过滤要开的盒子。
                     // stateChange.state 为1、2是盒子上线事件。实时数据推送需要开点
                     if (stateChange.state == 1 || stateChange.state == 2) {
-                            try {
-                                activeData(stateChange.id);
-                            } catch (IOException e) {
-                                System.out.println(e);
-                                e.printStackTrace();
-                            }
+                        try {
+                            // 盒子每次上线后，均需要开启FBox数据推送控制接口（订阅）
+                            Global.commServer.executePost("box/" + stateChange.id + "/dmon/start", String.class);
+                            // token有效期为两小时。若token过期，demo会自动刷新token。所以返回401后均需要重试接口
+                            this.logger.logInformation(String.format("Start dmon points on box ok %s\n",stateChange.id));
+                        } catch (IOException e) {
+                            System.out.println(e);
+                            e.printStackTrace();
+                        }
                     }
                 }
+
             });
         });
-    }
-    /*
-     * 启动设备订阅接口
-     * 盒子每次上线后，均需要开启FBox数据推送控制接口(订阅)
-     */
-    private void activeData (long id) throws IOException {
-        String url = "http://fbcs101.fbox360.com/api/box/" + id + "/dmon/start";
-        OkHttpClient client = new OkHttpClient();
-        FormBody formBody = new FormBody.Builder().build();
-        Request request = new Request.Builder().url(url)
-                .post(formBody)
-                .addHeader("Authorization", "Bearer " + this.token)
-                .addHeader("X-FBox-ClientId", Global.signalrClientId)
-                .build();
-        Response response = client.newCall(request).execute();
-        if (response.isSuccessful()){
-            response.body().close();
-            // token有效期为两小时。若token过期，demo会自动刷新token。所以返回401后均需要重试接口
-            this.logger.logInformation(String.format("Start dmon points on box ok %s\n", id));
-        }else{
-            throw new IOException("Unexpected code " + response);
-        }
     }
 }

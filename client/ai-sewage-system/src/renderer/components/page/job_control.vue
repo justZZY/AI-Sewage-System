@@ -36,7 +36,7 @@
               </el-form>
             </div>
         </el-col>
-        
+
       </el-row>
     </el-header>
     <el-container>
@@ -461,7 +461,7 @@
       </div>
     </el-dialog>
 
-    <el-drawer 
+    <el-drawer
       v-if="currentUser.identity=='admin'"
       style="text-align:center"
       title="自动派单设置"
@@ -518,7 +518,7 @@
           <el-button type="primary" @click="setJobSchedule">确 定</el-button>
         </div>
       </div>
-      
+
     </el-drawer>
 
     <camera v-on:listenToChildEvent="receiveDataFromCamera" ref="camera"></camera>

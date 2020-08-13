@@ -226,31 +226,34 @@ public class EquipController {
         });
     }
 
-    /**
-     * 建立signalr实时监控
-     */
-    @RequestMapping(value = "/createSignalRConnect", method = RequestMethod.POST)
-    String createSignalRConnect (@RequestBody JSONObject jsonObject) {
-        String signalrUrl = jsonObject.getString("url");
-        String token = jsonObject.getString("token");
-        // System.out.println("====打开signalr");
-        // 启动signalr
-        ConsoleLoggerFactory loggerFactory = new ConsoleLoggerFactory();
-        signalRConnection = new FBoxSignalRConnection(signalrUrl, token,
-                Global.signalrClientId, Global.proxy, loggerFactory);
-        signalRConnection.start();
-        return "success";
-    }
-    /**
-     * 关闭signalr监控
-     */
-    @RequestMapping(value = "/closeSignalRConnect", method = RequestMethod.POST)
-    String closeSignalRConnect () {
-        signalRConnection.disConnect();
-        return "success";
-    }
+//    2020.08.12 SignalR数据启用移动到服务器
+//    /**
+//     * 建立signalr实时监控
+//     */
+//    @RequestMapping(value = "/createSignalRConnect", method = RequestMethod.POST)
+//    String createSignalRConnect (@RequestBody JSONObject jsonObject) {
+//        String signalrUrl = jsonObject.getString("url");
+//        String token = jsonObject.getString("token");
+//        // System.out.println("====打开signalr");
+//        // 启动signalr
+//        ConsoleLoggerFactory loggerFactory = new ConsoleLoggerFactory();
+//        signalRConnection = new FBoxSignalRConnection(signalrUrl, token,
+//                Global.signalrClientId, Global.proxy, loggerFactory);
+//        signalRConnection.start();
+//        return "success";
+//    }
+//    /**
+//     * 关闭signalr监控
+//     */
+//    @RequestMapping(value = "/closeSignalRConnect", method = RequestMethod.POST)
+//    String closeSignalRConnect () {
+//        signalRConnection.disConnect();
+//        return "success";
+//    }
+
+
     private static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
-    private FBoxSignalRConnection signalRConnection = null;
+//    private FBoxSignalRConnection signalRConnection = null;
 
     /**
      * 根据前端发来的站点id获取站点数据

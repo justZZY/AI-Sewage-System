@@ -1537,152 +1537,166 @@
     </iot:hasSite>
     <iot:hasSite>
       <rdf:Description rdf:about="https://www.zm-iot-platform.com/site/河口村污水处理站(40m³/d)/300218090078/">
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#提升泵_运行时间/131948192426515330"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_流量累计_m3/138986575923401267"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_绿化用水_启停开关/131951659280912656"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_1#污泥泵_启停开关/131951658952708328"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_液位_m/130659102731164366"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_消毒装置_关机小时/131948193114381291"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_2#污泥泵_故障反馈/131952215337621873"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_1#污泥泵_手自动开关/131951658936979686"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_消毒装置_开机分钟/131948193081875432"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_2#提升泵_运行反馈/131952215255832935"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_MBR膜反洗_停止时间/131948193229724669"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_1#回流泵_启停开关/131951659018768624"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#提升泵_停止时间/131948192443292548"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_2#回流泵_故障反馈/131952215402633593"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_自吸泵_关机分钟/131948193032592352"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#污泥泵_开机分钟/131948192459021192"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_氧气浓度_mg/L/130659103550102251"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_1#污泥泵_运行反馈/131952215288338795"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_温度_℃/130659102993308377"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#鼓风机_关机小时/131948192852237256"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#回流泵_运行时间/131948192656153510"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#鼓风机_开机小时/131948192819731394"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#回流泵_关机分钟/131948192639376292"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#提升泵_开机分钟/131948192377232252"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#污泥泵_开机分钟/131948192540810132"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_1#鼓风机_运行反馈/131952215419410811"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_自吸泵_手自动开关/131951659166617858"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#提升泵_关机小时/131948192394009470"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#鼓风机_停止时间/131948192802954176"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#污泥泵_关机分钟/131948192574364568"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_3#鼓风机_运行时间/131948192967580630"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_3#鼓风机_关机分钟/131948192950803412"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_自吸泵_开机分钟/131948193000086492"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_自吸泵_启停开关/131951659182346500"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#提升泵_开机小时/131948192278666094"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_1#回流泵_故障反馈/131952215370127733"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_消毒装置_运行反馈/131952215599765905"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_自吸泵_故障反馈/131952215550482827"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_1#回流泵_运行反馈/131952215353350515"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_机柜_急停反馈/131952215189772641"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#提升泵_关机小时/131948192312220530"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_2#鼓风机_运行反馈/131952215451916671"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#鼓风机_关机小时/131948192770448314"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_溶氧_mV/130659103354018530"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#污泥泵_运行时间/131948192491527054"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#回流泵_开机小时/131948192606870430"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_消毒装置_停止时间/131948193146887153"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#鼓风机_运行时间/131948192787225534"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_氨氮_mg/L/130659103304735457"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_3#鼓风机_手自动开关/131951659133063422"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_反洗泵_故障反馈/131952215582988687"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#鼓风机_停止时间/131948192836508614"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#提升泵_开机分钟/131948192295443312"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_反洗用水_启停开关/131951659313418517"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#污泥泵_关机小时/131948192475798410"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_MBR膜反洗_运行时间/131948193229724667"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_1#污泥泵_故障反馈/131952215305116013"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_消毒装置_手自动开关/131951659199123718"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_1#提升泵_启停开关/131951658887696607"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_绿化用水_关机分钟/131948193294736389"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_绿化用水_开机分钟/131948193262230529"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_2#提升泵_启停开关/131951658920202467"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#鼓风机_开机分钟/131948192753671096"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#提升泵_关机分钟/131948192409738112"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_MBR膜反洗_开机分钟/131948193180441589"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_自吸泵_运行时间/131948193049369570"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#鼓风机_关机分钟/131948192869014474"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_3#鼓风机_开机小时/131948192901520334"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#回流泵_关机小时/131948192705436590"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#污泥泵_运行时间/131948192574364570"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_消毒装置_关机分钟/131948193131158509"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_3#鼓风机_运行反馈/131952215501199748"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_1#回流泵_启停开关/131951659018768624"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#回流泵_运行时间/131948192721165234"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#回流泵_关机分钟/131948192721165232"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/氨氮/181302007705260782"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_反洗用水_开机小时/131948193344019467"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#污泥泵_停止时间/131948192590093212"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_1#提升泵_手自动开关/131951658855190749"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_2#提升泵_故障反馈/131952215271561577"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_消毒装置_开机小时/131948193065098214"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#提升泵_停止时间/131948192344726392"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_消毒装置_启停开关/131951659214852360"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_2#回流泵_运行反馈/131952215386904951"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#污泥泵_停止时间/131948192508304272"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_2#鼓风机_启停开关/131951659117334780"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_SS_mg/L/130659103009037018"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#提升泵_运行时间/131948192344726390"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#鼓风机_关机分钟/131948192770448316"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_3#鼓风机_关机小时/131948192950803410"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_2#鼓风机_故障反馈/131952215484422529"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_MBR膜反洗_手自动开关/131951659231629578"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#回流泵_开机分钟/131948192622599072"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_1#鼓风机_手自动开关/131951659068051702"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_反洗用水_开机分钟/131948193360796685"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_3#鼓风机_启停开关/131951659149840640"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_自吸泵_停止时间/131948193065098212"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_自吸泵_运行反馈/131952215533705608"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_2#回流泵_启停开关/131951659051274484"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_1#提升泵_运行反馈/131952215206549859"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#回流泵_关机小时/131948192622599074"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_消毒装置_运行时间/131948193131158511"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_绿化用水_关机小时/131948193277959171"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_自吸泵_开机小时/131948193000086490"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_反洗用水_关机分钟/131948193393302545"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_消毒装置_故障反馈/131952215615494547"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_2#回流泵_手自动开关/131951659035545842"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#回流泵_开机小时/131948192671882154"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_MBR膜反洗_关机小时/131948193196170231"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_1#鼓风机_故障反馈/131952215436188029"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_MBR膜反洗_启停开关/131951659248406796"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_2#污泥泵_手自动开关/131951658969485546"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_绿化用水_运行时间/131948193311513607"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_绿化用水_手自动开关/131951659264135438"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_自吸泵_关机小时/131948193015815134"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#回流泵_停止时间/131948192737942452"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#鼓风机_开机分钟/131948192884743116"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_2#提升泵_手自动开关/131951658904473825"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#污泥泵_开机小时/131948192443292550"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#提升泵_开机小时/131948192360455034"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#提升泵_关机分钟/131948192327949172"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#污泥泵_关机分钟/131948192475798412"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_绿化用水_停止时间/131948193327242249"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#鼓风机_开机小时/131948192753671094"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_2#污泥泵_启停开关/131951658986262764"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_1#鼓风机_启停开关/131951659083780344"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_反洗用水_关机小时/131948193376525327"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_3#鼓风机_故障反馈/131952215517976966"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_反洗用水_运行时间/131948193409031187"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_1#回流泵_手自动开关/131951659001991406"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_反洗用水_停止时间/131948193425808405"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_反洗泵_运行反馈/131952215567260045"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_2#鼓风机_手自动开关/131951659100557562"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_1#提升泵_故障反馈/131952215239055717"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_ph值_pH/130659103485090538"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_绿化用水_开机小时/131948193245453311"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#污泥泵_开机小时/131948192525081490"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_3#鼓风机_开机分钟/131948192918297552"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_MBR膜反洗_停止时间/131948193229724669"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_3#鼓风机_停止时间/131948192983309272"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#鼓风机_运行时间/131948192836508612"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#回流泵_停止时间/131948192671882152"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_流量_m3/h/130659102746893007"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_3#鼓风机_手自动开关/131951659133063422"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/低电压停运设备延时/184566980032223505"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#回流泵_关机分钟/131948192639376292"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_3#鼓风机_开机小时/131948192901520334"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#提升泵_运行时间/131948192426515330"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_自吸泵_运行反馈/131952215533705608"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_1#污泥泵_运行反馈/131952215288338795"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#提升泵_开机小时/131948192278666094"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_1#鼓风机_启停开关/131951659083780344"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_3#鼓风机_运行反馈/131952215501199748"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#回流泵_运行时间/131948192721165234"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_自吸泵_开机小时/131948193000086490"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_反洗用水_关机小时/131948193376525327"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#污泥泵_开机分钟/131948192540810132"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_温度_℃/130659102993308377"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/进水液位/181289261131519333"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_消毒装置_运行时间/131948193131158511"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_1#提升泵_手自动开关/131951658855190749"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_3#鼓风机_运行时间/131948192967580630"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_2#提升泵_故障反馈/131952215271561577"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_MBR膜反洗_手自动开关/131951659231629578"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_SS_mg/L/130659103009037018"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_自吸泵_运行时间/131948193049369570"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#污泥泵_关机小时/131948192475798410"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_自吸泵_手自动开关/131951659166617858"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/高电压允许启动所有设备/184566832233337999"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_绿化用水_运行时间/131948193311513607"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_MBR膜反洗_运行时间/131948193229724667"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#污泥泵_运行时间/131948192491527054"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_消毒装置_开机分钟/131948193081875432"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/厌氧ORP/181289220206646781"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_1#污泥泵_启停开关/131951658952708328"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_MBR膜反洗_开机小时/131948193163664371"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_MBR膜反洗_关机分钟/131948193212947449"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#回流泵_开机分钟/131948192688659372"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_2#污泥泵_运行反馈/131952215320844655"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_绿化用水_关机小时/131948193277959171"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_MBR膜反洗_开机分钟/131948193180441589"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_绿化用水_关机分钟/131948193294736389"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_1#提升泵_运行反馈/131952215206549859"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_绿化用水_手自动开关/131951659264135438"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_2#回流泵_运行反馈/131952215386904951"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_反洗用水_手自动开关/131951659297689874"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#提升泵_关机小时/131948192312220530"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_氧气浓度_mg/L/130659103550102251"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#鼓风机_运行时间/131948192836508612"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_绿化用水_启停开关/131951659280912656"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_绿化用水_停止时间/131948193327242249"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_1#鼓风机_手自动开关/131951659068051702"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#提升泵_关机分钟/131948192409738112"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#鼓风机_开机小时/131948192819731394"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/高电压允许启动设备延时/184567052243456938"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/自吸泵故障复位/181318105363272588"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_1#鼓风机_运行反馈/131952215419410811"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#鼓风机_开机分钟/131948192753671096"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_1#提升泵_故障反馈/131952215239055717"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_机柜_急停反馈/131952215189772641"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_2#污泥泵_故障反馈/131952215337621873"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_液位_m/130659102731164366"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_消毒装置_启停开关/131951659214852360"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#污泥泵_关机分钟/131948192475798412"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_消毒装置_故障反馈/131952215615494547"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#回流泵_运行时间/131948192656153510"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_3#鼓风机_停止时间/131948192983309272"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#回流泵_开机小时/131948192606870430"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_自吸泵_关机分钟/131948193032592352"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_2#鼓风机_故障反馈/131952215484422529"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_3#鼓风机_关机分钟/131948192950803412"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#鼓风机_关机小时/131948192770448314"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_自吸泵_开机分钟/131948193000086492"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_消毒装置_手自动开关/131951659199123718"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#污泥泵_开机小时/131948192443292550"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_流量累计_m3/138986575923401267"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_2#提升泵_启停开关/131951658920202467"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_3#鼓风机_故障反馈/131952215517976966"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_消毒装置_关机小时/131948193114381291"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#污泥泵_关机分钟/131948192574364568"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_1#鼓风机_故障反馈/131952215436188029"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_反洗用水_停止时间/131948193425808405"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_MBR膜反洗_关机小时/131948193196170231"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#鼓风机_关机分钟/131948192770448316"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#提升泵_开机分钟/131948192295443312"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_2#鼓风机_运行反馈/131952215451916671"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#回流泵_开机分钟/131948192688659372"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#污泥泵_停止时间/131948192508304272"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_1#回流泵_手自动开关/131951659001991406"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_自吸泵_启停开关/131951659182346500"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_2#回流泵_手自动开关/131951659035545842"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/进水PH/181289172629607505"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_反洗用水_开机分钟/131948193360796685"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/1#提升泵/181318395744378279"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#提升泵_运行时间/131948192344726390"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_1#污泥泵_手自动开关/131951658936979686"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#鼓风机_停止时间/131948192836508614"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_2#鼓风机_手自动开关/131951659100557562"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_1#提升泵_启停开关/131951658887696607"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_2#鼓风机_启停开关/131951659117334780"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_2#提升泵_手自动开关/131951658904473825"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_2#污泥泵_手自动开关/131951658969485546"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_1#回流泵_运行反馈/131952215353350515"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_消毒装置_运行反馈/131952215599765905"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_绿化用水_开机分钟/131948193262230529"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_3#鼓风机_开机分钟/131948192918297552"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_消毒装置_开机小时/131948193065098214"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_2#污泥泵_运行反馈/131952215320844655"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#鼓风机_关机分钟/131948192869014474"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_反洗用水_运行时间/131948193409031187"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#提升泵_关机分钟/131948192327949172"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_反洗泵_运行反馈/131952215567260045"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_2#回流泵_启停开关/131951659051274484"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_3#鼓风机_启停开关/131951659149840640"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#污泥泵_停止时间/131948192590093212"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_MBR膜反洗_关机分钟/131948193212947449"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/低电压停运所有设备/184566772253744818"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#污泥泵_开机小时/131948192525081490"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#污泥泵_运行时间/131948192574364570"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#回流泵_停止时间/131948192737942452"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_3#鼓风机_关机小时/131948192950803410"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#污泥泵_关机小时/131948192557587350"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_1#污泥泵_故障反馈/131952215305116013"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#提升泵_停止时间/131948192344726392"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#回流泵_开机小时/131948192671882154"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/1#污泥泵故障复位/181318369196528606"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_自吸泵_停止时间/131948193065098212"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#鼓风机_关机小时/131948192852237256"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_MBR膜反洗_启停开关/131951659248406796"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_1#回流泵_故障反馈/131952215370127733"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_2#提升泵_运行反馈/131952215255832935"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#回流泵_停止时间/131948192671882152"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_反洗泵_故障反馈/131952215582988687"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#回流泵_关机小时/131948192705436590"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_消毒装置_关机分钟/131948193131158509"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#鼓风机_停止时间/131948192802954176"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#鼓风机_开机小时/131948192753671094"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_反洗用水_启停开关/131951659313418517"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#提升泵_开机分钟/131948192377232252"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#回流泵_关机分钟/131948192721165232"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#提升泵_关机小时/131948192394009470"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_自吸泵_故障反馈/131952215550482827"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_溶氧_mV/130659103354018530"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#鼓风机_运行时间/131948192787225534"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/电池电压/184566716491520705"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_氨氮_mg/L/130659103304735457"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_绿化用水_开机小时/131948193245453311"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#污泥泵_开机分钟/131948192459021192"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/1#回流泵故障复位/181318284730586629"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#提升泵_开机小时/131948192360455034"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#回流泵_开机分钟/131948192622599072"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/2#提升泵复位/181314408880165473"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_1#回流泵_关机小时/131948192622599074"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_ph值_pH/130659103485090538"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_自吸泵_关机小时/131948193015815134"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_2#鼓风机_开机分钟/131948192884743116"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_2#污泥泵_启停开关/131951658986262764"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_反洗用水_关机分钟/131948193393302545"/>
+        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/定时_消毒装置_停止时间/131948193146887153"/>
       </rdf:Description>
     </iot:hasSite>
     <iot:hasSite>
@@ -1920,23 +1934,13 @@
     <iot:hasSite>
       <rdf:Description rdf:about="https://www.zm-iot-platform.com/site/测试平台/300219050084/">
         <iot:hasExceptionEquip>
-          <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_浊度值_NTU/152072156045791856">
-            <iot:hasExceptionValue>
-              <rdf:Description rdf:about="https://www.zm-iot-platform.com/value/传感_浊度值_NTU/24/2020-06-20_08:58:34">
-                <iot:hasException rdf:resource="https://www.zm-iot-platform.com/Exception"/>
-              </rdf:Description>
-            </iot:hasExceptionValue>
-            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_浊度值_NTU/24/2020-06-20_08:58:34"/>
-          </rdf:Description>
-        </iot:hasExceptionEquip>
-        <iot:hasExceptionEquip>
           <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_pH值_pH/152072156003848814">
             <iot:hasExceptionValue>
-              <rdf:Description rdf:about="https://www.zm-iot-platform.com/value/传感_pH值_pH/44/2020-06-20_08:58:34">
+              <rdf:Description rdf:about="https://www.zm-iot-platform.com/value/传感_pH值_pH/52/2020-08-12_15:43:34">
                 <iot:hasException rdf:resource="https://www.zm-iot-platform.com/Exception"/>
               </rdf:Description>
             </iot:hasExceptionValue>
-            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_pH值_pH/44/2020-06-20_08:58:34"/>
+            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_pH值_pH/52/2020-08-12_15:43:34"/>
           </rdf:Description>
         </iot:hasExceptionEquip>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_+P01-M1变频水泵_手自动反馈/152072156669694598"/>
@@ -1953,7 +1957,7 @@
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_+P01-M1变频水泵_启动开关/152072156299547258"/>
         <iot:hasEquip>
           <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_水温_℃/152072156023771759">
-            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_水温_℃/23/2020-06-20_08:58:34"/>
+            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_水温_℃/27/2020-08-12_15:43:34"/>
           </rdf:Description>
         </iot:hasEquip>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_+F01-M1变频风机_手自动反馈/152072156557496961"/>
@@ -1962,20 +1966,24 @@
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_+P01-M1变频水泵_手自动开关/152072156257604217"/>
         <iot:hasEquip>
           <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_瞬时流量_m³/152072156137017972">
-            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_瞬时流量_m³/34/2020-06-20_08:58:34"/>
+            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_瞬时流量_m³/58/2020-08-12_15:43:34"/>
           </rdf:Description>
         </iot:hasEquip>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_+P01-M1变频水泵_故障反馈/152072156689617543"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_+P02-M1工频水泵_故障反馈/152072156835369611"/>
         <iot:hasEquip>
           <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_环境温度_℃/152072156118143603">
-            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_环境温度_℃/36/2020-06-20_08:58:34"/>
+            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_环境温度_℃/43/2020-08-12_15:43:34"/>
           </rdf:Description>
         </iot:hasEquip>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/-KM1P02接触器/152072155825590888"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/-FR1P02热继电器/152072155880116841"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/-KM1P01接触器/152072155732267621"/>
-        <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/传感_浊度值_NTU/152072156045791856"/>
+        <iot:hasEquip>
+          <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_浊度值_NTU/152072156045791856">
+            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_浊度值_NTU/7/2020-08-12_15:43:34"/>
+          </rdf:Description>
+        </iot:hasEquip>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/频率_+P01-M1变频水泵_频率设定/152072156955955856"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/远程_+P02-M1工频水泵_启动开关/152072156447396477"/>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/-F32微断/152072155529892444"/>
@@ -1991,7 +1999,7 @@
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/-FR1P01热继电器/152072155752190566"/>
         <iot:hasEquip>
           <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_溶解氧值_mg/152072156079346289">
-            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_溶解氧值_mg/40/2020-06-20_08:58:34"/>
+            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_溶解氧值_mg/25/2020-08-12_15:43:34"/>
           </rdf:Description>
         </iot:hasEquip>
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_+F01-M1变频风机_运行反馈/152072156604682883"/>
@@ -2003,7 +2011,7 @@
         <iot:hasEquip rdf:resource="https://www.zm-iot-platform.com/equip/状态_+F01-M1变频风机_自动状态/152072156520796800"/>
         <iot:hasEquip>
           <rdf:Description rdf:about="https://www.zm-iot-platform.com/equip/传感_水箱水位_m/152072156099269234">
-            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_水箱水位_m/46/2020-06-20_08:58:34"/>
+            <iot:hasValue rdf:resource="https://www.zm-iot-platform.com/value/传感_水箱水位_m/48/2020-08-12_15:43:34"/>
           </rdf:Description>
         </iot:hasEquip>
       </rdf:Description>
