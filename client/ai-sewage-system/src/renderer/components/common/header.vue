@@ -36,7 +36,7 @@
           <i class="el-icon-s-data"></i>
           <span slot="title">数据统计</span>
         </el-menu-item>
-        <el-menu-item index="/404">
+        <el-menu-item index="/site_monitor">
           <!-- 加入map图标 -->
           <i class="el-icon-video-camera"></i>
           <span slot="title">站点监控</span>

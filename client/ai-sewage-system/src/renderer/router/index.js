@@ -100,7 +100,13 @@ export default new Router({
           path: '/404',
           name: 'page404',
           component: require('@/components/page/404').default
+        },
+        {
+          path: '/site_monitor',
+          name: 'site_monitor',
+          component: require('@/components/page/site_monitor').default
         }
+
       ]
     },
     {
