@@ -73,7 +73,7 @@
     name: 'vHeader',
     data () {
       return {
-        imgurl: require('@/assets/logo3.png'),
+        imgurl: require('@/assets/logo4.png'),
         userName: '当前用户: ' + this.$store.state.ShiroToken.username
       }
     },
