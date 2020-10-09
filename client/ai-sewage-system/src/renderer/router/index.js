@@ -105,8 +105,17 @@ export default new Router({
           path: '/site_monitor',
           name: 'site_monitor',
           component: require('@/components/page/site_monitor').default
+        },
+        {
+          path: '/site_battery_data',
+          name: 'site_battery_data',
+          component: require('@/components/page/site_battery_data').default
+        },
+        {
+          path: '/battery_data_skip',
+          name: 'battery_data_skip',
+          component: require('@/components/page/skip/battery_data_skip').default
         }
-
       ]
     },
     {

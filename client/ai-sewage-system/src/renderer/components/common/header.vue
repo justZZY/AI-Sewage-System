@@ -28,9 +28,9 @@
           <i class="el-icon-s-promotion"></i>
           <span slot="title">站点控制</span>
         </el-menu-item>
-        <el-menu-item index="/site_realtime_data">
-          <i class="el-icon-data-line"></i>
-          <span slot="title">参数信息</span>
+        <el-menu-item index="/site_battery_data">
+          <i class="el-icon-sunny"></i>
+          <span slot="title">电池信息</span>
         </el-menu-item>
         <el-menu-item index="/site_data">
           <i class="el-icon-s-data"></i>

@@ -5,7 +5,7 @@
 <script>
   export default {
     name: 'control_skip',
-    data () {
+    created () {
       this.$router.replace({
         path: '@/components/page/remote_control',
         name: 'remote_control'

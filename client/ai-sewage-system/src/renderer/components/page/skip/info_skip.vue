@@ -5,7 +5,7 @@
 <script>
   export default {
     name: 'info_skip',
-    data () {
+    created () {
       this.$router.replace({
         path: '@/components/page/site_info',
         name: 'site_info'
