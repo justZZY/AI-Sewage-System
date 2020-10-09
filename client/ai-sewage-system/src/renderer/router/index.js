@@ -41,6 +41,11 @@ export default new Router({
           component: require('@/components/page/skip/info_skip').default
         },
         {
+          path: '/monitor_skip',
+          name: 'monitor_skip',
+          component: require('@/components/page/skip/monitor_skip').default
+        },
+        {
           path: '/site_realtime_data',
           name: 'site_realtime_data',
           component: require('@/components/page/site_realtime_data').default
@@ -100,6 +105,21 @@ export default new Router({
           path: '/404',
           name: 'page404',
           component: require('@/components/page/404').default
+        },
+        {
+          path: '/site_monitor',
+          name: 'site_monitor',
+          component: require('@/components/page/site_monitor').default
+        },
+        {
+          path: '/site_battery_data',
+          name: 'site_battery_data',
+          component: require('@/components/page/site_battery_data').default
+        },
+        {
+          path: '/battery_data_skip',
+          name: 'battery_data_skip',
+          component: require('@/components/page/skip/battery_data_skip').default
         }
       ]
     },

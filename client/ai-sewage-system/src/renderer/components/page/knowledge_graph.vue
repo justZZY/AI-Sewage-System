@@ -66,6 +66,7 @@
           })
           let equipList = await this.getEquipMonitor(temp)
           console.log('====after axios')
+          console.log(equipList)
           equipList = equipList.data
           console.log(equipList)
           for (let j = 0; j < equipList.length; j++) {

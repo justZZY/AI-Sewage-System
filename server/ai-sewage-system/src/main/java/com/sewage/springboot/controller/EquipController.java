@@ -297,6 +297,12 @@ public class EquipController {
         return CommonUtil.jsonResult(1, "更新成功");
     };
 
+    @RequestMapping(value = "/getAllSiteDetail", method = RequestMethod.GET)
+    JSONArray getAllSiteDetail() throws IOException{
+        JSONArray jsonArray = readJsonFile();
+        return jsonArray;
+    }
+
     private JSONArray readJsonFile () throws IOException {
         File siteFile = new File("siteDetails/siteDetails.json");
         String input = FileUtils.readFileToString(siteFile, "UTF-8");

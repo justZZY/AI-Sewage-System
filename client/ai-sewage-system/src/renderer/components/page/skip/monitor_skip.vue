@@ -4,11 +4,11 @@
 
 <script>
   export default {
-    name: 'site_skip',
-    created () {
+    name: 'monitor_skip',
+    data () {
       this.$router.replace({
-        path: '@/components/page/site_watch',
-        name: 'site_watch'
+        path: '@/components/page/site_monitor',
+        name: 'site_monitor'
       })
     }
   }
