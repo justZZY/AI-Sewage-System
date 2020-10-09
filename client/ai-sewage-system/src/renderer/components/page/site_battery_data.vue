@@ -41,6 +41,7 @@ import {rateOption} from '../../js/chart'
 const echarts = require('echarts')
 let batteryChart = {}
 let batteryValue = 0
+let batteryOption = {}
 
 export default {
   name: 'site_battery_data',
@@ -61,7 +62,6 @@ export default {
     }
   },
   created () {
-    this.websocket()
     this.getBatteryValue()
   },
   beforeDestroy () {
@@ -69,17 +69,18 @@ export default {
   },
   mounted () {
     this.drawBatteryChart()
+    this.websocket()
   },
   methods: {
     drawBatteryChart () {
       batteryChart = echarts.init(document.getElementById('batteryChart'))
-      let batteryOption = JSON.parse(JSON.stringify(rateOption))
+      batteryOption = JSON.parse(JSON.stringify(rateOption))
       console.log(batteryOption)
       batteryOption.title.text = '电池电压'
       batteryOption.series[0].max = 180
       batteryOption.series[0].detail.formatter = '{value}V'
       batteryOption.series[0].data[0].value = batteryValue
-      batteryChart.setOption(rateOption, true)
+      batteryChart.setOption(batteryOption, true)
     },
     /*
      * 用来获取实时电池电压信息
@@ -108,6 +109,8 @@ export default {
       if (narray[0] === boxID && narray[1] === '电池电压') {
         console.log(narray)
         batteryValue = parseFloat(narray[2]).toFixed(2)
+        batteryOption.series[0].data[0].value = batteryValue
+        batteryChart.setOption(batteryOption, true)
       }
     },
     getBatteryValue () {
@@ -136,7 +139,7 @@ export default {
 
 <style scoped>
 .batteryChart {
-  width: 100%;
-  height: 260px;
+  width: 350px;
+  height: 350px;
 }
 </style>
