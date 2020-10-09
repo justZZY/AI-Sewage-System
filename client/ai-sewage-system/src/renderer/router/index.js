@@ -36,14 +36,14 @@ export default new Router({
           component: require('@/components/page/site_info').default
         },
         {
+          path: '/monitor_info',
+          name: 'monitor_info',
+          component: require('@/components/page/monitor_info').default
+        },
+        {
           path: '/info_skip',
           name: 'info_skip',
           component: require('@/components/page/skip/info_skip').default
-        },
-        {
-          path: '/monitor_skip',
-          name: 'monitor_skip',
-          component: require('@/components/page/skip/monitor_skip').default
         },
         {
           path: '/site_realtime_data',

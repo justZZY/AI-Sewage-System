@@ -132,7 +132,7 @@
     data () {
       this.getEquipMonitor()
       return {
-        imgUrl: 'http://127.0.0.1:8083/pic/EquipState.png',
+        imgUrl: 'http://43.228.77.195:8083/pic/EquipState.png',
         devicedata: [],
         sliderData: [], // 设置频率滑动条json数组
         // 1.14新增
@@ -172,7 +172,7 @@
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-        this.$http.post('http://127.0.0.1:8082/equip/getEquipMonitor', {
+        this.$http.post('http://43.228.77.195:8082/equip/getEquipMonitor', {
           authorization: authorization,
           apiBaseUrl: apiBaseUrl,
           boxNo: boxNo
@@ -202,7 +202,7 @@
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
         let names = getMonitorNames(dataArray)
         console.log(names)
-        this.$http.post('http://127.0.0.1:8082/equip/getEquipValue', {
+        this.$http.post('http://43.228.77.195:8082/equip/getEquipValue', {
           authorization: authorization,
           apiBaseUrl: apiBaseUrl,
           boxNo: boxNo,
@@ -373,7 +373,7 @@
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-        this.$http.post('http://127.0.0.1:8082/equip/setEquipValue', {
+        this.$http.post('http://43.228.77.195:8082/equip/setEquipValue', {
           authorization: authorization,
           apiUrl: apiBaseUrl,
           boxNo: boxNo,
