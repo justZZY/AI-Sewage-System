@@ -43,7 +43,7 @@ export default new Router({
         {
           path: '/monitor_skip',
           name: 'monitor_skip',
-          component: require('@/components/page/monitor_skip').default
+          component: require('@/components/page/skip/monitor_skip').default
         },
         {
           path: '/site_realtime_data',
