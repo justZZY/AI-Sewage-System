@@ -33,6 +33,7 @@ public class Job {
 	    @Column(name = "telephone")
 	    private String telephone;
 	    
+	    @Deprecated
 	    @Column(name = "email")
 	    private String email;
 	    

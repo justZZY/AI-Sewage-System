@@ -77,8 +77,7 @@ public class JobServiceImpl implements JobService {
 		job.setContent(form.getString("content"));
 		job.setCreator(loginUser.getUsername());
 		job.setProcessor(processor);
-		job.setTelephone(loginUser.getPhone());
-		job.setEmail(loginUser.getMail());
+		job.setTelephone(site.getString("phone"));
 		job.setJobTypeName(form.getString("jobTypeName"));
 		job.setStatus(JobConstant.JOB_STATUS_CREATE);
 		job.setCreateTime(new Date());
@@ -122,14 +121,15 @@ public class JobServiceImpl implements JobService {
 			JSONObject siteInfo = siteDetailDao.getSiteDetailById(siteID);
 			String siteName = siteInfo.getString("name");
 			String siteAddr = siteInfo.getString("address");
-			String processor = siteInfo.getString("operator"); // 运维人员
+			String processor = siteInfo.getString("operator"); 	// 运维人员
+			String phone = siteInfo.getString("phone"); 		// 运维人员手机
 			// 创建工单
 			Job job = new Job();
 			job.setJobTypeName(alarmName);
 			job.setContent(alarmMsg);
 			job.setCreator(creator);
 			job.setProcessor(processor);
-//			job.setTelephone(phone);
+			job.setTelephone(phone);
 			job.setStatus(JobConstant.JOB_STATUS_CREATE);
 			job.setSite(siteName);
 			job.setSiteAddr(siteAddr);
@@ -324,6 +324,7 @@ public class JobServiceImpl implements JobService {
 		Job job = new Job();
 		// 添加工单处理人，更新工单状态
 		job.setProcessor(user);
+		job.setTelephone(queryUser.getString("phone"));
 		job.setStatus(JobConstant.JOB_STATUS_PROCESSING);
 		job.setUpdateTime(new Date());
 		Example example = new Example(Job.class);
@@ -347,7 +348,7 @@ public class JobServiceImpl implements JobService {
 		int j = jobProcessMapper.insertList(recordList);
 		if(i<1 || i!=j || i!=jobsIds.size()) 
 			throw new BussinessException(0, "派单失败！");
-		SmsSender.sendSmsMsg(queryUser.getString("phone")+",18171656008", "您有新工单啦，请及时登录平台处理。问题优先级："+job.getPriority());
+		SmsSender.sendSmsMsg(job.getTelephone(), "您有新工单啦，请及时登录平台处理。问题优先级："+job.getPriority());
 		return CommonUtil.jsonResult(1, "派单成功！", i);
 	}
 	
@@ -396,7 +397,7 @@ public class JobServiceImpl implements JobService {
 					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); // 手动回滚
 				else {
 					JSONObject queryUser = userDao.queryUserByName(job.getProcessor());
-					SmsSender.sendSmsMsg(queryUser.getString("phone")+",18171656008", "您有新工单啦，请及时登录平台处理。问题优先级："+job.getPriority()+"。");
+					SmsSender.sendSmsMsg(job.getTelephone(), "您有新工单啦，请及时登录平台处理。问题优先级："+job.getPriority()+"。");
 				}
 			}
 		}
@@ -422,6 +423,7 @@ public class JobServiceImpl implements JobService {
 		Job job = new Job();
 		job.setProcessor(receiver);
 		job.setUpdateTime(new Date());
+		job.setTelephone(queryUser.getString("phone"));
 		int i = jobMapper.updateByExampleSelective(job, example);
 		if(i<1 || i!=jobsIds.size()) throw new BussinessException(0, "转发失败");
 		// 2. 添加转发进程 和 新的处理进程

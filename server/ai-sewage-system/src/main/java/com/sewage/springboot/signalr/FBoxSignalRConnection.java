@@ -39,11 +39,6 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
     
     private static JobService jobService;
     
-    @PostConstruct
-    void initSpringBean(){
-    	jobService = SpringContextHolder.getBean(JobServiceImpl.class); 
-    }
-
     public FBoxSignalRConnection(String hubUrl, String signalrClientId, TokenManager tokenManager, Proxy proxy, LoggerFactory loggerFactory) {
         super(hubUrl, signalrClientId, tokenManager, proxy, loggerFactory);
         this.logger = loggerFactory.createLogger("FBoxSignalRConnection");
@@ -104,18 +99,21 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
                     System.out.println("\t" + jsonElement);
                     WebSocket.sendAll(jsonElement.toString());
                 }
-                
+
                 /** 报警工单 */
+                if(jobService==null) jobService = SpringContextHolder.getBean(JobServiceImpl.class); 
                 String boxUid = jsonElements[2].getAsString();
-                JsonArray itemsValues = jsonElements[1].getAsJsonArray();
-                JsonObject firstAlarmItem = itemsValues.get(0).getAsJsonObject();
-                String id = firstAlarmItem.get("id").getAsString();			// 监控点条目的unique_id
-                String value = firstAlarmItem.get("value").getAsString();	// 监控点条目值
-                String name = firstAlarmItem.get("name").getAsString();		// 报警条目编码
-                String msg = firstAlarmItem.get("msg").getAsString();		// 报警条目信息
-                String status = firstAlarmItem.get("status").getAsString(); // 条目状态 ,如果条目正常，则无此属性
-                jobService.CreateAlarmJob(boxUid, name, msg);
-                
+                JsonArray alarmElements = jsonElements[1].getAsJsonArray();
+                for (com.google.gson.JsonElement alarmElement : alarmElements) {
+	                JsonObject alarmItemJson = alarmElement.getAsJsonObject();
+	                String id = alarmItemJson.get("id").getAsString();			// 监控点条目的unique_id
+	                String value = alarmItemJson.get("value").getAsString();	// 监控点条目值
+	                String name = alarmItemJson.get("name").getAsString();		// 报警条目编码
+	                String msg = alarmItemJson.get("msg").getAsString();		// 报警条目信息
+	                String status = alarmItemJson.get("status").getAsString(); // 条目状态 ,如果条目正常，则无此属性
+	                System.out.println("box:" + boxUid + "\nname：" + name + "\nmsg："+ msg);
+	                jobService.CreateAlarmJob(boxUid, name, msg);
+                }
                 //打印报警条目的值集合
                 System.out.printf("%d",jsonElements[1].getAsLong());
                 //打印boxUid
