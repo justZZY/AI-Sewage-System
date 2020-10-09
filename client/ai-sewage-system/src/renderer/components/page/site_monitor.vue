@@ -150,6 +150,9 @@
           console.log(this.monitorSample)
           console.log(this.addMonitor)
           let monitors = []
+          if (res.data.monitors === undefined) {
+            res.data.monitors = []
+          }
           if (res.data.monitors.length > 0) {
             for (let i = 0; i < res.data.monitors.length; i++) {
               let tempMonitor = Object.assign({}, this.monitorSample)
