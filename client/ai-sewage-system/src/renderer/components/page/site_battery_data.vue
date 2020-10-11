@@ -25,7 +25,15 @@
                   <span>电压控制</span>
                 </div>
                 <div>
-
+                  <el-table :data="batteryTableList" stripe style="width: 100%">
+                    <el-table-column prop="name" label="电源控制项"></el-table-column>
+                    <el-table-column prop="value" label="设置值"></el-table-column>
+                    <el-table-column label="操作">
+                      <template slot-scope="scope">
+                        <el-button size="mini" type="danger" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                      </template>
+                    </el-table-column>
+                  </el-table>
                 </div>
               </el-card>
             </el-col>
@@ -46,7 +54,9 @@ let batteryOption = {}
 export default {
   name: 'site_battery_data',
   data () {
-
+    return {
+      batteryTableList: []
+    }
   },
   watch: {
     refreshPage: function () {
@@ -62,7 +72,7 @@ export default {
     }
   },
   created () {
-    this.getBatteryValue()
+    this.getBatteryNames()
   },
   beforeDestroy () {
     this.over()
@@ -113,8 +123,27 @@ export default {
         batteryChart.setOption(batteryOption, true)
       }
     },
-    getBatteryValue () {
-      let names = ['电池电压']
+    // 获取电池设备信息
+    getBatteryNames () {
+      console.log('获取电池信息')
+      let index = this.$store.state.Treedata.chooseData
+      let authorization = 'Bearer ' + window.jsonobj['access_token']
+      let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
+      let boxNo = window.equipmentobjarray[index]['box']['boxNo']
+      this.$http.post('http://43.228.77.195:8082/equip/getEquipMonitor', {
+        authorization: authorization,
+        apiBaseUrl: apiBaseUrl,
+        boxNo: boxNo
+      }, {
+        headers: {
+          'Authorization': this.$store.state.ShiroToken.token
+        }
+      }).then(res => {
+        // 取电池信息
+        this.getBatteryValue(getNamesFromData(res['data']))
+      })
+    },
+    getBatteryValue (names) {
       let index = this.$store.state.Treedata.chooseData
       let authorization = 'Bearer ' + window.jsonobj['access_token']
       let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
@@ -130,10 +159,88 @@ export default {
         }
       }).then(res => {
         console.log(res)
-        batteryValue = parseFloat(res.data[0].value).toFixed(2)
+        // 获取除去电池信息的设备值列表
+        this.batteryTableList = getBatteryValueBesideRate(res.data)
+      })
+    },
+    handleEdit (index, row) {
+      this.$prompt('请输入修改的整数值', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /(^[1-9]\d*$)/,
+        inputErrorMessage: '数值格式不正确'
+      }).then(({value}) => {
+        if (Number(value) !== row.value) {
+          // 提交到远程服务器
+          this.setEquipValue(row.name, 0, value)
+        } else {
+          this.$message.error('与修改前数值相同，取消修改')
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消输入'
+        })
+      })
+    },
+    // 通用请求接口
+    setEquipValue (name, type, value) {
+      let index = this.$store.state.Treedata.chooseData
+      let authorization = 'Bearer ' + window.jsonobj['access_token']
+      let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
+      let boxNo = window.equipmentobjarray[index]['box']['boxNo']
+      this.$http.post('http://43.228.77.195:8082/equip/setEquipValue', {
+        authorization: authorization,
+        apiUrl: apiBaseUrl,
+        boxNo: boxNo,
+        name: name,
+        type: type,
+        value: value
+      }, {
+        headers: {
+          'Authorization': this.$store.state.ShiroToken.token
+        }
+      }).then(res => {
+        console.log(res)
+        this.$message({
+          type: 'success',
+          message: '修改成功'
+        })
+        setTimeout(() => {
+          this.$router.replace({
+            path: '@/components/page/skip/battery_data_skip',
+            name: 'battery_data_skip'
+          })
+        }, 1000)
       })
     }
   }
+}
+
+function getNamesFromData (dataList) {
+  let batteryList = []
+  let names = []
+  for (let i = 0; i < dataList.length; i++) {
+    if (dataList[i].name === '电池') {
+      batteryList = dataList[i].items
+    }
+  }
+  for (let batteryListKey in batteryList) {
+    if (batteryList.hasOwnProperty(batteryListKey)) {
+      names.push(batteryList[batteryListKey].name)
+    }
+  }
+  return names
+}
+
+function getBatteryValueBesideRate (dataList) {
+  let ans = []
+  for (const i in dataList) {
+    if (dataList.hasOwnProperty(i) && dataList[i].name !== '电池电压') {
+      ans.push({name: dataList[i].name, value: dataList[i].value})
+    }
+  }
+  return ans
 }
 </script>
 
