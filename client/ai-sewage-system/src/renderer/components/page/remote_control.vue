@@ -22,10 +22,11 @@
           <div slot="header">
             <span>站点组态图信息</span>
           </div>
-          <el-image
-              style="width: 100%; height: 100%"
-              :src="imgUrl">
-          </el-image>
+          <dynamic></dynamic>
+<!--          <el-image-->
+<!--              style="width: 100%; height: 100%"-->
+<!--              :src="imgUrl">-->
+<!--          </el-image>-->
         </el-card>
       </el-col>
     </el-row>
@@ -127,6 +128,7 @@
 
 <script>
   // import {equipName} from '../../js/site_detail'
+  import dynamic from './subDynamicPic/dynamic.vue'
   export default {
     name: 'remote_control',
     data () {
@@ -144,6 +146,7 @@
         sliderMax: 100
       }
     },
+    components: { dynamic },
     computed: {
       refreshPage () {
         return this.$store.state.Treedata.chooseData
