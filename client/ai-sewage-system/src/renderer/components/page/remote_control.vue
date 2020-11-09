@@ -22,10 +22,11 @@
           <div slot="header">
             <span>站点组态图信息</span>
           </div>
-          <el-image
-              style="width: 100%; height: 100%"
-              :src="imgUrl">
-          </el-image>
+          <dynamic></dynamic>
+<!--          <el-image-->
+<!--              style="width: 100%; height: 100%"-->
+<!--              :src="imgUrl">-->
+<!--          </el-image>-->
         </el-card>
       </el-col>
     </el-row>
@@ -127,6 +128,7 @@
 
 <script>
   // import {equipName} from '../../js/site_detail'
+  import dynamic from './subDynamicPic/dynamic.vue'
   export default {
     name: 'remote_control',
     data () {
@@ -144,6 +146,7 @@
         sliderMax: 100
       }
     },
+    components: { dynamic },
     computed: {
       refreshPage () {
         return this.$store.state.Treedata.chooseData
@@ -172,7 +175,7 @@
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-        this.$http.post('http://43.228.77.195:8082/equip/getEquipMonitor', {
+        this.$http.post('http://182.254.148.104:8082/equip/getEquipMonitor', {
           authorization: authorization,
           apiBaseUrl: apiBaseUrl,
           boxNo: boxNo
@@ -202,7 +205,7 @@
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
         let names = getMonitorNames(dataArray)
         console.log(names)
-        this.$http.post('http://43.228.77.195:8082/equip/getEquipValue', {
+        this.$http.post('http://182.254.148.104:8082/equip/getEquipValue', {
           authorization: authorization,
           apiBaseUrl: apiBaseUrl,
           boxNo: boxNo,
@@ -373,7 +376,7 @@
         let authorization = 'Bearer ' + window.jsonobj['access_token']
         let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
         let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-        this.$http.post('http://43.228.77.195:8082/equip/setEquipValue', {
+        this.$http.post('http://182.254.148.104:8082/equip/setEquipValue', {
           authorization: authorization,
           apiUrl: apiBaseUrl,
           boxNo: boxNo,
