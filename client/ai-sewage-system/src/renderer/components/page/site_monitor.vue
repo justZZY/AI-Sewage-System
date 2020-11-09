@@ -133,7 +133,7 @@
       getSiteDetail () {
         let index = this.$store.state.Treedata.chooseData
         let boxUid = window.equipmentobjarray[index].boxUid
-        this.$http.post('http://43.228.77.195:8082/equip/getSiteDetail', {
+        this.$http.post('http://182.254.148.104:8082/equip/getSiteDetail', {
           siteID: boxUid
         }, {
           headers: {
@@ -181,7 +181,7 @@
         this.currentSite.monitors.splice(index, 1)
         this.monitors.splice(index, 1)
         console.log(this.currentSite.monitors)
-        this.$http.post('http://43.228.77.195:8082/equip/setSiteDetail', this.currentSite, {
+        this.$http.post('http://182.254.148.104:8082/equip/setSiteDetail', this.currentSite, {
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
@@ -196,7 +196,7 @@
             this.currentSite.monitors[this.currentIndex].name = this.changeMonitor.monitorName
             this.currentSite.monitors[this.currentIndex].url = this.changeMonitor.url
             console.log(this.currentIndex)
-            this.$http.post('http://43.228.77.195:8082/equip/setSiteDetail', this.currentSite, {
+            this.$http.post('http://182.254.148.104:8082/equip/setSiteDetail', this.currentSite, {
               headers: {
                 'Authorization': this.$store.state.ShiroToken.token
               }
@@ -226,7 +226,7 @@
             tempMonitor.name = this.addMonitor.monitorName
             tempMonitor.url = this.addMonitor.url
             this.currentSite.monitors.push(tempMonitor)
-            this.$http.post('http://43.228.77.195:8082/equip/setSiteDetail', this.currentSite, {
+            this.$http.post('http://182.254.148.104:8082/equip/setSiteDetail', this.currentSite, {
               headers: {
                 'Authorization': this.$store.state.ShiroToken.token
               }

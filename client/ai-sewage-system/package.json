@@ -38,7 +38,7 @@
     "publish": [
       {
         "provider": "generic",
-        "url": "http://43.228.77.195:8083/update/"
+        "url": "http://182.254.148.104:8083/update/"
       }
     ],
     "dmg": {
