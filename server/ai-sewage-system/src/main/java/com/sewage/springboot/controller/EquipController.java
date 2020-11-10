@@ -1,25 +1,20 @@
 package com.sewage.springboot.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.sewage.springboot.Global;
 import com.sewage.springboot.entity.EquipJson;
 import com.sewage.springboot.entity.EquipValueJson;
-import com.sewage.springboot.graph.TDBPersistence;
-import com.sewage.springboot.logger.ConsoleLoggerFactory;
+import com.sewage.springboot.entity.SiteDetail;
+import com.sewage.springboot.repository.SiteDetailRepository;
 import com.sewage.springboot.service.GraphService;
-import com.sewage.springboot.service.impl.GraphServiceImpl;
-import com.sewage.springboot.signalr.FBoxSignalRConnection;
 import com.sewage.springboot.util.CommonUtil;
 import okhttp3.*;
 import org.apache.commons.io.FileUtils;
-import org.apache.jena.query.*;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Selector;
 import org.apache.jena.rdf.model.Statement;
-import org.apache.jena.sparql.resultset.ResultsFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +33,9 @@ import java.util.List;
 public class EquipController {
     @Autowired
     private GraphService graphService;
+    @Autowired
+    private SiteDetailRepository siteDetailRepository;
+
     /**
      * @desc 获取fbox连接的token信息
      */
@@ -262,76 +260,56 @@ public class EquipController {
      * @return 站点json数据
      */
     @RequestMapping(value = "/getSiteDetail", method = RequestMethod.POST)
-    String getSiteDetail(@RequestBody JSONObject jsonObject) throws IOException {
+    String getSiteDetail(@RequestBody JSONObject jsonObject) {
         String siteID = jsonObject.getString("siteID");
-        JSONArray jsonArray = readJsonFile();
-        JSONObject ans = null;
-        for (int i = 0; i < jsonArray.size(); i++) {
-            if (siteID.equals(jsonArray.getJSONObject(i).getString("id"))) {
-                ans = jsonArray.getJSONObject(i);
-            }
-        }
-        // 找不到数据自己构造一个初始数据表
-        if (ans == null) {
-            ans = new JSONObject(jsonArray.getJSONObject(0));
-            ans.put("id", siteID);
-            // 加入json数据表中
-            jsonArray.add(ans);
-            writeJsonFile(jsonArray.toJSONString());
-        }
-        return ans.toJSONString();
+        // 从数据库中查找站点信息 不存在则读取一个初始化0的站点信息
+        SiteDetail siteDetail = siteDetailRepository.findById(siteID).orElse(new SiteDetail(siteID));
+        return JSONObject.toJSONString(siteDetail);
     }
 
     @RequestMapping(value = "/setSiteDetail", method = RequestMethod.POST)
     JSONObject setSiteDetail(@RequestBody JSONObject jsonObject) throws IOException {
-        String siteID = jsonObject.getString("id");
-        JSONArray jsonArray = readJsonFile();
-        for (int i = jsonArray.size() - 1; i >= 0; i--) {
-            if (siteID.equals(jsonArray.getJSONObject(i).getString("id"))) {
-                jsonArray.remove(i);
-                jsonArray.add(jsonObject);
-                break; // 同一个站点id只应该出现一次
-            }
-        }
-        writeJsonFile(jsonArray.toJSONString());
+        SiteDetail siteDetail = JSON.parseObject(jsonObject.toJSONString(), SiteDetail.class);
+        siteDetailRepository.save(siteDetail);
         return CommonUtil.jsonResult(1, "更新成功");
     };
 
-    @RequestMapping(value = "/getAllSiteDetail", method = RequestMethod.GET)
-    JSONArray getAllSiteDetail() throws IOException{
-        JSONArray jsonArray = readJsonFile();
-        return jsonArray;
-    }
-
-    private JSONArray readJsonFile () throws IOException {
-        File siteFile = new File("siteDetails/siteDetails.json");
-        String input = FileUtils.readFileToString(siteFile, "UTF-8");
-        return JSONArray.parseArray(input);
-    }
-
-    private boolean writeJsonFile (String content) {
-        boolean flag = true;
-        String filePath = "siteDetails/siteDetails.json";
-        // 生成json格式文件
-        try {
-            // 保证创建一个新文件
-            File file = new File(filePath);
-            if (!file.getParentFile().exists()) { // 如果父目录不存在，创建父目录
-                file.getParentFile().mkdirs();
-            }
-            if (file.exists()) { // 如果已存在,删除旧文件
-                file.delete();
-            }
-            file.createNewFile();
-            // 将格式化后的字符串写入文件
-            Writer write = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
-            write.write(content);
-            write.flush();
-            write.close();
-        } catch (Exception e) {
-            flag = false;
-            e.printStackTrace();
-        }
-        return flag;
-    }
+//    2020.11.9 站点数据放到数据库 废弃
+//    @RequestMapping(value = "/getAllSiteDetail", method = RequestMethod.GET)
+//    JSONArray getAllSiteDetail() throws IOException{
+//        JSONArray jsonArray = readJsonFile();
+//        return jsonArray;
+//    }
+//
+//    private JSONArray readJsonFile () throws IOException {
+//        File siteFile = new File("siteDetails/siteDetails.json");
+//        String input = FileUtils.readFileToString(siteFile, "UTF-8");
+//        return JSONArray.parseArray(input);
+//    }
+//
+//    private boolean writeJsonFile (String content) {
+//        boolean flag = true;
+//        String filePath = "siteDetails/siteDetails.json";
+//        // 生成json格式文件
+//        try {
+//            // 保证创建一个新文件
+//            File file = new File(filePath);
+//            if (!file.getParentFile().exists()) { // 如果父目录不存在，创建父目录
+//                file.getParentFile().mkdirs();
+//            }
+//            if (file.exists()) { // 如果已存在,删除旧文件
+//                file.delete();
+//            }
+//            file.createNewFile();
+//            // 将格式化后的字符串写入文件
+//            Writer write = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+//            write.write(content);
+//            write.flush();
+//            write.close();
+//        } catch (Exception e) {
+//            flag = false;
+//            e.printStackTrace();
+//        }
+//        return flag;
+//    }
 }

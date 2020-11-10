@@ -93,10 +93,10 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
         // signalr报警触发事件
         hubProxy.subscribe("alarmTriggered").addReceivedHandler(jsonElements -> {
             Global.threadPool.submit(() -> {
-                System.out.println("Alarm triggered: ");
+//                System.out.println("Alarm triggered: ");
                 for (com.google.gson.JsonElement jsonElement : jsonElements) {
                     //报警推送消息全部打印。具体参数解释请看接口文档http://docs.flexem.net/fbox/zh-cn/tutorials/AlarmTiggerPush.html
-                    System.out.println("\t" + jsonElement);
+//                    System.out.println("\t" + jsonElement);
                     WebSocket.sendAll(jsonElement.toString());
                 }
 
@@ -124,10 +124,10 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
         // signalr报警还原事件
         hubProxy.subscribe("alarmRecovered").addReceivedHandler(jsonElements -> {
             Global.threadPool.submit(() -> {
-                System.out.println("Alarm recovered: ");
+//                System.out.println("Alarm recovered: ");
                 for (com.google.gson.JsonElement jsonElement : jsonElements) {
                     //报警推送消息全部打印。具体参数解释请看接口文档http://docs.flexem.net/fbox/zh-cn/tutorials/AlarmReductionPush.html
-                    System.out.println("\t" + jsonElement);
+//                    System.out.println("\t" + jsonElement);
                     WebSocket.sendAll(jsonElement.toString());
                 };
                 //打印报警条目的值集合

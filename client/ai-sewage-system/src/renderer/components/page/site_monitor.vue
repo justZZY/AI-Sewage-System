@@ -152,19 +152,22 @@
           let monitors = []
           if (res.data.monitors === undefined) {
             res.data.monitors = []
-          }
-          if (res.data.monitors.length > 0) {
-            for (let i = 0; i < res.data.monitors.length; i++) {
-              let tempMonitor = Object.assign({}, this.monitorSample)
-              tempMonitor.siteName = res.data.name
-              tempMonitor.address = res.data.address
-              tempMonitor.monitorName = res.data.monitors[i].name
-              tempMonitor.installDate = res.data.monitors[i].date
-              tempMonitor.url = res.data.monitors[i].url
-              monitors.push(tempMonitor)
-            }
-            this.monitors = monitors.slice()
           } else {
+            if (res.data.monitors.length > 0) {
+              res.data.monitors = JSON.parse(res.data.monitors)
+              for (let i = 0; i < res.data.monitors.length; i++) {
+                let tempMonitor = Object.assign({}, this.monitorSample)
+                tempMonitor.siteName = res.data.name
+                tempMonitor.address = res.data.address
+                tempMonitor.monitorName = res.data.monitors[i].name
+                tempMonitor.installDate = res.data.monitors[i].date
+                tempMonitor.url = res.data.monitors[i].url
+                monitors.push(tempMonitor)
+              }
+              this.monitors = monitors.slice()
+            } else {
+              res.data.monitors = []
+            }
           }
           console.log(this.monitors)
         })

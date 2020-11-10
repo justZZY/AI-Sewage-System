@@ -174,6 +174,11 @@
           }
         }).then(res => {
           console.log(res)
+          if (res.data.uploadImgIDArray === '') {
+            res.data.uploadImgIDArray = []
+          } else {
+            res.data.uploadImgIDArray = JSON.parse(res.data.uploadImgIDArray)
+          }
           this.siteForm = res.data
           this.table = tableGet(this.siteForm)
         })
