@@ -96,7 +96,7 @@ export default {
      * 用来获取实时电池电压信息
      */
     websocket () {
-      let ws = new WebSocket('ws://43.228.77.195:8082/websocket')
+      let ws = new WebSocket('ws://182.254.148.104:8082/websocket')
       ws.onopen = () => {
         console.log('打开电池websocket连接')
       }
@@ -130,7 +130,7 @@ export default {
       let authorization = 'Bearer ' + window.jsonobj['access_token']
       let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
       let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-      this.$http.post('http://43.228.77.195:8082/equip/getEquipMonitor', {
+      this.$http.post('http://182.254.148.104:8082/equip/getEquipMonitor', {
         authorization: authorization,
         apiBaseUrl: apiBaseUrl,
         boxNo: boxNo
@@ -148,7 +148,7 @@ export default {
       let authorization = 'Bearer ' + window.jsonobj['access_token']
       let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
       let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-      this.$http.post('http://43.228.77.195:8082/equip/getEquipValue', {
+      this.$http.post('http://182.254.148.104:8082/equip/getEquipValue', {
         authorization: authorization,
         apiBaseUrl: apiBaseUrl,
         boxNo: boxNo,
@@ -189,7 +189,7 @@ export default {
       let authorization = 'Bearer ' + window.jsonobj['access_token']
       let apiBaseUrl = window.equipmentobjarray[index]['box']['cs']['apiBaseUrl']
       let boxNo = window.equipmentobjarray[index]['box']['boxNo']
-      this.$http.post('http://43.228.77.195:8082/equip/setEquipValue', {
+      this.$http.post('http://182.254.148.104:8082/equip/setEquipValue', {
         authorization: authorization,
         apiUrl: apiBaseUrl,
         boxNo: boxNo,

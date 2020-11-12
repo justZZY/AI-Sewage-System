@@ -46,7 +46,7 @@
         </el-form-item>
 
         <el-form-item label="相关附件" prop="fileList" style="width: fit-content" >
-          <el-upload action="http://43.228.77.195:8082/file/singleupload"
+          <el-upload action="http://182.254.148.104:8082/file/singleupload"
                      list-type="picture-card"
                      :file-list="jobAddForm.fileList"
                      :multiple="true"
@@ -70,7 +70,7 @@
           <div>
             <ul class="el-upload-list el-upload-list--picture-card">
               <li tabindex="0" class="el-upload-list__item is-success" v-for="item in photoList" :key="item">
-                <img :src="'http://43.228.77.195:8082/file/download/' + item" alt="" class="el-upload-list__item-thumbnail"><a class="el-upload-list__item-name">
+                <img :src="'http://182.254.148.104:8082/file/download/' + item" alt="" class="el-upload-list__item-thumbnail"><a class="el-upload-list__item-name">
                 <i class="el-icon-document"></i>
               </a>
                 <label class="el-upload-list__item-status-label">
@@ -80,7 +80,7 @@
                 <i class="el-icon-close-tip"></i>
                 <span class="el-upload-list__item-actions">
                     <span class="el-upload-list__item-preview">
-                      <i class="el-icon-zoom-in" @click="pictureCardPreview('http://43.228.77.195:8082/file//download/' + item)"></i>
+                      <i class="el-icon-zoom-in" @click="pictureCardPreview('http://182.254.148.104:8082/file//download/' + item)"></i>
                     </span>
                     <span class="el-upload-list__item-delete">
                       <i class="el-icon-delete" @click="deleteFromPhotoList(item)"></i>
@@ -184,7 +184,7 @@
             let form = JSON.parse(JSON.stringify(this.jobAddForm))
             form.fileList = this.jobAddForm.fileList.concat(this.photoList) // 注意提交的是jobAddForm.fileList (注意concat方法不修改原数组，只返回新数组)
             form.site = this.sitesMap[String(this.jobAddForm.site[2])].name
-            this.$http.post('http://43.228.77.195:8082/job/add', form,
+            this.$http.post('http://182.254.148.104:8082/job/add', form,
               {
                 headers: {
                   'Authorization': this.$store.state.ShiroToken.token
@@ -213,7 +213,7 @@
         })
       },
       queryJobTypeList () {
-        this.$http.post('http://43.228.77.195:8082/job/type/queryall', null, {
+        this.$http.post('http://182.254.148.104:8082/job/type/queryall', null, {
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
@@ -229,7 +229,7 @@
       },
       /** 根据服务器配置文件 */
       querySitesMap1 () {
-        this.$http.post('http://43.228.77.195:8082/job/site/list', null, {
+        this.$http.post('http://182.254.148.104:8082/job/site/list', null, {
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }

@@ -13,7 +13,7 @@
               <el-col :span="24">
                 <el-carousel :interval="4000" type="card" height="300px">
                   <el-carousel-item v-for="item in siteForm.uploadImgIDArray" :key="item">
-                    <img :src="'http://43.228.77.195:8082/file/download/'+item" style="width:100%">
+                    <img :src="'http://182.254.148.104:8082/file/download/'+item" style="width:100%">
                   </el-carousel-item>
                 </el-carousel>
               </el-col>
@@ -43,7 +43,7 @@
       <el-row :gutter="10">
         <el-col :span="24">
           <el-col :span="10">
-            <el-upload action="http://43.228.77.195:8082/file/singleupload"
+            <el-upload action="http://182.254.148.104:8082/file/singleupload"
                        list-type="picture-card"
                        :before-upload="handleBeforeUpload"
                        :on-remove="handleRemove"
@@ -166,7 +166,7 @@
         console.log(boxUid)
         // 2020.06.20 通过远程获取修改信息
         // let site = siteDetail.find(s => s.id === Number(boxUid))
-        this.$http.post('http://43.228.77.195:8082/equip/getSiteDetail', {
+        this.$http.post('http://182.254.148.104:8082/equip/getSiteDetail', {
           siteID: boxUid
         }, {
           headers: {
@@ -174,6 +174,11 @@
           }
         }).then(res => {
           console.log(res)
+          if (res.data.uploadImgIDArray === '') {
+            res.data.uploadImgIDArray = []
+          } else {
+            res.data.uploadImgIDArray = JSON.parse(res.data.uploadImgIDArray)
+          }
           this.siteForm = res.data
           this.table = tableGet(this.siteForm)
         })
@@ -223,7 +228,7 @@
       onSiteSubmit () {
         console.log(this.siteForm)
         this.siteForm.uploadImgIDArray = this.waitMergeImgArray
-        this.$http.post('http://43.228.77.195:8082/equip/setSiteDetail', this.siteForm, {
+        this.$http.post('http://182.254.148.104:8082/equip/setSiteDetail', this.siteForm, {
           headers: {
             'Authorization': this.$store.state.ShiroToken.token
           }
