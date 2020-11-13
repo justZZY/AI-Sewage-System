@@ -55,9 +55,6 @@
           <i class="el-icon-s-custom"></i>
           <span slot="title">用户管理</span>
         </el-menu-item>
-        <el-menu-item index="/123">
-          <span slot="title">123</span>
-        </el-menu-item>
       </el-menu>
     </el-col>
     <el-col :span="3">
