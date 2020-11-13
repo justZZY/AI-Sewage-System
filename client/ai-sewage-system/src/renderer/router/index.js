@@ -120,6 +120,11 @@ export default new Router({
           path: '/battery_data_skip',
           name: 'battery_data_skip',
           component: require('@/components/page/skip/battery_data_skip').default
+        },
+        {
+          path: '/123',
+          name: '123',
+          component: require('@/components/page/123').default
         }
       ]
     },
