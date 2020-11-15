@@ -38,7 +38,7 @@
 <!--  <div class="box" style="height: 180px;width: 2000px;padding: 0px">-->
   <div class="box" style="height: 90px;width: 1000px;padding: 0px">
 <!--    <canvas id="top25" width="100" height="180"></canvas>-->
-    <canvas id="top25" width="50" height="90"></canvas>
+    <canvas id="top25" width="30" height="90"></canvas>
     <!--调节池-->
 <!--    <canvas id="canvas1" width="300" height="400"></canvas>-->
     <canvas id="canvas1"></canvas>
@@ -215,7 +215,7 @@
       end_y: 10,
       canvas_w: 50,
       canvas_h: 300,
-      color: '#00BFFF', // 颜色
+      color: '#BEBEBE', // 颜色
       vx: 6, // 坐标变化速度参数
       vy: 6,
       line_w: 4,
@@ -232,7 +232,7 @@
       end_y: 10,
       canvas_w: 320,
       canvas_h: 300,
-      color: '#00BFFF', // 颜色
+      color: '#BEBEBE', // 颜色
       vx: 6, // 坐标变化速度参数
       vy: 6,
       line_w: 4,
@@ -249,7 +249,7 @@
       end_y: 10,
       canvas_w: 50,
       canvas_h: 300,
-      color: '#00BFFF', // 颜色
+      color: '#BEBEBE', // 颜色
       vx: 6, // 坐标变化速度参数
       vy: 6,
       line_w: 4,
@@ -266,7 +266,7 @@
       end_y: 50,
       canvas_w: 320,
       canvas_h: 300,
-      color: '#00BFFF', // 颜色
+      color: '#BEBEBE', // 颜色
       vx: 6, // 坐标变化速度参数
       vy: 6,
       line_w: 4,
@@ -283,7 +283,7 @@
       end_y: 10,
       canvas_w: 80,
       canvas_h: 100,
-      color: '#00BFFF', // 颜色
+      color: '#BEBEBE', // 颜色
       vx: 6, // 坐标变化速度参数
       vy: 6,
       line_w: 4,
@@ -337,7 +337,7 @@
       end_y: 80,
       canvas_w: 180,
       canvas_h: 300,
-      color: '#00BFFF', // 颜色
+      color: '#00FF00', // 颜色
       vx: 6, // 坐标变化速度参数
       vy: 6,
       line_w: 4,
@@ -355,7 +355,7 @@
       end_y: 80,
       canvas_w: 20,
       canvas_h: 200,
-      color: '#00BFFF', // 颜色
+      color: '#A52A2A', // 颜色
       vx: 6, // 坐标变化速度参数
       vy: 6,
       line_w: 4,
@@ -427,7 +427,7 @@
       end_y: 80,
       canvas_w: 20,
       canvas_h: 115,
-      color: '#00BFFF', // 颜色
+      color: '#A52A2A', // 颜色
       vx: 6, // 坐标变化速度参数
       vy: 6,
       line_w: 4,
@@ -445,7 +445,7 @@
       end_y: 250,
       canvas_w: 180,
       canvas_h: 300,
-      color: '#00BFFF', // 颜色
+      color: '#A52A2A', // 颜色
       vx: 3, // 坐标变化速度参数
       vy: 6,
       line_w: 15,
@@ -463,7 +463,7 @@
       end_y: 80,
       canvas_w: 20,
       canvas_h: 100,
-      color: '#00BFFF', // 颜色
+      color: '#A52A2A', // 颜色
       vx: 6, // 坐标变化速度参数
       vy: 6,
       line_w: 4,
@@ -481,7 +481,7 @@
       end_y: 80,
       canvas_w: 20,
       canvas_h: 200,
-      color: '#00BFFF', // 颜色
+      color: '#A52A2A', // 颜色
       vx: 6, // 坐标变化速度参数
       vy: 6,
       line_w: 4,
@@ -499,7 +499,7 @@
       end_y: 250,
       canvas_w: 180,
       canvas_h: 300,
-      color: '#00BFFF', // 颜色
+      color: '#A52A2A', // 颜色
       vx: 6, // 坐标变化速度参数
       vy: 6,
       line_w: 15,
@@ -517,7 +517,7 @@
       end_y: 40,
       canvas_w: 20,
       canvas_h: 100,
-      color: '#00BFFF', // 颜色
+      color: '#A52A2A', // 颜色
       vx: 6, // 坐标变化速度参数
       vy: 6,
       line_w: 4,
@@ -535,7 +535,7 @@
       end_y: 50,
       canvas_w: 180,
       canvas_h: 100,
-      color: '#00BFFF', // 颜色
+      color: '#A52A2A', // 颜色
       vx: 6, // 坐标变化速度参数
       vy: 6,
       line_w: 4,
@@ -551,9 +551,9 @@
       start_y: 50,
       end_x: 10,
       end_y: 50,
-      canvas_w: 50,
+      canvas_w: 30,
       canvas_h: 90,
-      color: '#00BFFF', // 颜色
+      color: '#BEBEBE', // 颜色
       vx: 6, // 坐标变化速度参数
       vy: 6,
       line_w: 4,
@@ -571,7 +571,7 @@
       end_y: 50,
       canvas_w: 90,
       canvas_h: 90,
-      color: '#00BFFF', // 颜色
+      color: '#00FF00', // 颜色
       vx: 6, // 坐标变化速度参数
       vy: 6,
       line_w: 4,
@@ -674,18 +674,18 @@
     res26.begin('top26', data26)
 
     // 绘制直线
-    drawline('top8', 200, 0, 200, 300, 60)
-    drawline('top11', 200, 0, 200, 300, 60)
-    drawline('top6', 0, 50, 300, 50, 4)
-    drawline('top6', 300, 50, 300, 160, 4)
-    drawline('top13', 110, 0, 110, 300, 24)
+    drawline('top8', 200, 0, 200, 300, 60, '#79d4f9')
+    drawline('top11', 200, 0, 200, 300, 60, '#79d4f9')
+    drawline('top6', 0, 50, 300, 50, 4, '#79d4f9')
+    drawline('top6', 300, 50, 300, 160, 4, '#79d4f9')
+    drawline('top13', 110, 0, 110, 300, 24, '#79d4f9')
 
     // 填充字体
-    drawText('top6', 80, 30, '紫外线消毒')
-    drawText('top4', 100, 100, '曝气')
-    drawText('top25', 10, 40, '进水管')
-    drawText('top26', 20, 40, '外排')
-    drawText('top24', 20, 40, '定期抽吸')
+    drawText('top6', 80, 30, '紫外线消毒', '20px')
+    drawText('top4', 100, 100, '曝气', '20px')
+    drawText('top25', 10, 40, '进水', '10px')
+    drawText('top26', 20, 40, '外排', '10px')
+    drawText('top24', 20, 40, '定期抽吸', '30px')
 
     // 调节池
     wave.init('canvas1')
@@ -992,7 +992,7 @@ function drawRect (element, x, y, width, height, text) {
     return flow
 }
 
-  function drawline (element, start_x, start_y, end_x, end_y, lineWidth) {
+  function drawline (element, start_x, start_y, end_x, end_y, lineWidth, color) {
     let canvas = document.getElementById(element)
     if (canvas.getContext) {
       let ctx = canvas.getContext('2d')
@@ -1011,14 +1011,14 @@ function drawRect (element, x, y, width, height, text) {
     }
   }
 
-  function drawText (element, x, y, text) {
+  function drawText (element, x, y, text, fsize) {
     var canvas = document.getElementById(element)
     if (canvas.getContext) {
       var ctx = canvas.getContext('2d')
       ctx.fillStyle = 'red'
-      ctx.font = "15px '微软雅黑'"
+      ctx.font = `${fsize} '微软雅黑'`
       ctx.textAlign = 'left'
-
+      console.log(ctx.font)
       // ctx.fillText(text, x, y);
       setInterval(function () {
         ctx.fillText(text, x, y)
