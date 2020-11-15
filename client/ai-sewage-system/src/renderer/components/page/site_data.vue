@@ -61,6 +61,7 @@
   const NODE_NUM = 20
   let monitorOptionArray = []
   let monitorChartObjArray = []
+  let fracDigitArray = []
 
   export default {
     name: 'site_data',
@@ -175,6 +176,7 @@
           let data = res['data']
           console.log(data)
           let monitorNames = getTypeNames(data, '传感')
+
           monitorOptionArray = getInitOptions(monitorNames, monitorOption)
           this.$store.dispatch('setMonitorNums', getTypeNums(monitorNames, MONITOR_WATCH_CLASS))
           this.getEquipValue(monitorNames, 'monitor')
@@ -233,6 +235,16 @@
           if (type === '传感') {
             let value1 = narray[narray.length - 2]
             let timestamp = narray[narray.length - 1]
+            // 2020.11.12 用于智能接入小数点计算
+            if (name.indexOf('传感器') !== -1) {
+              let index = 0
+              for (let i = 0; i < monitorOptionArray.length; i++) {
+                if (monitorOptionArray[i]['title']['text'] === name) {
+                  index = i
+                }
+              }
+              value1 = value1 / Math.pow(10, fracDigitArray[index])
+            }
             this.updateMonitorData(name, value1, timestamp)
           } else if (type === '频率') {
             let value2 = narray[narray.length - 2]
@@ -308,14 +320,23 @@
     console.log(dataSet)
     for (let i = 0; i < dataSet[index]['items'].length; i++) {
       names.push(dataSet[index]['items'][i]['name'])
+      // 2020.11.12 保留小数位用于数据计算
+      fracDigitArray.push(dataSet[index]['items'][i]['fracDigits'])
     }
+    console.log(fracDigitArray)
     return names
   }
   function formatMonitorOptionArray (dataSet) {
+    console.log('====')
+    console.log(dataSet)
     for (let i = 0; i < monitorOptionArray.length; i++) {
       monitorOptionArray[i]['xAxis'][0]['data'].push(dataSet[i]['timestamp'])
       let names = dataSet[i]['name'].split('_')
       monitorOptionArray[i]['yAxis'][0]['name'] = names[names.length - 1]
+      // 2020.11.12 用于智能接入数据
+      if (names[names.length - 2].indexOf('传感器') !== -1) {
+        dataSet[i]['value'] = dataSet[i]['value'] / Math.pow(10, fracDigitArray[i])
+      }
       monitorOptionArray[i]['series'][0]['data'].push(dataSet[i]['value'].toFixed(2))
     }
   }

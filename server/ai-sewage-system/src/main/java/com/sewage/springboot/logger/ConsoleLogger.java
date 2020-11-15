@@ -40,7 +40,12 @@ public class ConsoleLogger implements Logger {
     @Override
     public void logTrace(String msg) {
         msg = formatter.format(new Date()) + " [Trace][" + name + "] " + msg;
-//        System.out.println(msg);
         logger.trace(msg);
+    }
+
+    @Override
+    public void logDebug(String msg) {
+        msg = formatter.format(new Date()) + " [Trace][" + name + "] " + msg;
+        logger.debug(msg);
     }
 }

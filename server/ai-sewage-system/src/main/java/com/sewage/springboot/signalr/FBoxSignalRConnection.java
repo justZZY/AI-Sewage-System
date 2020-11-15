@@ -80,7 +80,7 @@ public class FBoxSignalRConnection extends SignalRConnectionBase {
                     String value = item.get("value").getAsString();
                     long time = item.get("t").getAsLong();
                     timestamp = sdf.format(time);
-                    this.logger.logInformation(String.format(" %s, %s, %d, %s\n", name, value, time, timestamp));
+                    this.logger.logDebug(String.format(" %s, %s, %d, %s\n", name, value, time, timestamp));
                     WebSocket.sendAll(boxUid + '_' + name + '_' + value + '_' + timestamp);
                 }
                 //打印监控点的值集合，集合详细信息请看接口文档http://docs.flexem.net/fbox/zh-cn/tutorials/RealtimeDataPush.html

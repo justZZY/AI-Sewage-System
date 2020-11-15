@@ -114,8 +114,8 @@
       let boxUid = equipmentobjarray[i]['boxUid']
       let name = equipmentobjarray[i]['alias']
       let address = equipmentobjarray[i]['box']['address']
-      let longitude = equipmentobjarray[i]['box']['longitude']
-      let latitude = equipmentobjarray[i]['box']['latitude']
+      let longitude = equipmentobjarray[i]['box']['longitude'] === 0.0 ? equipmentobjarray[i]['box']['useLongitude'] : equipmentobjarray[i]['box']['longitude']
+      let latitude = equipmentobjarray[i]['box']['latitude'] === 0.0 ? equipmentobjarray[i]['box']['useLatitude'] : equipmentobjarray[i]['box']['latitude']
       let net = equipmentobjarray[i]['box']['net']
       let connectionState = equipmentobjarray[i]['box']['connectionState']
       let posobj = {

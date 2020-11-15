@@ -5,6 +5,7 @@ public interface Logger{
     void logWarning(String msg);
     void logError(String msg);
     void logTrace(String msg);
+    void logDebug(String msg);
 }
 
 
