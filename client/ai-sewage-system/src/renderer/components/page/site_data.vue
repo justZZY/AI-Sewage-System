@@ -145,7 +145,14 @@
           let index = this.$store.state.Treedata.chooseData
           let boxId = window.equipmentobjarray[index]['box']['id']
           // 做数据解析
-          this.solveSocketData(boxId, res)
+          if (res.data === 'refresh_page') {
+            this.$router.replace({
+              path: '@/components/page/skip/data_skip',
+              name: 'data_skip'
+            })
+          } else {
+            this.solveSocketData(boxId, res)
+          }
         }
         ws.onclose = () => {
           console.log('连接已关闭')

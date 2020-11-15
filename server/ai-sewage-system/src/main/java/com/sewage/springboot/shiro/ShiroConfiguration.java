@@ -56,6 +56,8 @@ public class ShiroConfiguration {
 		filterChainDefinitionMap.put("/user/updateRole","anon");
 		filterChainDefinitionMap.put("/user/deleteRole","anon");
 		filterChainDefinitionMap.put("/websocket","anon");
+		// 2020.11.16 实现通过websocket刷新
+		filterChainDefinitionMap.put("/equip/sendEquipAddSocket","anon");
 		filterChainDefinitionMap.put("/test/**","anon");
 		filterChainDefinitionMap.put("/error", "anon");
 		filterChainDefinitionMap.put("/file/download/**", "anon");

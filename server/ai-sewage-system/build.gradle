@@ -15,13 +15,8 @@ configurations {
 		extendsFrom developmentOnly
 	}
 }
-allprojects {
-	repositories {
-		maven { url 'https://maven.aliyun.com/repository/public/' }
-		maven { url 'https://maven.aliyun.com/repository/spring/'}
-		mavenLocal()
-		mavenCentral()
-	}
+repositories {
+	maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
 }
 
 dependencies {

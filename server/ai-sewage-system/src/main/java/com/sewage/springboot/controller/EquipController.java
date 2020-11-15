@@ -12,6 +12,7 @@ import com.sewage.springboot.entity.SiteDetail;
 import com.sewage.springboot.repository.SiteDetailRepository;
 import com.sewage.springboot.service.GraphService;
 import com.sewage.springboot.util.CommonUtil;
+import com.sewage.springboot.websoket.WebSocket;
 import okhttp3.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.jena.rdf.model.Statement;
@@ -274,6 +275,11 @@ public class EquipController {
         return CommonUtil.jsonResult(1, "更新成功");
     };
 
+    @RequestMapping(value = "/sendEquipAddSocket", method = RequestMethod.GET)
+    boolean sendEquipAddSocket() {
+        WebSocket.sendAll("refresh_page");
+        return true;
+    }
 //    2020.11.9 站点数据放到数据库 废弃
 //    @RequestMapping(value = "/getAllSiteDetail", method = RequestMethod.GET)
 //    JSONArray getAllSiteDetail() throws IOException{
