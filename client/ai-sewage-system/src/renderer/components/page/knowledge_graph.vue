@@ -26,6 +26,13 @@
       async initOption () {
         let option = JSON.parse(JSON.stringify(relationOption))
         let categoryList = this.getCategory()
+        if (categoryList[0] === 'all') {
+          let tempList = []
+          window.equipmentobjarray.forEach(item => {
+            tempList.push(item.alias)
+          })
+          categoryList = tempList
+        }
         await this.getNodeData(categoryList)
         console.log('====after init')
         nodeList = unique(nodeList)
@@ -57,7 +64,7 @@
           console.log(temp)
           nodeList.push({
             name: temp.alias,
-            des: temp.box.address,
+            des: temp.box.hasOwnProperty('address') ? temp.box.address : temp.box.useAddress,
             category: i,
             symbol: 'image://http://182.254.148.104:8083/pic/1.jpg',
             symbolSize: size,
