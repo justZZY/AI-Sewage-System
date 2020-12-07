@@ -99,9 +99,8 @@
           // 解析请求到的设备数据
           window.equipmentobj = JSON.parse(JSON.stringify(response))['data']
           window.equipmentobjarray = getArray(window.equipmentobj)
-          console.log('====equipmentobjarray:')
-          console.log(window.equipmentobjarray)
-          this.gotoIndex()
+          // 2020.12.7 FBox改了数据请求接口 需要重新请求设备经纬度
+          this.updateEquipArrayWithPos('Bearer ' + window.jsonobj['access_token'], 'zzy_test', window.equipmentobjarray)
         }).catch(function (error) {
           this.loading = false
           console.log(error)
@@ -109,6 +108,33 @@
       },
       gotoIndex () {
         this.$router.push('/main')
+      },
+      updateEquipArrayWithPos (authorization, clientID, equipArray) {
+        let boxIdList = []
+        for (let i = 0; i < equipArray.length; i++) {
+          boxIdList.push(equipArray[i]['box']['id'])
+        }
+        this.$http.post('http://fbox360.com/api/client/v2/box/location',
+          {'ids': boxIdList},
+          {headers: {'Authorization': authorization, 'X-FBox-ClientId': clientID}
+          }).then(res => {
+          let posList = res.data
+          for (let i = 0; i < posList.length; i++) {
+            for (let j = 0; j < equipArray.length; j++) {
+              if (posList[i]['boxId'] === equipArray[j]['box']['id']) {
+                equipArray[j]['box']['latitude'] = posList[i]['latitude']
+                equipArray[j]['box']['longitude'] = posList[i]['longitude']
+                equipArray[j]['box']['useLatitude'] = posList[i]['useLatitude']
+                equipArray[j]['box']['useLongitude'] = posList[i]['useLongitude']
+                equipArray[j]['box']['address'] = posList[i]['address']
+              }
+            }
+          }
+          window.equipmentobjarray = equipArray
+          console.log('====equipmentobjarray:')
+          console.log(window.equipmentobjarray)
+          this.gotoIndex()
+        })
       }
     }
   }
