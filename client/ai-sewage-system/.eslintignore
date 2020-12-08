@@ -1,3 +1,5 @@
 test/unit/coverage/**
 test/unit/*.js
 test/e2e/*.js
+src/renderer/js/go-module.js
+src/renderer/components/page/subDynamicPic/dynamic.vue
