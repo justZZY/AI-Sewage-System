@@ -139,11 +139,19 @@
     }
   }
   function getArray (arrayObj) {
+    console.log('......')
+    console.log(arrayObj)
+    // 2021.3.10 筛选一下接入测试的设备,不需要出现在软件里
     let array = []
     for (let i = 0; i < arrayObj.length; i++) {
-      array = array.concat(arrayObj[i]['boxRegs'])
+      if (arrayObj[i].name !== 'ynu接入测试') {
+        array = array.concat(arrayObj[i]['boxRegs'])
+      }
     }
     return array
+  }
+  function getReleaseSites (siteList) {
+    return []
   }
 </script>
 <style rel="stylesheet/scss" lang="scss">
