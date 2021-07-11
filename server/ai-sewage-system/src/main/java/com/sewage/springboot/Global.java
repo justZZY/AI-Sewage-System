@@ -26,11 +26,11 @@ public class Global {
     public static Proxy proxy = null;
 
     // FlexManager
-    public static String username = "ynzmhj";
-    public static String password = "zmhj123456";
+    public static String username = "xxxx";
+    public static String password = "123456";
     // 获取API账号请咨询对接的销售。
-    public static String clientId = "kmbq";
-    public static String clientSecret = "a89f97dc2ed2457aa0c6e58eb40142b2";
+    public static String clientId = "xxxx";
+    public static String clientSecret = "xxxx";
     // 登录参数
     public static String scope = "openid offline_access fbox email profile";
     public static String grant_type_login = "password";
